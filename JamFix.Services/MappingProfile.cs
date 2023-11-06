@@ -2,11 +2,6 @@
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Services.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JamFix.Services
 {
@@ -16,6 +11,14 @@ namespace JamFix.Services
         {
             CreateMap<Korisnik, Korisnici>();
             CreateMap<KorisniciInsertRequest, Korisnik>();
+            CreateMap<KorisniciUpdateRequest, Korisnik>();
+
+            CreateMap<ProizvodiInsertRequest, Proizvodi>();
+            CreateMap<Proizvodi, Proizvodi>();
+            
+            CreateMap<Uredjaj,Uredjaji>();  
+
+            CreateMap<Drzava,Drzave>();
         }
     }
 }

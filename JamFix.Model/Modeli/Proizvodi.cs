@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JamFix.Services.Database
+namespace JamFix.Model.Modeli
 {
-    public class Proizvod
+    public class Proizvodi
     {
-        [Key]
         public int ProizvodId { get; set; }
         public string? NazivProizvoda { get; set; }
         public double Cijena { get; set; }

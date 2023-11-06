@@ -16,16 +16,16 @@ namespace JamFix.Services.Database
         public int Id { get; set; }
         public string? korisnickoIme { get; set; }
         [JsonIgnore]
-        public string lozinka { get; set; }
+        public string ?lozinka { get; set; }
 
         [JsonIgnore]
-        public Korisnik korisnik => this as Korisnik;
+        public Korisnik? korisnik => this as Korisnik;
 
         [JsonIgnore]
-        public Administrator administrator => this as Administrator;
+        public Administrator? administrator => this as Administrator;
 
         [JsonIgnore]
-        public Radnik radnik => this as Radnik;
+        public Radnik? radnik => this as Radnik;
 
         public bool isKupac => korisnik != null;
         public bool isAdmin => administrator != null;
