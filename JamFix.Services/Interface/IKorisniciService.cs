@@ -1,14 +1,13 @@
 ﻿using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 
 namespace JamFix.Services.Interface
 {
-    public interface IKorisniciService
+    public interface IKorisniciService : ICRUDService<Korisnici, KorisniciSO, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
-        Task<List<Korisnici>> Get();
-        Korisnici Insert(KorisniciInsertRequest request);
-        Korisnici Update(int id,KorisniciUpdateRequest request);
-        List<Korisnik> Delete(int id);
+        //List<Korisnici> Get();
+        //List<Korisnik> Delete(int id);
     }
 }

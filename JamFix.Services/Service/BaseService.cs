@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JamFix.Services.Service
 {
-    public class BaseService<T,TDb, TSearch> : IService<T,TSearch> where TDb : class where T : class where TSearch : BaseSO
+    public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where TDb : class where T : class where TSearch : BaseSO
     {
         protected Context _context;
         protected IMapper _mapper{ get; set; }
@@ -16,7 +16,7 @@ namespace JamFix.Services.Service
             _mapper = mapper;
         }
 
-        public virtual async Task<List<T>> Get(TSearch? search=null) 
+        public virtual IEnumerable<T> Get(TSearch? search=null) 
         {
             var querry= _context.Set<TDb>().AsQueryable();
 
@@ -27,13 +27,15 @@ namespace JamFix.Services.Service
                 querry = querry.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
             }
 
-            var list= await querry.ToListAsync();
+            var list= querry.ToList();
 
-            return _mapper.Map<List<T>>(list);
+            return _mapper.Map<IList<T>>(list);
         }
-        public virtual async Task<T> GetById(int id)
+        public T GetById(int id)
         {
-            var entity = await _context.Set<TDb>().FindAsync(id);
+            var set = _context.Set<TDb>();
+
+            var entity = set.Find(id);
 
             return _mapper.Map<T>(entity);
         }
@@ -41,14 +43,19 @@ namespace JamFix.Services.Service
         {
             return querry;
         }
-        public virtual async Task<T> DeleteById(int id)
+        public T DeleteById(int id)
         {
-            var entity = await _context.Set<TDb>().FindAsync(id);
-            
+            var set = _context.Set<TDb>();
+
+            var entity = set.Find(id);
             _context.Remove(entity);
             _context.SaveChanges();
 
             return _mapper.Map<T>(entity);
+        }
+        public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query, TSearch search = null)
+        {
+            return query;
         }
     }
 }

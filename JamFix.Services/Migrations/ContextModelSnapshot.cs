@@ -17,6 +17,7 @@ namespace JamFix.Services.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseCollation("Latin1_General_CI_AI")
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -66,27 +67,93 @@ namespace JamFix.Services.Migrations
                     b.ToTable("Izvjestaj");
                 });
 
-            modelBuilder.Entity("JamFix.Services.Database.KorisnickiNalog", b =>
+            modelBuilder.Entity("JamFix.Services.Database.KorisniciUloge", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("KorisnikUlogaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikUlogaID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikUlogaId"));
 
-                    b.Property<string>("korisnickoIme")
+                    b.Property<DateTime>("DatumIzmjene")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("KorisnikId")
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikID");
+
+                    b.Property<int>("UlogaId")
+                        .HasColumnType("int")
+                        .HasColumnName("UlogaID");
+
+                    b.HasKey("KorisnikUlogaId");
+
+                    b.HasIndex("KorisnikId");
+
+                    b.HasIndex("UlogaId");
+
+                    b.ToTable("KorisniciUloge", (string)null);
+                });
+
+            modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>
+                {
+                    b.Property<int>("KorisnikId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikId"));
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Ime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("lozinka")
+                    b.Property<string>("KorisnickoIme")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("LozinkaHash")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("KorisnickiNalog");
+                    b.Property<string>("LozinkaSalt")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.UseTptMappingStrategy();
+                    b.Property<string>("Prezime")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((1))");
+
+                    b.Property<string>("Telefon")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("KorisnikId");
+
+                    b.HasIndex(new[] { "Email" }, "CS_Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex(new[] { "KorisnickoIme" }, "CS_KorisnickoIme")
+                        .IsUnique();
+
+                    b.ToTable("Korisnici", (string)null);
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Proizvod", b =>
@@ -101,19 +168,19 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("LokacijaSlike")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NazivProizvoda")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Snizen")
                         .HasColumnType("bit");
+
+                    b.Property<string>("StateMachine")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProizvodId");
 
@@ -172,6 +239,42 @@ namespace JamFix.Services.Migrations
                     b.ToTable("RadniNalog");
                 });
 
+            modelBuilder.Entity("JamFix.Services.Database.Radnik", b =>
+                {
+                    b.Property<int>("RadnikId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RadnikId"));
+
+                    b.Property<DateTime>("DatumRodjenja")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DrzavaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Ime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prezime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Spol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("trajanjeUgovora")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RadnikId");
+
+                    b.HasIndex("DrzavaId");
+
+                    b.ToTable("Radnik");
+                });
+
             modelBuilder.Entity("JamFix.Services.Database.StatusZahtjeva", b =>
                 {
                     b.Property<int>("StatusZahtjevaId")
@@ -187,6 +290,26 @@ namespace JamFix.Services.Migrations
                     b.HasKey("StatusZahtjevaId");
 
                     b.ToTable("StatusZahtjeva");
+                });
+
+            modelBuilder.Entity("JamFix.Services.Database.Uloga", b =>
+                {
+                    b.Property<int>("UlogaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UlogaId"));
+
+                    b.Property<string>("Naziv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Opis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UlogaId");
+
+                    b.ToTable("Uloga");
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Uredjaj", b =>
@@ -252,111 +375,23 @@ namespace JamFix.Services.Migrations
                     b.ToTable("Zahtjev");
                 });
 
-            modelBuilder.Entity("JamFix.Services.Database.Administrator", b =>
+            modelBuilder.Entity("JamFix.Services.Database.KorisniciUloge", b =>
                 {
-                    b.HasBaseType("JamFix.Services.Database.KorisnickiNalog");
-
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DrzavaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Ime")
+                    b.HasOne("JamFix.Services.Database.Korisnik", "Korisnik")
+                        .WithMany("KorisniciUloge")
+                        .HasForeignKey("KorisnikId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasConstraintName("FK_KorisniciUloge_Korisnici");
 
-                    b.Property<string>("Prezime")
+                    b.HasOne("JamFix.Services.Database.Uloga", "Uloga")
+                        .WithMany("KorisniciUloges")
+                        .HasForeignKey("UlogaId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasConstraintName("FK_KorisniciUloge_Uloge");
 
-                    b.Property<string>("Spol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Navigation("Korisnik");
 
-                    b.Property<DateTime>("trajanjeUgovora")
-                        .HasColumnType("datetime2");
-
-                    b.ToTable("Administrator");
-                });
-
-            modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>
-                {
-                    b.HasBaseType("JamFix.Services.Database.KorisnickiNalog");
-
-                    b.Property<string>("Adresa")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ConfirmedEmail")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DrzavaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LokacijaSlike")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Pretplacen")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Prezime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Spol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("DrzavaId");
-
-                    b.ToTable("Korisnik");
-                });
-
-            modelBuilder.Entity("JamFix.Services.Database.Radnik", b =>
-                {
-                    b.HasBaseType("JamFix.Services.Database.KorisnickiNalog");
-
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DrzavaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Ime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Prezime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Spol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("trajanjeUgovora")
-                        .HasColumnType("datetime2");
-
-                    b.HasIndex("DrzavaId");
-
-                    b.ToTable("Radnik");
+                    b.Navigation("Uloga");
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.RadniNalog", b =>
@@ -370,6 +405,17 @@ namespace JamFix.Services.Migrations
                     b.Navigation("Radnik");
                 });
 
+            modelBuilder.Entity("JamFix.Services.Database.Radnik", b =>
+                {
+                    b.HasOne("JamFix.Services.Database.Drzava", "Drzava")
+                        .WithMany()
+                        .HasForeignKey("DrzavaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drzava");
+                });
+
             modelBuilder.Entity("JamFix.Services.Database.Zahtjev", b =>
                 {
                     b.HasOne("JamFix.Services.Database.Uredjaj", "Uredjaj")
@@ -381,47 +427,14 @@ namespace JamFix.Services.Migrations
                     b.Navigation("Uredjaj");
                 });
 
-            modelBuilder.Entity("JamFix.Services.Database.Administrator", b =>
-                {
-                    b.HasOne("JamFix.Services.Database.KorisnickiNalog", null)
-                        .WithOne()
-                        .HasForeignKey("JamFix.Services.Database.Administrator", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>
                 {
-                    b.HasOne("JamFix.Services.Database.Drzava", "Drzava")
-                        .WithMany()
-                        .HasForeignKey("DrzavaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JamFix.Services.Database.KorisnickiNalog", null)
-                        .WithOne()
-                        .HasForeignKey("JamFix.Services.Database.Korisnik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Drzava");
+                    b.Navigation("KorisniciUloge");
                 });
 
-            modelBuilder.Entity("JamFix.Services.Database.Radnik", b =>
+            modelBuilder.Entity("JamFix.Services.Database.Uloga", b =>
                 {
-                    b.HasOne("JamFix.Services.Database.Drzava", "Drzava")
-                        .WithMany()
-                        .HasForeignKey("DrzavaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JamFix.Services.Database.KorisnickiNalog", null)
-                        .WithOne()
-                        .HasForeignKey("JamFix.Services.Database.Radnik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Drzava");
+                    b.Navigation("KorisniciUloges");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace JamFix.Model.Modeli
 {
-    public class Korisnici
+    public partial class Korisnici
     {
-        public string? Ime { get; set; }
-        public string? Prezime { get; set; }
-        public string? Spol { get; set; }
+        public int KorisnikId { get; set; }
+        public string Ime { get; set; } = null!;
+        public string Prezime { get; set; } = null!;
         public string? Email { get; set; }
-        public string? Adresa { get; set; }
-        public bool Pretplacen { get; set; }
-        public string LokacijaSlike { get; set; }
-        public bool ConfirmedEmail { get; set; }
+        public string? Telefon { get; set; }
+        public bool? Status { get; set; }
+        public virtual ICollection<KorisnikUloge> KorisnikUloge { get; set; }
     }
 }

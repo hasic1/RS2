@@ -1,3 +1,6 @@
+using JamFix.Model.Modeli;
+using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -7,19 +10,15 @@ namespace JamFix.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProizvodiController : ControllerBase
+    public class ProizvodiController : BaseCRUDController<Proizvodi, ProizvodiSO, ProizvodiInsertRequest, ProizvodiUpdateRequest>
     {
-        private readonly IProizvodiService _service;
-        private readonly Context _context;
-        public ProizvodiController(Context context,IProizvodiService service)
+        public ProizvodiController(ILogger<BaseController<Proizvodi, ProizvodiSO>> loger, IProizvodiService service) : base(loger, service)
         {
-            _context = context;
-            _service = service;
         }
-        [HttpGet]
-        public IEnumerable<Proizvod> Get()
+        [HttpPut("{id}/activate")]
+        public virtual async Task<Proizvodi> Activate(int id)
         {
-            return _service.Get();
+            return await (_service as IProizvodiService).Activate(id);
         }
     }
 }

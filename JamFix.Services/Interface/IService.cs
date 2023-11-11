@@ -9,8 +9,8 @@ namespace JamFix.Services.Interface
 {
     public interface IService<T,TSearch> where TSearch : class 
     {
-        Task<List<T>> Get(TSearch search=null);
-        Task<T> GetById(int id);
-        Task<T> DeleteById(int id);
+        IEnumerable<T> Get(TSearch search = null);
+        T GetById(int id);
+        T DeleteById(int id);
     }
 }

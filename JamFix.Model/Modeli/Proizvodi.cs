@@ -14,5 +14,6 @@ namespace JamFix.Model.Modeli
         public string? Opis { get; set; }
         public string? LokacijaSlike { get; set; }
         public bool Snizen { get; set; } = false;
+        public string StateMachine { get; set; }
     }
 }

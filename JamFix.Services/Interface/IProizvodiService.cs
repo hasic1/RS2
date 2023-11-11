@@ -1,11 +1,11 @@
 ﻿using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 
 namespace JamFix.Services.Interface
 {
-    public interface IProizvodiService /*: ICRUDService<Proizvodi, ProizvodiSearchObject, ProizvodiInsertRequest, ProizvodiUpdateRequest>*/
+    public interface IProizvodiService : ICRUDService<Proizvodi, ProizvodiSO, ProizvodiInsertRequest, ProizvodiUpdateRequest>
     {
-        List<Proizvodi> Get();
-        Proizvodi Insert(ProizvodiInsertRequest request);
+        Task<Proizvodi> Activate(int id);
     }
 }

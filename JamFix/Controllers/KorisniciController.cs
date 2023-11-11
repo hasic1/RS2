@@ -1,31 +1,20 @@
 ﻿using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
+using JamFix.Services.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class KorisniciController : ControllerBase
+    public class KorisniciController : BaseCRUDController<Korisnici,KorisniciSO,KorisniciInsertRequest,KorisniciUpdateRequest>
     {
-        private readonly IKorisniciService _service;
-        private readonly Context _context;
-        public KorisniciController( Context context,IKorisniciService service)
+        public KorisniciController( ILogger<BaseController<Korisnici,KorisniciSO>> loger,IKorisniciService service) : base(loger, service)
         {
-            _context = context;
-            _service = service;
         }
-        [HttpGet]
-        public IEnumerable<Korisnici> Get()
-        {
-            return _service.Get();
-        }
-        [HttpPost]
-        public Korisnici Insert(KorisniciInsertRequest request)
-        {
-            return _service.Insert(request);
-        }
+      
     }
 }

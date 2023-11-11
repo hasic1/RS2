@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XxaeIOGBkVfkssA6TskbxypVQT4rtzFyAv1XX0xGd/oPIdW1eHi0hpXbHSUUug5uwx7n/Eh+dDYixz3s54cbOg==",
+  "dgSpecHash": "QXUELF3y5Zm/GWOmAmOcSWsZqlKELVKWlb3NJ/6z5SPq3dVR7M66l57boRwHZFzE5b8TMFvGCT5l1XZzY+RuKg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix.Services\\JamFix.Services.csproj",
+  "projectFilePath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix.Services\\JamFix.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bakah\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\bakah\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

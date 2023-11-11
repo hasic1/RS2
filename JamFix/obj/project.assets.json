@@ -4216,11 +4216,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix\\JamFix.csproj",
+      "projectUniqueName": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix\\JamFix.csproj",
       "projectName": "JamFix",
-      "projectPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix\\JamFix.csproj",
+      "projectPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix\\JamFix.csproj",
       "packagesPath": "C:\\Users\\bakah\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix\\obj\\",
+      "outputPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4241,8 +4241,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix.Services\\JamFix.Services.csproj": {
-              "projectPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix.Services\\JamFix.Services.csproj"
+            "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix.Services\\JamFix.Services.csproj": {
+              "projectPath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix.Services\\JamFix.Services.csproj"
             }
           }
         }

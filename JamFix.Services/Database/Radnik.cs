@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Database
 {
-    [Table("Radnik")]
-    public class Radnik:KorisnickiNalog
+    public class Radnik
     {
+        [Key]
+        public int RadnikId { get; set; }
         public string Ime { get; set; }
         public string Prezime { get; set; }
         public string Spol { get; set; }

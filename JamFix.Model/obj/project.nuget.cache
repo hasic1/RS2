@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ULjiHGGsh6g+N0dXW8v/jDeN7LGE1i6d9J7CjRuhcE4QoPpa85MzIP9ii3MHvKbR4yjLRNDiS+JnW47Qvx4gYA==",
+  "dgSpecHash": "h5/naSpkvtqkZ/ceemaZPCNLJ9XmLQ3otQODEEkZyT/Ud2CNEp+BRAXhY2TSvYdEERR0Smzr1JHEAQKipGAQZw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\JamFix.Model\\JamFix.Model.csproj",
+  "projectFilePath": "C:\\Users\\bakah\\OneDrive\\Desktop\\RS2\\RS2\\JamFix.Model\\JamFix.Model.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bakah\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\bakah\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",

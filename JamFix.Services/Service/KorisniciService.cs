@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -11,58 +13,26 @@ using System.Text;
 
 namespace JamFix.Services.Service
 {
-    public class KorisniciService : IKorisniciService
+    public class KorisniciService : BaseCRUDService<Korisnici,Korisnik,KorisniciSO, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
-        Context _context;
-        public IMapper _mapper{ get; set; }
-        public KorisniciService(Context context,IMapper mapper)
+        public KorisniciService(Context context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<List<Korisnici>>Get()
+        public override async Task BeforeInsert(Korisnik entity, KorisniciInsertRequest insert)
         {
-            var entityList =await _context.Korisnik.ToListAsync();
-           
-            return _mapper.Map<List<Korisnici>>(entityList);
+            entity.LozinkaSalt = GenerateSalt();
+            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.lozinka);
+
         }
 
-        public Korisnici Insert(KorisniciInsertRequest request)
-        {
-            var korisnik = new Korisnik();
-            _mapper.Map(request, korisnik);
-
-            
-            _context.Korisnik.Add(korisnik);
-            _context.SaveChanges();
-
-            return _mapper.Map<Korisnici>(korisnik);
-        }
-        public Korisnici Update(int id, KorisniciUpdateRequest request)
-        {
-            var entity = _context.Korisnik.Find(id);
-            _mapper.Map(request,entity);
-
-            _context.SaveChanges();
-            return _mapper.Map<Korisnici>(entity);
-        }
+       
 
         public List<Korisnik> Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        //public ActionResult Delete(int id)
-        //{
-        //    Korisnik korisnik = _context.Korisnik.Find(id);
-        //    if (korisnik == null)
-        //        return null;
-        //    _context.Remove(korisnik);
-        //    _context.SaveChanges();
-
-        //    return Ok(korisnik);
-        //}
         public static string GenerateSalt()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
@@ -84,6 +54,14 @@ namespace JamFix.Services.Service
             HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
             byte[] inArray = algorithm.ComputeHash(dst);
             return Convert.ToBase64String(inArray);
+        }
+        public override IQueryable<Korisnik> AddInclude(IQueryable<Korisnik> query, KorisniciSO search = null)
+        {
+            if (search?.IsUlogeIncluded==true)
+            {
+                query = query.Include("KorisniciUloge.Uloga");
+            }
+            return base.AddInclude(query, search);
         }
 
     }

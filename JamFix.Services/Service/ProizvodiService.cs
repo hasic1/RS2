@@ -1,37 +1,39 @@
 ﻿using AutoMapper;
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
+using JamFix.Services.ProizvodiSM;
+using System.Collections.Generic;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace JamFix.Services.Service
 {
-    public class ProizvodiService : IProizvodiService
+    public class ProizvodiService : BaseCRUDService<Proizvodi, Proizvod, ProizvodiSO, ProizvodiInsertRequest, ProizvodiUpdateRequest>, IProizvodiService
     {
-        Context _context;
-        public IMapper _mapper { get; set; }
+        public BaseState _baseState { get; set; }
 
-        public ProizvodiService(Context context, IMapper mapper)
+        public ProizvodiService(BaseState baseState, Context context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
+            _baseState = baseState;
         }
-        public List<Proizvodi> Get()
+        public override Task<Proizvodi> Insert(ProizvodiInsertRequest insert)
         {
-            var entityList = _context.Proizvod.ToList();
-
-            return _mapper.Map<List<Proizvodi>>(entityList);
+            var state = _baseState.CreateState("initial");
+            return state.Insert(insert);
         }
-
-        public Proizvodi Insert(ProizvodiInsertRequest request)
+        public override async Task<Proizvodi>Update(int id, ProizvodiUpdateRequest update)
         {
-            var proizvod = new Proizvod();
-            _mapper.Map(request, proizvod);
-
-            _context.Proizvod.Add(proizvod);
-            _context.SaveChanges();
-
-            return _mapper.Map<Proizvodi>(proizvod);
+            var entity = await _context.Proizvod.FindAsync(id);
+            var state = _baseState.CreateState(entity.StateMachine);
+            return await state.Update(id, update);
+        }
+        public async Task<Proizvodi> Activate(int id)
+        {
+            var entity = await _context.Proizvod.FindAsync(id);
+            var state = _baseState.CreateState(entity.StateMachine);
+            return await state.Activate(id);
         }
     }
 }

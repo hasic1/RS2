@@ -7,21 +7,23 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Database
 {
-    [Table("Korisnik")]
-    public class Korisnik : KorisnickiNalog 
+    public partial class Korisnik  
     {
-        public string? Ime { get; set; } 
-        public string? Prezime { get; set; } 
-        public string? Spol { get; set; } 
+        public Korisnik()
+        {
+            KorisniciUloge = new HashSet<KorisniciUloge>();
+        }
+        public int KorisnikId { get; set; }
+        public string Ime { get; set; } = null!;
+        public string Prezime { get; set; } = null!;
         public string? Email { get; set; }
-        public DateTime DatumRodjenja { get; set; }
-        [ForeignKey(nameof(DrzavaId))]
-        public Drzava? Drzava { get; set; }
-        public string? Adresa { get; set; }
-        public int DrzavaId { get; set; }
-        public bool Pretplacen { get; set; }
-        public string? LokacijaSlike { get; set; }
-        public bool ConfirmedEmail { get; set; }
-        public string? UserToken { get; set; }
+        public string? Telefon { get; set; }
+        public bool? Status { get; set; }
+        public string KorisnickoIme { get; set; } = null!;
+        public string LozinkaHash { get; set; } = null!;
+        public string LozinkaSalt { get; set; } = null!;
+        public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; }
+        //public virtual ICollection<Izlazi> Izlazis { get; set; }
+        //public virtual ICollection<Ulazi> Ulazis { get; set; }
     }
 }
