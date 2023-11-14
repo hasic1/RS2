@@ -18,22 +18,60 @@ namespace JamFix.Services.Service
         {
             _baseState = baseState;
         }
-        public override Task<Proizvodi> Insert(ProizvodiInsertRequest insert)
+        public override Proizvodi Insert(ProizvodiInsertRequest insert)
         {
+            //return base.Insert(insert);
             var state = _baseState.CreateState("initial");
+
             return state.Insert(insert);
         }
-        public override async Task<Proizvodi>Update(int id, ProizvodiUpdateRequest update)
+
+        public override Proizvodi Update(int id, ProizvodiUpdateRequest update)
         {
-            var entity = await _context.Proizvod.FindAsync(id);
-            var state = _baseState.CreateState(entity.StateMachine);
-            return await state.Update(id, update);
+            var product = _context.Proizvod.Find(id);
+            //return base.Update(id, update);
+            var state = _baseState.CreateState(product.StateMachine);
+            state.CurrentEntity = product;
+
+            state.Update(id,update);
+
+            return GetById(id);
         }
-        public async Task<Proizvodi> Activate(int id)
+
+        public Proizvodi Activate(int id)
         {
-            var entity = await _context.Proizvod.FindAsync(id);
-            var state = _baseState.CreateState(entity.StateMachine);
-            return await state.Activate(id);
+            var product = _context.Proizvod.Find(id);
+            //return base.Update(id, update);
+            var state = _baseState.CreateState(product.StateMachine);
+            state.CurrentEntity = product;
+
+            state.Activate();
+
+            return GetById(id);
         }
+        
+        public Proizvodi Hide(int id)
+        {
+            var product = _context.Proizvod.Find(id);
+            //return base.Update(id, update);
+            var state = _baseState.CreateState(product.StateMachine);
+            state.CurrentEntity = product;
+
+            state.Hide();
+
+            return GetById(id);
+        }
+        public List<string> AllowedActions(int id)
+        {
+            var product = GetById(id);
+            var state = _baseState.CreateState(product.StateMachine);
+
+            return state.AllowedActions();
+        }
+        public List<Proizvodi> Recommend(int id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

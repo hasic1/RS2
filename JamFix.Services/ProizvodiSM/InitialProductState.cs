@@ -12,15 +12,21 @@ namespace JamFix.Services.ProizvodiSM
 
         }
 
-        public override async Task<Proizvodi> Insert(ProizvodiInsertRequest request)
+        public override Proizvodi Insert(ProizvodiInsertRequest request)
         {
             var set = _context.Set<Proizvod>();
             var entity = _mapper.Map<Proizvod>(request);
 
             set.Add(entity);
             entity.StateMachine = "draft";
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return _mapper.Map<Proizvodi>(entity);
+        }
+        public override List<string> AllowedActions()
+        {
+            var list = base.AllowedActions();
+            list.Add("Insert");
+            return list;
         }
     }
 }

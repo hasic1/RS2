@@ -2,6 +2,7 @@
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
@@ -19,14 +20,19 @@ namespace JamFix.Controllers
         }
 
         [HttpPost]
-        public virtual  async Task<T> Insert([FromBody]TInsert insert)
+        [Authorize(Roles ="Administrator")]
+        public virtual T Insert([FromBody]TInsert insert)
         {
-            return await _service.Insert(insert);
+            var result = ((ICRUDService<T, TSearch, TInsert, TUpdate>)this._service).Insert(insert);
+
+            return result;
         }
         [HttpPut("{id}")]
-        public virtual  async Task<T> Update(int id,[FromBody]TUpdate update)
+        public virtual T Update(int id,[FromBody]TUpdate update)
         {
-            return await _service.Update(id, update);
+            var result = ((ICRUDService<T, TSearch, TInsert, TUpdate>)this._service).Update(id, update);
+
+            return result;
         }        
     }
 }

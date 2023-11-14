@@ -7,7 +7,6 @@ namespace JamFix.Services.Interface
 {
     public interface IKorisniciService : ICRUDService<Korisnici, KorisniciSO, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
-        //List<Korisnici> Get();
-        //List<Korisnik> Delete(int id);
+        public Task<Korisnici> Login(string username, string password); 
     }
 }

@@ -13,34 +13,41 @@ namespace JamFix.Services.ProizvodiSM
 {
     public class BaseState
     {
-        public Context _context;
+        public Context _context { get; set; } = null;
+        public Proizvod CurrentEntity { get; set; }
+        public string CurrentState { get; set; }
         public IMapper _mapper { get; set; }
         public IServiceProvider _serviceProvider { get; set; }
+
         public BaseState(IServiceProvider serviceProvider, Context context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
             _serviceProvider = serviceProvider;
         }
-        public virtual Task<Proizvodi> Insert(ProizvodiInsertRequest request)
+        public virtual Proizvodi Insert(ProizvodiInsertRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
-        public virtual Task<Proizvodi> Update(int id,ProizvodiUpdateRequest request)
+        public virtual Proizvodi Update(int id, ProizvodiUpdateRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
-        public virtual Task<Proizvodi> Activate(int id)
+        public virtual void Activate()
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
-        public virtual Task<Proizvodi> Hide(int id)
+        public virtual void Hide()
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
         public virtual Task<Proizvodi> Delete(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
+        }
+        public virtual List<string> AllowedActions()
+        {
+            return new List<string>();
         }
         public BaseState CreateState(string stateName)
         {
@@ -54,7 +61,7 @@ namespace JamFix.Services.ProizvodiSM
                 case "active":
                     return _serviceProvider.GetService<ActiveProductState>();
                 default:
-                    throw new Exception("Ne radi");
+                    throw new UserException("Ne radi");
             }
         }
     }

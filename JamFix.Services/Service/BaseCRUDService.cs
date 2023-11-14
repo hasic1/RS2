@@ -20,24 +20,31 @@ namespace JamFix.Services.Service
 
         }
 
-        public virtual async Task<T> Insert(TInsert insert)
+        public virtual T Insert(TInsert insert)
         {
             var set = _context.Set<TDb>(); 
             TDb entity= _mapper.Map<TDb>(insert);
 
             set.Add(entity);
-            await BeforeInsert(entity, insert);
-            await _context.SaveChangesAsync();
+            BeforeInsert(entity, insert);
+            _context.SaveChanges();
 
             return _mapper.Map<T>(entity);
         }
-        public virtual async Task<T> Update(int id,TUpdate update)
+        public virtual T Update(int id, TUpdate update)
         {
             var set = _context.Set<TDb>();
-            var entity = await set.FindAsync(id);
+            var entity = set.Find(id);
 
-            _mapper.Map(update, entity);
-            await _context.SaveChangesAsync();
+            if (entity != null)
+            {
+                _mapper.Map(update, entity);
+            }
+            else
+            {
+                return null;
+            }
+            _context.SaveChanges();
 
             return _mapper.Map<T>(entity);
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JamFix.Model.Modeli;
 using JamFix.Services.Database;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,17 @@ namespace JamFix.Services.ProizvodiSM
     {
         public ActiveProductState(IServiceProvider serviceProvider, Context context, IMapper mapper) : base(serviceProvider,context, mapper)
         {
+        }
+        public override void Hide()
+        {
+            CurrentEntity.StateMachine = "draft";
+            _context.SaveChanges();
+        }
+        public override List<string> AllowedActions()
+        {
+            var list = base.AllowedActions();
+            list.Add("Hide");
+            return list;
         }
     }
 }

@@ -6,6 +6,10 @@ namespace JamFix.Services.Interface
 {
     public interface IProizvodiService : ICRUDService<Proizvodi, ProizvodiSO, ProizvodiInsertRequest, ProizvodiUpdateRequest>
     {
-        Task<Proizvodi> Activate(int id);
+        Proizvodi Activate(int id);
+        List<string> AllowedActions(int id);
+
+        List<Proizvodi> Recommend(int id);
+        Proizvodi Hide(int id);
     }
 }

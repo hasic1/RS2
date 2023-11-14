@@ -3,35 +3,46 @@ using Azure.Core;
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Services.Database;
+using Microsoft.Extensions.Logging;
 
 namespace JamFix.Services.ProizvodiSM
 {
     public class DraftProductState : BaseState
     {
-        public DraftProductState(IServiceProvider serviceProvider, Context context, IMapper mapper) : base(serviceProvider, context, mapper)
+        protected ILogger _logger;
+        public DraftProductState(ILogger<DraftProductState> logger,IServiceProvider serviceProvider, Context context, IMapper mapper) : base(serviceProvider, context, mapper)
         {
+            _logger = logger;   
         }
 
-        public override async Task<Proizvodi> Update(int id,ProizvodiUpdateRequest request)
+        public void Update(int id,ProizvodiUpdateRequest request)
         {
             var set = _context.Set<Proizvod>();
-            var entity = await set.FindAsync(id);
 
-            _mapper.Map(request, entity);
-            await _context.SaveChangesAsync();
+            _mapper.Map(request, CurrentEntity);
+            CurrentEntity.StateMachine = "draft";
 
-            return _mapper.Map<Proizvodi>(entity);
+            _context.SaveChanges();
         }
 
-        public override async Task<Proizvodi> Activate(int id)
+        public override void Activate()
         {
-            var set = _context.Set<Proizvod>();
-            var entity = await set.FindAsync(id);
-            entity.StateMachine = "active";
+            _logger.LogInformation($"Aktivacija proizvoda");
+            _logger.LogWarning($"W: Aktivacija proizvoda");
+            _logger.LogError($"E: Aktivacija proizvoda");
 
-            await _context.SaveChangesAsync();
 
-            return _mapper.Map<Proizvodi>(entity);
+            CurrentEntity.StateMachine = "active";
+            _context.SaveChanges();
+        }
+        public override List<string> AllowedActions()
+        {
+            var list = base.AllowedActions();
+
+            list.Add("Update");
+            list.Add("Activate");
+
+            return list;
         }
     }
 }
