@@ -12,10 +12,14 @@ namespace JamFix.Model.Modeli
         public int KorisnikId { get; set; }
         public string Ime { get; set; } = null!;
         public string Prezime { get; set; } = null!;
-        public string KorisnickoIme { get; set; }
         public string? Email { get; set; }
         public string? Telefon { get; set; }
         public bool? Status { get; set; }
-        public virtual ICollection<KorisnikUloge> KorisnikUloge { get; set; }
+        public string KorisnickoIme { get; set; } = null!;
+        public string LozinkaHash { get; set; } = null!;
+        public string LozinkaSalt { get; set; } = null!;
+        public virtual ICollection<KorisnikUloge> KorisniciUloge { get; set; }
+        //public string RoleNames => string.Join(", ", KorisnikUloge?.Select(x => x.Uloga?.Naziv)?.ToList());
+
     }
 }

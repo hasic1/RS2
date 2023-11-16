@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using EasyNetQ;
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Services.Database;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
+using System.Text;
 
 namespace JamFix.Services.ProizvodiSM
 {
@@ -31,6 +34,27 @@ namespace JamFix.Services.ProizvodiSM
             _logger.LogWarning($"W: Aktivacija proizvoda");
             _logger.LogError($"E: Aktivacija proizvoda");
 
+            //var factory = new ConnectionFactory { HostName = "localhost" };
+            //using var connection = factory.CreateConnection();
+            //using var channel = connection.CreateModel();
+
+            //channel.QueueDeclare(queue: "product_added",
+            //                     durable: false,
+            //                     exclusive: false,
+            //                     autoDelete: false,
+            //                     arguments: null);
+
+            //const string message = "Hello World!";
+            //var body = Encoding.UTF8.GetBytes(message);
+
+            //channel.BasicPublish(exchange: string.Empty,
+            //                     routingKey: "product_added",
+            //                     basicProperties: null,
+            //                     body: body);
+
+            using var bus = RabbitHutch.CreateBus("host=localhost");
+
+            bus.PubSub.Publish(CurrentEntity);
 
             CurrentEntity.StateMachine = "active";
             _context.SaveChanges();

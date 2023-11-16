@@ -22,11 +22,24 @@ namespace JamFix.Services.Service
         public override async Task BeforeInsert(Korisnik entity, KorisniciInsertRequest insert)
         {
             entity.LozinkaSalt = GenerateSalt();
-            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.lozinka);
+            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
 
         }
+        public override Korisnici Insert(KorisniciInsertRequest insert)
+        {
 
-       
+            if (insert.Password != insert.PasswordPotvrda)
+            {
+                throw new UserException("Password and confirmation must be the same");
+            }
+
+            var entity = base.Insert(insert);
+
+            _context.SaveChanges();
+
+            return entity;
+        }
+
 
         public List<Korisnik> Delete(int id)
         {
@@ -59,14 +72,14 @@ namespace JamFix.Services.Service
         {
             if (search?.IsUlogeIncluded==true)
             {
-                query = query.Include("KorisniciUloge.Uloga");
+                query = query.Include("KorisnikUloge.Uloga");
             }
             return base.AddInclude(query, search);
         }
 
         public async Task<Korisnici> Login(string username, string password)
         {
-            var entity = await _context.Korisnik.FirstOrDefaultAsync(x => x.KorisnickoIme == username);
+            var entity = await _context.Korisnik.Include("KorisniciUloge.Uloga").FirstOrDefaultAsync(x => x.KorisnickoIme == username);
             if (entity==null)
             {
                 return null;

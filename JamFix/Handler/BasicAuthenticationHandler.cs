@@ -1,4 +1,5 @@
 ﻿using JamFix.Services.Interface;
+using JamFix.Services.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
@@ -31,7 +32,7 @@ namespace JamFix.Handler
             var password = credentials[0];
             var user = await _korisniciService.Login(username, password);
 
-            if (username == null || password ==null)
+            if (username == null || password == null)
             {
                 return AuthenticateResult.Fail("Incorrect username or password");
             }
@@ -43,12 +44,12 @@ namespace JamFix.Handler
                     new Claim(ClaimTypes.NameIdentifier,user.KorisnickoIme),
 
                 };
-                foreach (var role in user.KorisnikUloge)
+                foreach (var role in user.KorisniciUloge)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role.Uloga.Naziv));
                 }
 
-                var identity = new ClaimsIdentity();
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
 

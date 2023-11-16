@@ -4,6 +4,7 @@ using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
 using JamFix.Services.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
@@ -15,6 +16,10 @@ namespace JamFix.Controllers
         public KorisniciController( ILogger<BaseController<Korisnici,KorisniciSO>> loger,IKorisniciService service) : base(loger, service)
         {
         }
-      
+        [Authorize(Roles ="Administrator")]
+        public override Korisnici Insert([FromBody] KorisniciInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
     }
 }

@@ -1,22 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using JamFix.Model.Modeli;
+using System.ComponentModel.DataAnnotations;
 
 namespace JamFix.Model.Requests
 {
     public class KorisniciInsertRequest
     {
-        public string? Ime { get; set; }
-        public string? Prezime { get; set; }
-        public string? Spol { get; set; }
+        public int KorisnikId { get; set; }
+        public string Ime { get; set; } = null!;
+        public string Prezime { get; set; } = null!;
         public string? Email { get; set; }
-        public DateTime DatumRodjenja { get; set; }
-        public string? Adresa { get; set; }
-        public int DrzavaId { get; set; }
-        public bool Pretplacen { get; set; }
-        public string? LokacijaSlike { get; set; }
-        public bool ConfirmedEmail { get; set; }
-        public string? UserToken { get; set; }
-        public string? korisnickoIme { get; set; }
-        public string? lozinka { get; set; }
-        public string? lozinkaPotvrda { get; set; }
+        public string? Telefon { get; set; }
+        public bool? Status { get; set; }
+        public string KorisnickoIme { get; set; } = null!;
+        public string Password { get; set; }
+        public string PasswordPotvrda { get; set; }
+        public List<int> UlogeIdList { get; set; } = new List<int> { };
     }
 }

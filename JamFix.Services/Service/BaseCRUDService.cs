@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace JamFix.Services.Service
 {
@@ -22,14 +23,26 @@ namespace JamFix.Services.Service
 
         public virtual T Insert(TInsert insert)
         {
-            var set = _context.Set<TDb>(); 
-            TDb entity= _mapper.Map<TDb>(insert);
+            //var set = _context.Set<TDb>(); 
+            //TDb entity= _mapper.Map<TDb>(insert);
+
+            //set.Add(entity);
+            ////BeforeInsert(entity, insert);
+            //_context.SaveChanges();
+
+            //return _mapper.Map<T>(entity);
+            var set = _context.Set<TDb>();
+
+            TDb entity = _mapper.Map<TDb>(insert);
 
             set.Add(entity);
+
             BeforeInsert(entity, insert);
+
             _context.SaveChanges();
 
             return _mapper.Map<T>(entity);
+            
         }
         public virtual T Update(int id, TUpdate update)
         {
@@ -44,6 +57,16 @@ namespace JamFix.Services.Service
             {
                 return null;
             }
+            _context.SaveChanges();
+
+            return _mapper.Map<T>(entity);
+        }
+        public virtual T Delete(int id)
+        {
+            var set = _context.Set<TDb>();
+
+            var entity = set.Find(id);
+            _context.Remove(entity);
             _context.SaveChanges();
 
             return _mapper.Map<T>(entity);

@@ -313,3 +313,7 @@ C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\obj\Debug\net6.0\refint\JamFix.dl
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\obj\Debug\net6.0\JamFix.pdb
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\obj\Debug\net6.0\JamFix.genruntimeconfig.cache
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\obj\Debug\net6.0\ref\JamFix.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\bin\Debug\net6.0\System.Threading.Channels.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\bin\Debug\net6.0\EasyNetQ.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix\bin\Debug\net6.0\Newtonsoft.Json.dll
