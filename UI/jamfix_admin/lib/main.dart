@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyMaterialApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +31,97 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Text('Flutter Home Page'),
+      home: MyMaterialApp(),
+    );
+  }
+}
+class MyAppBar extends StatelessWidget {
+  String title;
+  MyAppBar({Key? key,required this.title}) :super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title);
+  }
+}
+
+
+class Counter extends StatefulWidget {
+  const Counter({super.key});
+
+  @override
+  State<Counter> createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+int _count=0;
+void _incrementCounter(){
+    setState(() 
+  {    
+    _count++;
+  });  
+}
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('You have pusheddd $_count times'),
+        ElevatedButton(onPressed: _incrementCounter, child:Text("Bakir Hasic"))
+      ],
+    );
+  }
+}
+
+class LayoutExample extends StatelessWidget {
+  const LayoutExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 150,
+          color: Colors.red,
+            child:Center(
+              child: Container(
+              height: 100,
+              color: Colors.blue,
+              child: Text("Exampe text"),
+              alignment: Alignment.bottomLeft,
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text("Item 1"),
+            Text("Item 1"),
+            Text("Item 1"),
+          ],
+        ),
+        Container(
+          height: 150,
+          color: Colors.red,
+          child: Text("Contain"),
+          alignment: Alignment.center,
+        )
+      ],
+    );
+  }
+}
+
+class MyMaterialApp extends StatelessWidget {
+  const MyMaterialApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title:'RS II Material app',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: 
+      Text("Test"),
+      
     );
   }
 }
