@@ -118,10 +118,48 @@ class MyMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title:'RS II Material app',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: 
-      Text("Test"),
-      
+      theme: ThemeData(primarySwatch: Colors.red),
+      home: LoginPage(),
+      );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Login"),
+      ),
+      body: Center(child: Container(
+        constraints: BoxConstraints(maxWidth: 400,maxHeight: 400),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0), 
+              child: Column(children: [
+              Image.network("https://www.fit.ba/content/public/images/og-image.jpg",height: 100,width: 100,),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  prefixIcon: Icon(Icons.email)
+                ),
+              ),
+              SizedBox(height: 8,),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  prefixIcon: Icon(Icons.password)
+                ),
+              ),
+              SizedBox(height: 8,),
+              ElevatedButton(onPressed: (){
+              }, child:Text("Login"))
+                        ]),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
