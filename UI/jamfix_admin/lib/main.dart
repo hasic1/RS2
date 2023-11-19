@@ -36,16 +36,16 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class MyAppBar extends StatelessWidget {
   String title;
-  MyAppBar({Key? key,required this.title}) :super(key: key);
+  MyAppBar({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(title);
   }
 }
-
 
 class Counter extends StatefulWidget {
   const Counter({super.key});
@@ -55,20 +55,19 @@ class Counter extends StatefulWidget {
 }
 
 class _CounterState extends State<Counter> {
-int _count=0;
-void _incrementCounter(){
-    setState(() 
-  {    
-    _count++;
-  });  
-}
+  int _count = 0;
+  void _incrementCounter() {
+    setState(() {
+      _count++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text('You have pusheddd $_count times'),
-        ElevatedButton(onPressed: _incrementCounter, child:Text("Bakir Hasic"))
+        ElevatedButton(onPressed: _incrementCounter, child: Text("Bakir Hasic"))
       ],
     );
   }
@@ -84,8 +83,8 @@ class LayoutExample extends StatelessWidget {
         Container(
           height: 150,
           color: Colors.red,
-            child:Center(
-              child: Container(
+          child: Center(
+            child: Container(
               height: 100,
               color: Colors.blue,
               child: Text("Exampe text"),
@@ -118,18 +117,18 @@ class MyMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title:'RS II Material app',
+      title: 'RS II Material app',
       theme: ThemeData(primarySwatch: Colors.red),
       home: LoginPage(),
-      );
+    );
   }
 }
 
 class LoginPage extends StatelessWidget {
- LoginPage({super.key});
+  LoginPage({super.key});
 
-TextEditingController _usernameController= new TextEditingController();
-TextEditingController _passwordController= new TextEditingController();
+  TextEditingController _usernameController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -139,37 +138,43 @@ TextEditingController _passwordController= new TextEditingController();
       ),
       body: Center(
         child: Container(
-        constraints: BoxConstraints(maxWidth: 400,maxHeight: 400),
+          constraints: BoxConstraints(maxWidth: 400, maxHeight: 400),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0), 
+              padding: const EdgeInsets.all(16.0),
               child: Column(children: [
-              //Image.network("https://www.fit.ba/content/public/images/og-image.jpg",height: 100,width: 100,),
-              Image.asset("assets/images/og-image.jpg",height: 100,width: 100,),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Username",
-                  prefixIcon: Icon(Icons.email)
+                //Image.network("https://www.fit.ba/content/public/images/og-image.jpg",height: 100,width: 100,),
+                Image.asset(
+                  "assets/images/og-image.jpg",
+                  height: 100,
+                  width: 100,
                 ),
-                controller: _usernameController,
-              ),
-              SizedBox(height: 8,),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  prefixIcon: Icon(Icons.password)
+                TextField(
+                  decoration: InputDecoration(
+                      labelText: "Username", prefixIcon: Icon(Icons.email)),
+                  controller: _usernameController,
                 ),
-                controller: _passwordController,
-              ),
-              SizedBox(height: 8,),
-              ElevatedButton(onPressed: (){
-                var username = _usernameController.text;
-                var password = _passwordController.value;
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                    const ProductListScreen()
-                    ),
-                  );
-                }, child:Text("Login"))
+                SizedBox(
+                  height: 8,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                      labelText: "Password", prefixIcon: Icon(Icons.password)),
+                  controller: _passwordController,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      var username = _usernameController.text;
+                      var password = _passwordController.text;
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const ProductListScreen()),
+                      );
+                    },
+                    child: Text("Login"))
               ]),
             ),
           ),
