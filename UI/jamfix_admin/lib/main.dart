@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jamfix_admin/providers/product_provider.dart';
+import 'package:jamfix_admin/utils/util.dart';
+import 'package:provider/provider.dart';
 import './screens/product_list_screen.dart';
 
 void main() {
-  runApp(const MyMaterialApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => ProductProvider())],
+    child: const MyMaterialApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -125,13 +131,16 @@ class MyMaterialApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage({Key? key}) : super(key: key);
 
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
+  late ProductProvider _productProvider;
 
   @override
   Widget build(BuildContext context) {
+    _productProvider = context.read<ProductProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
@@ -166,13 +175,31 @@ class LoginPage extends StatelessWidget {
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const ProductListScreen()),
-                      );
+
+                      Authorization.username = username;
+                      Authorization.password = password;
+                      try {
+                        await _productProvider.get();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const ProductListScreen()),
+                        );
+                      } on Exception catch (e) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext) => AlertDialog(
+                                  title: Text("Error"),
+                                  content: Text(e.toString()),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text("OK"))
+                                  ],
+                                ));
+                      }
                     },
                     child: Text("Login"))
               ]),

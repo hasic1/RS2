@@ -30,13 +30,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
             height: 8,
           ),
           ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 //Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ProductDetailScreen(),
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => const ProductDetailScreen(),
+                //   ),
+                // );
+                var data=await _productProvider.get();
               },
               child: Text("Login"))
         ]),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/screens/product_detail_screen.dart';
 import 'package:jamfix_admin/screens/product_list_screen.dart';
 
@@ -24,6 +25,16 @@ class __MasterScreenWidgetState extends State<MasterScreenWidget> {
       drawer: Drawer(
         child: ListView(
           children: [
+            ListTile(
+              title: Text('Login'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+            ),
             ListTile(
               title: Text('Proizvodi'),
               onTap: () {

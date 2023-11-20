@@ -32,7 +32,7 @@ namespace JamFix.Handler
             var password = credentials[0];
             var user = await _korisniciService.Login(username, password);
 
-            if (username == null || password == null)
+            if (user == null)
             {
                 return AuthenticateResult.Fail("Incorrect username or password");
             }
