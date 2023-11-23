@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyMaterialApp(),
+      home: const MyMaterialApp(),
     );
   }
 }
@@ -73,7 +73,7 @@ class _CounterState extends State<Counter> {
     return Column(
       children: [
         Text('You have pusheddd $_count times'),
-        ElevatedButton(onPressed: _incrementCounter, child: Text("Bakir Hasic"))
+        ElevatedButton(onPressed: _incrementCounter, child: const Text("Bakir Hasic"))
       ],
     );
   }
@@ -93,12 +93,12 @@ class LayoutExample extends StatelessWidget {
             child: Container(
               height: 100,
               color: Colors.blue,
-              child: Text("Exampe text"),
               alignment: Alignment.bottomLeft,
+              child: const Text("Exampe text"),
             ),
           ),
         ),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text("Item 1"),
@@ -109,8 +109,8 @@ class LayoutExample extends StatelessWidget {
         Container(
           height: 150,
           color: Colors.red,
-          child: Text("Contain"),
           alignment: Alignment.center,
+          child: const Text("Contain"),
         )
       ],
     );
@@ -133,8 +133,8 @@ class MyMaterialApp extends StatelessWidget {
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  TextEditingController _usernameController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   late ProductProvider _productProvider;
 
   @override
@@ -143,11 +143,11 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: const Text("Login"),
       ),
       body: Center(
         child: Container(
-          constraints: BoxConstraints(maxWidth: 400, maxHeight: 400),
+          constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -159,30 +159,30 @@ class LoginPage extends StatelessWidget {
                   width: 100,
                 ),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: "Username", prefixIcon: Icon(Icons.email)),
                   controller: _usernameController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
                   controller: _passwordController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: () async {
+                    onPressed: ()  {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
 
                       Authorization.username = username;
                       Authorization.password = password;
                       try {
-                        await _productProvider.get();
+                         _productProvider.get();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const ProductListScreen()),
@@ -191,17 +191,17 @@ class LoginPage extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (BuildContext) => AlertDialog(
-                                  title: Text("Error"),
+                                  title: const Text("Error"),
                                   content: Text(e.toString()),
                                   actions: [
                                     TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("OK"))
+                                        child: const Text("OK"))
                                   ],
                                 ));
                       }
                     },
-                    child: Text("Login"))
+                    child: const Text("Login"))
               ]),
             ),
           ),

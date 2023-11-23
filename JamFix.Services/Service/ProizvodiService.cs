@@ -18,6 +18,20 @@ namespace JamFix.Services.Service
         {
             _baseState = baseState;
         }
+        public override IQueryable<Proizvod> AddFilter(IQueryable<Proizvod> querry, ProizvodiSO? search = null)
+        {
+            var fillteredQuery = base.AddFilter(querry, search);
+
+            if (!string.IsNullOrWhiteSpace(search?.FTS))
+            {
+                fillteredQuery = fillteredQuery.Where(x => x.NazivProizvoda.Contains(search.FTS) || x.Cijena.ToString().Contains(search.FTS));
+            }
+            if (!string.IsNullOrWhiteSpace(search?.Cijena))
+            {
+                fillteredQuery = fillteredQuery.Where(x => x.Cijena.ToString()==search.Cijena.ToString());
+            }
+            return fillteredQuery;
+        }
         public override Proizvodi Insert(ProizvodiInsertRequest insert)
         {
             //return base.Insert(insert);

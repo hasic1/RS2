@@ -12,8 +12,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Text("Details"),
       title: "Product details",
+      child: const Text("Details"),
     );
   }
 }
