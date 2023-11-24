@@ -167,13 +167,16 @@ namespace JamFix.Services.Migrations
                     b.Property<double>("Cijena")
                         .HasColumnType("float");
 
-                    b.Property<string>("LokacijaSlike")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NazivProizvoda")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slika")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SlikaThumb")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Snizen")
