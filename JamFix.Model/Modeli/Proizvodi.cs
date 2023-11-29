@@ -15,6 +15,7 @@ namespace JamFix.Model.Modeli
         public string Slika { get; set; }
         public string SlikaThumb { get; set; }
         public bool Snizen { get; set; } = false;
+        public int VrstaId { get; set; }
         public string StateMachine { get; set; }
     }
 }

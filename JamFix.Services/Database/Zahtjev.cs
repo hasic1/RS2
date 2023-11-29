@@ -10,7 +10,6 @@ namespace JamFix.Services.Database
 {
     public class Zahtjev
     {
-        [Key]
         public int ZahtjevId { get; set; }
         public string Adresa { get; set; }
         public string BrojTelefona { get; set; }
@@ -20,8 +19,7 @@ namespace JamFix.Services.Database
         public int KorisnikId { get; set; }
         public int StatusId { get; set; }
         public bool HitnaIntervencija { get; set; }
-        [ForeignKey(nameof(UredjajId))]
-        public Uredjaj Uredjaj{ get; set; }
-        public int UredjajId { get; set; }
+        public VrsteProizvoda VrsteProizvoda { get; set; }
+        public int VrstaId { get; set; }
     }
 }

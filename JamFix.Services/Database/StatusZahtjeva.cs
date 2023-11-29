@@ -9,7 +9,6 @@ namespace JamFix.Services.Database
 {
     public class StatusZahtjeva
     {
-        [Key]
         public int StatusZahtjevaId { get; set; }
         public string Opis { get; set; }
     }

@@ -40,7 +40,7 @@ class __MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ProductListScreen(),
+                    builder: (context) => ProductListScreen(),
                   ),
                 );
               },
@@ -50,7 +50,7 @@ class __MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ProductDetailScreen(),
+                    builder: (context) => ProductDetailScreen(),
                   ),
                 );
               },

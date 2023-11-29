@@ -10,15 +10,15 @@ namespace JamFix.Services.Database
 {
     public class Radnik
     {
-        [Key]
         public int RadnikId { get; set; }
         public string Ime { get; set; }
         public string Prezime { get; set; }
         public string Spol { get; set; }
         public DateTime DatumRodjenja { get; set; }
-        [ForeignKey(nameof(DrzavaId))]
         public Drzava Drzava { get; set; }
         public int DrzavaId { get; set; }
         public DateTime trajanjeUgovora { get; set; }
+        public virtual ICollection<RadniNalog> RadniNalog { get; set; }
+
     }
 }

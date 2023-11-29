@@ -12,15 +12,17 @@ namespace JamFix.Services
             CreateMap<Korisnik, Korisnici>();
             CreateMap<KorisniciInsertRequest, Korisnik>();
             CreateMap<KorisniciUpdateRequest, Korisnik>();
-
+            //---------------------------------------------------------         
             CreateMap<ProizvodiInsertRequest, Proizvod>();
             CreateMap<ProizvodiUpdateRequest, Proizvod>();
             CreateMap<Proizvod, Proizvodi>();
-            
-            CreateMap<Uredjaj,Uredjaji>();  
-
+            //---------------------------------------------------------
+            CreateMap<VrsteProizvodaUpdateRequest, VrsteProizvoda>();
+            CreateMap<VrsteProizvodaInsertRequest, VrsteProizvoda>();
+            CreateMap<VrsteProizvoda,VrstaProizvoda>();
+            //---------------------------------------------------------
             CreateMap<Drzava,Drzave>();
-
+            //---------------------------------------------------------
             CreateMap<KorisniciUloge, KorisnikUloge>();
             CreateMap<Uloga, Uloge>();
 

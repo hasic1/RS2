@@ -41,6 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 //Dodaj ovde dependency injection  
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
+builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
 builder.Services.AddTransient<IService<Uloge, BaseSO>, BaseService<Uloge, Uloga, BaseSO>>();
 
 builder.Services.AddTransient<BaseState>();

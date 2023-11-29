@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
+import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
 import './screens/product_list_screen.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => ProductProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => ProductProvider()),
+      ChangeNotifierProvider(create: (_) => KorisniciProvider()),
+      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
+    ],
     child: const MyMaterialApp(),
   ));
 }
@@ -73,7 +79,8 @@ class _CounterState extends State<Counter> {
     return Column(
       children: [
         Text('You have pusheddd $_count times'),
-        ElevatedButton(onPressed: _incrementCounter, child: const Text("Bakir Hasic"))
+        ElevatedButton(
+            onPressed: _incrementCounter, child: const Text("Bakir Hasic"))
       ],
     );
   }
@@ -133,8 +140,8 @@ class MyMaterialApp extends StatelessWidget {
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _usernameController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
   late ProductProvider _productProvider;
 
   @override
@@ -175,14 +182,17 @@ class LoginPage extends StatelessWidget {
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: ()  {
+                    onPressed: () {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
+                      _passwordController.text=username;
+
 
                       Authorization.username = username;
                       Authorization.password = password;
+
                       try {
-                         _productProvider.get();
+                        _productProvider.get();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const ProductListScreen()),
@@ -190,13 +200,13 @@ class LoginPage extends StatelessWidget {
                       } on Exception catch (e) {
                         showDialog(
                             context: context,
-                            builder: (BuildContext) => AlertDialog(
-                                  title: const Text("Error"),
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: Text("Error"),
                                   content: Text(e.toString()),
                                   actions: [
                                     TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: const Text("OK"))
+                                        child: Text("OK"))
                                   ],
                                 ));
                       }

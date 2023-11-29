@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace JamFix.Model.Modeli
 {
-    public class Uredjaji
+    public class VrstaProizvoda
     {
-        public int UredjajId { get; set; }
+        public int VrstaId { get; set; }
         public string Naziv { get; set; }
     }
 }

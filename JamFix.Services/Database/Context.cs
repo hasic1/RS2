@@ -24,7 +24,7 @@ namespace JamFix.Services.Database
         public virtual DbSet<Radnik> Radnik { get; set; } = null!;
         public virtual DbSet<RadniNalog> RadniNalog { get; set; } = null!;
         public virtual DbSet<StatusZahtjeva> StatusZahtjeva { get; set; } = null!;
-        public virtual DbSet<Uredjaj> Uredjaj { get; set; } = null!;
+        public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; } = null!;
         public virtual DbSet<Zahtjev> Zahtjev { get; set; } = null!;
 
 
@@ -98,6 +98,119 @@ namespace JamFix.Services.Database
                     .HasForeignKey(d => d.UlogaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_KorisniciUloge_Uloge");
+            });
+            modelBuilder.Entity<Kupci>(entity =>
+            {
+                entity.HasKey(e => e.KupacId);
+
+                entity.ToTable("Kupci");
+
+                entity.Property(e => e.KupacId).HasColumnName("KupacID");
+
+                entity.Property(e => e.DatumRegistracije).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.Ime).HasMaxLength(50);
+
+                entity.Property(e => e.KorisnickoIme).HasMaxLength(50);
+
+                entity.Property(e => e.LozinkaHash).HasMaxLength(50);
+
+                entity.Property(e => e.LozinkaSalt).HasMaxLength(50);
+
+                entity.Property(e => e.Prezime).HasMaxLength(50);
+            });
+            modelBuilder.Entity<Ocjene>(entity =>
+            {
+                entity.HasKey(e => e.OcjenaId);
+
+                entity.ToTable("Ocjene");
+
+                entity.Property(e => e.OcjenaId).HasColumnName("OcjenaID");
+
+                entity.Property(e => e.Datum).HasColumnType("datetime");
+
+                entity.Property(e => e.KupacId).HasColumnName("KupacID");
+
+                entity.Property(e => e.ProizvodId).HasColumnName("ProizvodID");
+
+                entity.HasOne(d => d.Kupac)
+                    .WithMany(p => p.Ocjene)
+                    .HasForeignKey(d => d.KupacId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Ocjene_Kupci");
+
+                entity.HasOne(d => d.Proizvod)
+                    .WithMany(p => p.Ocjene)
+                    .HasForeignKey(d => d.ProizvodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Ocjene_Proizvodi");
+            });
+            modelBuilder.Entity<Proizvod>(entity =>
+            {
+                entity.HasKey(e => e.ProizvodId);
+
+                entity.ToTable("Proizvod");
+
+                entity.Property(e => e.ProizvodId).HasColumnName("ProizvodID");
+
+                entity.Property(e => e.Cijena).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NazivProizvoda).HasMaxLength(50);
+
+                entity.Property(e => e.Opis).HasMaxLength(100);
+
+                entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
+                
+                entity.Property(e => e.Snizen)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Vrsta)
+                    .WithMany(p => p.Proizvod)
+                    .HasForeignKey(d => d.VrstaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Proizvodi_VrsteProizvoda");
+            });
+            modelBuilder.Entity<RadniNalog>(entity =>
+            {
+                entity.HasKey(e => e.NalogId);
+
+                entity.ToTable("RadniNalog");
+
+                entity.Property(e => e.NalogId).HasColumnName("NalogId");
+
+                entity.Property(e => e.Datum).HasColumnType("datetime");
+
+                entity.Property(e => e.Mjesto).HasMaxLength(50);
+
+                entity.Property(e => e.ImePrezime).HasMaxLength(50);
+
+                entity.Property(e => e.Adresa).HasMaxLength(50);
+
+                entity.Property(e => e.Telefon).HasMaxLength(50);
+
+                entity.Property(e => e.OpisPrijavljenog).HasMaxLength(150);
+
+                entity.Property(e => e.OpisUradjenog).HasMaxLength(50);
+
+                entity.Property(e => e.Naziv).HasMaxLength(50);
+
+                entity.HasOne(d => d.Radnik)
+                    .WithMany(p => p.RadniNalog)
+                    .HasForeignKey(d => d.NalogId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RadniNalog_Radnik");
+                //entity.Property(e => e.Cijena).HasColumnType("decimal(18, 2)");
+            });
+            modelBuilder.Entity<VrsteProizvoda>(entity =>
+            {
+                entity.HasKey(e => e.VrstaId);
+
+                entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
+
+                entity.Property(e => e.Naziv).HasMaxLength(50);
             });
             modelBuilder.UseCollation("Latin1_General_CI_AI");
 
