@@ -26,7 +26,7 @@ class __MasterScreenWidgetState extends State<MasterScreenWidget> {
         child: ListView(
           children: [
             ListTile(
-              title: const Text('Login'),
+              title: Text('Login'),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

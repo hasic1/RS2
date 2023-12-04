@@ -13,12 +13,12 @@ namespace JamFix.Services.ProizvodiSM
     public class DraftProductState : BaseState
     {
         protected ILogger _logger;
-        public DraftProductState(ILogger<DraftProductState> logger,IServiceProvider serviceProvider, Context context, IMapper mapper) : base(serviceProvider, context, mapper)
+        public DraftProductState(ILogger<DraftProductState> logger, IServiceProvider serviceProvider, Context context, IMapper mapper) : base(serviceProvider, context, mapper)
         {
-            _logger = logger;   
+            _logger = logger;
         }
 
-        public void Update(int id,ProizvodiUpdateRequest request)
+        public void Update(int id, ProizvodiUpdateRequest request)
         {
             var set = _context.Set<Proizvod>();
 
@@ -28,40 +28,32 @@ namespace JamFix.Services.ProizvodiSM
             _context.SaveChanges();
         }
 
-        public override void Activate()
+        public override async Task<Proizvodi> Activate(int id)
         {
-            _logger.LogInformation($"Aktivacija proizvoda");
-            _logger.LogWarning($"W: Aktivacija proizvoda");
-            _logger.LogError($"E: Aktivacija proizvoda");
+            _logger.LogInformation($"Aktivacija proizvoda: {id}");
 
-            //var factory = new ConnectionFactory { HostName = "localhost" };
-            //using var connection = factory.CreateConnection();
-            //using var channel = connection.CreateModel();
+            _logger.LogWarning($"W: Aktivacija proizvoda: {id}");
 
-            //channel.QueueDeclare(queue: "product_added",
-            //                     durable: false,
-            //                     exclusive: false,
-            //                     autoDelete: false,
-            //                     arguments: null);
+            _logger.LogError($"E: Aktivacija proizvoda: {id}");
 
-            //const string message = "Hello World!";
-            //var body = Encoding.UTF8.GetBytes(message);
+            var set = _context.Set<Database.Proizvod>();
 
-            //channel.BasicPublish(exchange: string.Empty,
-            //                     routingKey: "product_added",
-            //                     basicProperties: null,
-            //                     body: body);
+            var entity = await set.FindAsync(id);
+
+            entity.StateMachine = "active";
+
+            await _context.SaveChangesAsync();
+            var mappedEntity = _mapper.Map<Proizvodi>(entity);
 
             using var bus = RabbitHutch.CreateBus("host=localhost");
 
-            bus.PubSub.Publish(CurrentEntity);
+            bus.PubSub.Publish(mappedEntity);
 
-            CurrentEntity.StateMachine = "active";
-            _context.SaveChanges();
+            return mappedEntity;
         }
-        public override List<string> AllowedActions()
+        public override async Task<List<string>> AllowedActions()
         {
-            var list = base.AllowedActions();
+            var list = await base.AllowedActions();
 
             list.Add("Update");
             list.Add("Activate");

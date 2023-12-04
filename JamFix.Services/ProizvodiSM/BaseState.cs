@@ -25,15 +25,15 @@ namespace JamFix.Services.ProizvodiSM
             _mapper = mapper;
             _serviceProvider = serviceProvider;
         }
-        public virtual Proizvodi Insert(ProizvodiInsertRequest request)
+        public virtual Task<Proizvodi>Insert(ProizvodiInsertRequest request)
         {
             throw new UserException("Not allowed");
         }
-        public virtual Proizvodi Update(int id, ProizvodiUpdateRequest request)
+        public virtual Task<Proizvodi> Update(int id, ProizvodiUpdateRequest request)
         {
             throw new UserException("Not allowed");
         }
-        public virtual void Activate()
+        public virtual Task<Proizvodi> Activate(int id)
         {
             throw new UserException("Not allowed");
         }
@@ -45,7 +45,7 @@ namespace JamFix.Services.ProizvodiSM
         {
             throw new UserException("Not allowed");
         }
-        public virtual List<string> AllowedActions()
+        public virtual async Task<List<string>> AllowedActions()
         {
             return new List<string>();
         }

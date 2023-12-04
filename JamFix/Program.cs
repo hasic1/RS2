@@ -39,9 +39,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 // Add services to the container.
 //Dodaj ovde dependency injection  
+builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
+builder.Services.AddTransient<IRadniNalogService, RadniNalogService>();
+builder.Services.AddTransient<IIzvjestajiService, IzvjestajiService>();
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
-builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
+builder.Services.AddTransient<IZahtjeviService, ZahtjeviService>();
+builder.Services.AddTransient<INovostiService, NovostiService>();
+builder.Services.AddTransient<IUslugeService, UslugeService>();
 builder.Services.AddTransient<IService<Uloge, BaseSO>, BaseService<Uloge, Uloga, BaseSO>>();
 
 builder.Services.AddTransient<BaseState>();
@@ -57,20 +62,13 @@ builder.Services.AddControllersWithViews();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
-builder.Services.AddAutoMapper(typeof(IKorisniciService));
-builder.Services.AddAuthentication("BasicAuthentication")
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-
-//builder.Services.AddAuthentication("BasicAuthentication")
-//    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(options => 
         options.UseSqlServer(connectionString));
 
-
-
+builder.Services.AddAutoMapper(typeof(IKorisniciService));
+builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 var app = builder.Build();
 

@@ -19,10 +19,11 @@ namespace JamFix.Services.ProizvodiSM
             CurrentEntity.StateMachine = "draft";
             _context.SaveChanges();
         }
-        public override List<string> AllowedActions()
+        public override async Task<List<string>> AllowedActions()
         {
-            var list = base.AllowedActions();
+            var list = await base.AllowedActions();
             list.Add("Hide");
+
             return list;
         }
     }

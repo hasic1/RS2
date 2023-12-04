@@ -2,6 +2,7 @@
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Services.Database;
+using JamFix.Services.Service;
 
 namespace JamFix.Services
 {
@@ -25,7 +26,26 @@ namespace JamFix.Services
             //---------------------------------------------------------
             CreateMap<KorisniciUloge, KorisnikUloge>();
             CreateMap<Uloga, Uloge>();
-
+            //---------------------------------------------------------
+            CreateMap<NovostUpdateRequest, Novosti>();
+            CreateMap<NovostInsertRequest, Novosti>();
+            CreateMap<Novosti, Novost>();
+            //---------------------------------------------------------
+            CreateMap<UslugaInsertRequest, Usluge>();
+            CreateMap<UslugaUpdateRequest, Usluge>();
+            CreateMap<Usluge, Usluga>();
+            //---------------------------------------------------------
+            CreateMap<ZahtjeviInsertRequest, Zahtjev>();
+            CreateMap<ZahtjeviUpdateRequest, Zahtjev>();
+            CreateMap<Zahtjev, Zahtjevi>();
+            //---------------------------------------------------------
+            CreateMap<IzvjestajiInsertRequest, Izvjestaj>();
+            CreateMap<IzvjestajiUpdateRequest, Izvjestaj>();
+            CreateMap<Izvjestaj, Izvjestaji>();
+            //---------------------------------------------------------
+            CreateMap<RadniNalogInsertRequest, RadniNalog>();
+            CreateMap<RadniNalogUpdateRequest, RadniNalog>();
+            CreateMap<RadniNalog, RadniNalozi>();
         }
     }
 }

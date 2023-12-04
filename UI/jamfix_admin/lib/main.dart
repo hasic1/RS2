@@ -1,16 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:jamfix_admin/providers/korisnici_provider.dart';
+// import 'package:eprodaja_admin/models/jedinice_mjere.dart';
+//import 'package:eprodaja_admin/providers/jedinice_mjere.dart';
+//import 'package:eprodaja_admin/providers/product_provider.dart';
+//import 'package:eprodaja_admin/providers/vrste_proizvoda.dart';
+//import 'package:eprodaja_admin/utils/util.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
+
 import './screens/product_list_screen.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ProductProvider()),
-      ChangeNotifierProvider(create: (_) => KorisniciProvider()),
+      //ChangeNotifierProvider(create: (_) => JediniceMjereProvider()),
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
     ],
     child: const MyMaterialApp(),
@@ -18,7 +23,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -28,39 +33,32 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        // is not restarted.
+        primarySwatch: Colors.blue,
       ),
-      home: const MyMaterialApp(),
+      home: LayoutExamples(), //Counter(),
     );
   }
 }
 
 class MyAppBar extends StatelessWidget {
-  String title;
+  String? title;
   MyAppBar({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(title);
+    return Text(title!);
   }
 }
 
 class Counter extends StatefulWidget {
-  const Counter({super.key});
+  const Counter({Key? key}) : super(key: key);
 
   @override
   State<Counter> createState() => _CounterState();
@@ -68,6 +66,7 @@ class Counter extends StatefulWidget {
 
 class _CounterState extends State<Counter> {
   int _count = 0;
+
   void _incrementCounter() {
     setState(() {
       _count++;
@@ -78,16 +77,22 @@ class _CounterState extends State<Counter> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('You have pusheddd $_count times'),
+        Text('You have pushed button $_count times'),
         ElevatedButton(
-            onPressed: _incrementCounter, child: const Text("Bakir Hasic"))
+          onPressed: _incrementCounter,
+          child: Text("Increment++"),
+        ),
+        ElevatedButton(
+          onPressed: _incrementCounter,
+          child: Text("Increment"),
+        )
       ],
     );
   }
 }
 
-class LayoutExample extends StatelessWidget {
-  const LayoutExample({super.key});
+class LayoutExamples extends StatelessWidget {
+  const LayoutExamples({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,24 +105,24 @@ class LayoutExample extends StatelessWidget {
             child: Container(
               height: 100,
               color: Colors.blue,
+              child: Text("Example text"),
               alignment: Alignment.bottomLeft,
-              child: const Text("Exampe text"),
             ),
           ),
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text("Item 1"),
-            Text("Item 1"),
-            Text("Item 1"),
+            Text("Item 2"),
+            Text("Item 3"),
           ],
         ),
         Container(
           height: 150,
           color: Colors.red,
+          child: Text("Contain"),
           alignment: Alignment.center,
-          child: const Text("Contain"),
         )
       ],
     );
@@ -125,13 +130,13 @@ class LayoutExample extends StatelessWidget {
 }
 
 class MyMaterialApp extends StatelessWidget {
-  const MyMaterialApp({super.key});
+  const MyMaterialApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RS II Material app',
-      theme: ThemeData(primarySwatch: Colors.red),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: LoginPage(),
     );
   }
@@ -150,52 +155,55 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: Text("Login"),
       ),
       body: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
+          constraints: BoxConstraints(maxWidth: 400, maxHeight: 400),
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
-                //Image.network("https://www.fit.ba/content/public/images/og-image.jpg",height: 100,width: 100,),
+                // Image.network("https://www.fit.ba/content/public/images/og-image.jpg", height: 100, width: 100,),
                 Image.asset(
-                  "assets/images/og-image.jpg",
+                  "assets/images/logo.jpg",
                   height: 100,
                   width: 100,
                 ),
                 TextField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       labelText: "Username", prefixIcon: Icon(Icons.email)),
                   controller: _usernameController,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 8,
                 ),
                 TextField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
                   controller: _passwordController,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
-                      _passwordController.text=username;
+                      _passwordController.text = username;
 
+                      print("login proceed $username $password");
 
                       Authorization.username = username;
                       Authorization.password = password;
 
                       try {
-                        _productProvider.get();
+                        await _productProvider.get();
+
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const ProductListScreen()),
+                            builder: (context) => const ProductListScreen(),
+                          ),
                         );
                       } on Exception catch (e) {
                         showDialog(
@@ -211,7 +219,7 @@ class LoginPage extends StatelessWidget {
                                 ));
                       }
                     },
-                    child: const Text("Login"))
+                    child: Text("Login"))
               ]),
             ),
           ),

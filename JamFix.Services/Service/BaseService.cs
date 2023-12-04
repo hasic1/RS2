@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JamFix.Model.Modeli;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
@@ -16,42 +17,48 @@ namespace JamFix.Services.Service
             _mapper = mapper;
         }
 
-        public virtual IEnumerable<T> Get(TSearch? search=null) 
+        public virtual async Task<PagedResult<T>> Get(TSearch? search = null)
         {
-            var querry= _context.Set<TDb>().AsQueryable();
+            var query = _context.Set<TDb>().AsQueryable();
 
-            querry = AddFilter(querry, search);
+            PagedResult<T> result = new PagedResult<T>();
 
-            if (search?.Page.HasValue==true&& search?.PageSize.HasValue == true)
+            query = AddFilter(query, search);
+
+            query = AddInclude(query, search);
+
+            result.Count = await query.CountAsync();
+
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
-                querry = querry.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
             }
 
-            var list= querry.ToList();
+            var list = await query.ToListAsync();
 
-            return _mapper.Map<IList<T>>(list);
+            var tmp = _mapper.Map<List<T>>(list);
+            result.Result = tmp;
+            return result;
         }
-        public T GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
-            var set = _context.Set<TDb>();
-
-            var entity = set.Find(id);
+            var entity = await _context.Set<TDb>().FindAsync(id);
 
             return _mapper.Map<T>(entity);
         }
+        //public virtual async Task<T> DeleteById(int id)
+        //{
+        //    var set = _context.Set<TDb>();
+
+        //    var entity = set.FindAsync(id);
+        //    _context.Remove(entity);
+        //    _context.SaveChangesAsync();
+
+        //    return _mapper.Map<T>(entity);
+        //}
         public virtual IQueryable<TDb> AddFilter(IQueryable<TDb> querry,TSearch? search = null)
         {
             return querry;
-        }
-        public T DeleteById(int id)
-        {
-            var set = _context.Set<TDb>();
-
-            var entity = set.Find(id);
-            _context.Remove(entity);
-            _context.SaveChanges();
-
-            return _mapper.Map<T>(entity);
         }
         public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query, TSearch search = null)
         {

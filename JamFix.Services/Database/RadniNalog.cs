@@ -11,6 +11,7 @@ namespace JamFix.Services.Database
     public class RadniNalog
     {
         public int NalogId { get; set; }
+        public string NosilacPosla { get; set; }
         public string OpisPrijavljenog { get; set; }
         public string OpisUradjenog { get; set; }
         public string ImePrezime { get; set; }
@@ -20,7 +21,5 @@ namespace JamFix.Services.Database
         public string Mjesto { get; set; }
         public string Naziv { get; set; }
         public int Kolicina { get; set; }
-        public int RadnikId { get; set; }
-        public Radnik Radnik { get; set; }
     }
 }

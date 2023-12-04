@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Interface
 {
-    public interface IService<T,TSearch> where TSearch : class 
+    public interface IService<T, TSearch> where TSearch : class 
     {
-        IEnumerable<T> Get(TSearch search = null);
-        T GetById(int id);
-        T DeleteById(int id);
+        Task<PagedResult<T>> Get(TSearch search = null);
+        Task<T> GetById(int id);
+        //Task<T> DeleteById(int id);
     }
 }

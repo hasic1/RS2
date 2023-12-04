@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JamFix.Services.Migrations
 {
     /// <inheritdoc />
-    public partial class migracija1 : Migration
+    public partial class migracija : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,7 @@ namespace JamFix.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Korisnici",
+                name: "Korisnik",
                 columns: table => new
                 {
                     KorisnikID = table.Column<int>(type: "int", nullable: false)
@@ -57,7 +57,7 @@ namespace JamFix.Services.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Korisnici", x => x.KorisnikID);
+                    table.PrimaryKey("PK_Korisnik", x => x.KorisnikID);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,6 +78,40 @@ namespace JamFix.Services.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Kupci", x => x.KupacID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Novosti",
+                columns: table => new
+                {
+                    NovostId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Sadrzaj = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Novosti", x => x.NovostId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RadniNalog",
+                columns: table => new
+                {
+                    NalogId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OpisPrijavljenog = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    OpisUradjenog = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ImePrezime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Telefon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Datum = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Adresa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Mjesto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Naziv = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Kolicina = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RadniNalog", x => x.NalogId);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +142,20 @@ namespace JamFix.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Usluge",
+                columns: table => new
+                {
+                    UslugaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImePrezime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Datum = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usluge", x => x.UslugaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VrsteProizvoda",
                 columns: table => new
                 {
@@ -121,26 +169,26 @@ namespace JamFix.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Radnik",
+                name: "Zahtjev",
                 columns: table => new
                 {
-                    RadnikId = table.Column<int>(type: "int", nullable: false)
+                    ZahtjevId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Prezime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Spol = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatumRodjenja = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DrzavaId = table.Column<int>(type: "int", nullable: false),
-                    trajanjeUgovora = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Adresa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BrojTelefona = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Opis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DatumVrijeme = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StatusZahtjevaId = table.Column<int>(type: "int", nullable: false),
+                    HitnaIntervencija = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Radnik", x => x.RadnikId);
+                    table.PrimaryKey("PK_Zahtjev", x => x.ZahtjevId);
                     table.ForeignKey(
-                        name: "FK_Radnik_Drzava_DrzavaId",
-                        column: x => x.DrzavaId,
-                        principalTable: "Drzava",
-                        principalColumn: "DrzavaId",
+                        name: "FK_Zahtjev_StatusZahtjeva_StatusZahtjevaId",
+                        column: x => x.StatusZahtjevaId,
+                        principalTable: "StatusZahtjeva",
+                        principalColumn: "StatusZahtjevaId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -160,7 +208,7 @@ namespace JamFix.Services.Migrations
                     table.ForeignKey(
                         name: "FK_KorisniciUloge_Korisnici",
                         column: x => x.KorisnikID,
-                        principalTable: "Korisnici",
+                        principalTable: "Korisnik",
                         principalColumn: "KorisnikID");
                     table.ForeignKey(
                         name: "FK_KorisniciUloge_Uloge",
@@ -179,8 +227,8 @@ namespace JamFix.Services.Migrations
                     NazivProizvoda = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Cijena = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Opis = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Slika = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SlikaThumb = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Slika = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    SlikaThumb = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Snizen = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))"),
                     StateMachine = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -192,60 +240,6 @@ namespace JamFix.Services.Migrations
                         column: x => x.VrstaID,
                         principalTable: "VrsteProizvoda",
                         principalColumn: "VrstaID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Zahtjev",
-                columns: table => new
-                {
-                    ZahtjevId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Adresa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrojTelefona = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Opis = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatumVrijeme = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StatusZahtjeva = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KorisnikId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    HitnaIntervencija = table.Column<bool>(type: "bit", nullable: false),
-                    VrsteProizvodaVrstaId = table.Column<int>(type: "int", nullable: false),
-                    VrstaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Zahtjev", x => x.ZahtjevId);
-                    table.ForeignKey(
-                        name: "FK_Zahtjev_VrsteProizvoda_VrsteProizvodaVrstaId",
-                        column: x => x.VrsteProizvodaVrstaId,
-                        principalTable: "VrsteProizvoda",
-                        principalColumn: "VrstaID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RadniNalog",
-                columns: table => new
-                {
-                    NalogId = table.Column<int>(type: "int", nullable: false),
-                    OpisPrijavljenog = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    OpisUradjenog = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ImePrezime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Telefon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Datum = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Adresa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Mjesto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Naziv = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Kolicina = table.Column<int>(type: "int", nullable: false),
-                    RadnikId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RadniNalog", x => x.NalogId);
-                    table.ForeignKey(
-                        name: "FK_RadniNalog_Radnik",
-                        column: x => x.NalogId,
-                        principalTable: "Radnik",
-                        principalColumn: "RadnikId");
                 });
 
             migrationBuilder.CreateTable(
@@ -275,19 +269,6 @@ namespace JamFix.Services.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "CS_Email",
-                table: "Korisnici",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "CS_KorisnickoIme",
-                table: "Korisnici",
-                column: "KorisnickoIme",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_KorisniciUloge_KorisnikID",
                 table: "KorisniciUloge",
                 column: "KorisnikID");
@@ -296,6 +277,19 @@ namespace JamFix.Services.Migrations
                 name: "IX_KorisniciUloge_UlogaID",
                 table: "KorisniciUloge",
                 column: "UlogaID");
+
+            migrationBuilder.CreateIndex(
+                name: "CS_Email",
+                table: "Korisnik",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "CS_KorisnickoIme",
+                table: "Korisnik",
+                column: "KorisnickoIme",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ocjene_KupacID",
@@ -313,24 +307,25 @@ namespace JamFix.Services.Migrations
                 column: "VrstaID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Radnik_DrzavaId",
-                table: "Radnik",
-                column: "DrzavaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Zahtjev_VrsteProizvodaVrstaId",
+                name: "IX_Zahtjev_StatusZahtjevaId",
                 table: "Zahtjev",
-                column: "VrsteProizvodaVrstaId");
+                column: "StatusZahtjevaId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Drzava");
+
+            migrationBuilder.DropTable(
                 name: "Izvjestaj");
 
             migrationBuilder.DropTable(
                 name: "KorisniciUloge");
+
+            migrationBuilder.DropTable(
+                name: "Novosti");
 
             migrationBuilder.DropTable(
                 name: "Ocjene");
@@ -339,13 +334,13 @@ namespace JamFix.Services.Migrations
                 name: "RadniNalog");
 
             migrationBuilder.DropTable(
-                name: "StatusZahtjeva");
+                name: "Usluge");
 
             migrationBuilder.DropTable(
                 name: "Zahtjev");
 
             migrationBuilder.DropTable(
-                name: "Korisnici");
+                name: "Korisnik");
 
             migrationBuilder.DropTable(
                 name: "Uloga");
@@ -357,13 +352,10 @@ namespace JamFix.Services.Migrations
                 name: "Proizvod");
 
             migrationBuilder.DropTable(
-                name: "Radnik");
+                name: "StatusZahtjeva");
 
             migrationBuilder.DropTable(
                 name: "VrsteProizvoda");
-
-            migrationBuilder.DropTable(
-                name: "Drzava");
         }
     }
 }

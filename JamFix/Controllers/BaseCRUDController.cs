@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
 {
-    public class BaseCRUDController<T, TSearch,TInsert,TUpdate> : BaseController<T,TSearch> where T : class where TSearch : class where TInsert : class where TUpdate : class
-    {
+    [Route("[controller]")]
+    public class BaseCRUDController<T, TSearch,TInsert,TUpdate> : BaseController<T,TSearch> where T : class where TSearch : class 
+    { 
         protected new readonly ICRUDService<T, TSearch, TInsert, TUpdate> _service;
         protected readonly ILogger<BaseController<T,TSearch>> _logger;
 
@@ -19,26 +20,25 @@ namespace JamFix.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="Administrator")]
-        public virtual T Insert([FromBody]TInsert insert)
+        public virtual async Task<T> Insert([FromBody]TInsert insert)
         {
-            var result = ((ICRUDService<T, TSearch, TInsert, TUpdate>)this._service).Insert(insert);
+            var result = _service.Insert(insert);
 
-            return result;
+            return await result;
         }
         [HttpPut("{id}")]
-        public virtual T Update(int id,[FromBody]TUpdate update)
+        public virtual async Task<T> Update(int id,[FromBody]TUpdate update)
         {
-            var result = ((ICRUDService<T, TSearch, TInsert, TUpdate>)this._service).Update(id, update);
+            var result = _service.Update(id, update);
 
-            return result;
+            return await result;
         }
         [HttpDelete("{id}")]
-        public virtual T Delete(int id)
+        public bool Delete(int id)
         {
-            var result = ((ICRUDService<T, TSearch, TInsert, TUpdate>)this._service).Delete(id);
+            var result = _service.Delete(id);
 
-            return result;
+            return  result;
         }
     }
 }

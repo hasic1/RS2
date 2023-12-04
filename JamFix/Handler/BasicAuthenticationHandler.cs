@@ -29,7 +29,7 @@ namespace JamFix.Handler
             var credentials = Encoding.UTF8.GetString(credentialsBytes).Split(':');
 
             var username = credentials[0];
-            var password = credentials[0];
+            var password = credentials[1];
             var user = await _korisniciService.Login(username, password);
 
             if (user == null)

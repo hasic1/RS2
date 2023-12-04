@@ -1,12 +1,14 @@
 // ignore_for_file: sort_child_properties_last
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/vrste_proizvoda.dart';
-import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
@@ -87,18 +89,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   onPressed: () async {
                     _formKey.currentState?.saveAndValidate();
                     print(_formKey.currentState?.value);
+
+                    var request = new Map.from(_formKey.currentState!.value);
+                    request['slika'] = _base65Image;
+                    print(request['slika']);
                     try {
                       if (widget.product == null) {
-                        await _productProvider
-                            .insert(_formKey.currentState?.value);
+                        await _productProvider.insert(request);
                       } else {
                         await _productProvider.update(
-                            widget.product!.proizvodId!,
-                            _formKey.currentState?.value);
+                            widget.product!.proizvodId!, request);
                       }
                     } on Exception catch (e) {
-                      print(_formKey.currentState?.value);
-                      // ignore: use_build_context_synchronously
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -176,7 +178,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     _formKey.currentState!.fields['vrstaId']?.reset();
                   },
                 ),
-                hintText: 'Select Gender',
+                hintText: 'Odaberi vrstu',
               ),
               items: vrsteProizvodaResult?.result
                       .map((item) => DropdownMenuItem(
@@ -188,8 +190,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   [],
             ))
           ],
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: FormBuilderField(
+              name: 'imageId',
+              builder: ((field) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                      label: Text('Odaberite sliku'),
+                      errorText: field.errorText),
+                  child: ListTile(
+                    leading: Icon(Icons.photo),
+                    title: Text("Select image"),
+                    trailing: Icon(Icons.file_upload),
+                    onTap: getImage,
+                  ),
+                );
+              }),
+            )),
+          ],
         )
       ]),
     );
+  }
+
+  File? _image;
+  String? _base65Image;
+
+  Future getImage() async {
+    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null && result.files.single.path != null) {
+      _image = File(result.files.single.path!);
+      _base65Image = base64Encode(_image!.readAsBytesSync());
+    }
   }
 }

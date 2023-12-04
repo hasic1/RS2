@@ -11,9 +11,8 @@ namespace JamFix.Model.Requests
         public string? NazivProizvoda { get; set; }
         public double? Cijena { get; set; }
         public string? Opis { get; set; }
-        public string? Slika { get; set; }
-        public string? SlikaThumb { get; set; }
-        public int? VrstaId { get; set; }
+        public byte[]? Slika { get; set; }
+        public byte[]? SlikaThumb { get; set; }
         public bool? Snizen { get; set; } = false;
     }
 }

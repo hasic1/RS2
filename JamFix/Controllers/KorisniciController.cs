@@ -16,8 +16,8 @@ namespace JamFix.Controllers
         public KorisniciController( ILogger<BaseController<Korisnici,KorisniciSO>> loger,IKorisniciService service) : base(loger, service)
         {
         }
-        [Authorize(Roles ="Administrator")]
-        public override Korisnici Insert([FromBody] KorisniciInsertRequest insert)
+        //[Authorize(Roles ="Administrator")]
+        public override Task<Korisnici> Insert([FromBody] KorisniciInsertRequest insert)
         {
             return base.Insert(insert);
         }

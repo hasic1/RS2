@@ -15,17 +15,22 @@ namespace JamFix.Services.Database
 
         public Context(DbContextOptions<Context> options)
             : base(options) { }
-        public virtual DbSet<Korisnik> Korisnik { get; set; } = null!;
-        public virtual DbSet<KorisniciUloge> KorisniciUloge { get; set; } = null!;
-        public virtual DbSet<Uloga> Uloga { get; set; } = null!;
-        public virtual DbSet<Drzava> Drzava { get; set; } = null!;
-        public virtual DbSet<Izvjestaj> Izvjestaj { get; set; } = null!;
-        public virtual DbSet<Proizvod> Proizvod { get; set; } = null!;
-        public virtual DbSet<Radnik> Radnik { get; set; } = null!;
-        public virtual DbSet<RadniNalog> RadniNalog { get; set; } = null!;
-        public virtual DbSet<StatusZahtjeva> StatusZahtjeva { get; set; } = null!;
-        public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; } = null!;
-        public virtual DbSet<Zahtjev> Zahtjev { get; set; } = null!;
+        public virtual DbSet<Drzava> Drzava { get; set; }
+        public virtual DbSet<Izvjestaj> Izvjestaj { get; set; } 
+        public virtual DbSet<KorisniciUloge> KorisniciUloge { get; set; }
+        public virtual DbSet<Korisnik> Korisnik { get; set; }
+        public virtual DbSet<Kupci> Kupci { get; set; }  
+        public virtual DbSet<Novosti> Novosti{ get; set; } 
+        public virtual DbSet<Ocjene> Ocjene { get; set; }  
+        public virtual DbSet<Proizvod> Proizvod { get; set; } 
+        public virtual DbSet<RadniNalog> RadniNalog { get; set; } 
+        public virtual DbSet<StatusZahtjeva> StatusZahtjeva { get; set; } 
+        public virtual DbSet<Uloga> Uloga { get; set; } 
+        public virtual DbSet<Usluge> Usluge { get; set; }
+        public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; }
+        public virtual DbSet<Zahtjev> Zahtjev { get; set; } 
+
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,7 +49,7 @@ namespace JamFix.Services.Database
             {
                 entity.HasKey(e => e.KorisnikId);
 
-                entity.ToTable("Korisnici");
+                entity.ToTable("Korisnik");
 
                 entity.HasIndex(e => e.Email, "CS_Email")
                     .IsUnique();
@@ -53,24 +58,17 @@ namespace JamFix.Services.Database
                     .IsUnique();
 
                 entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
-
-                entity.Property(e => e.Email).HasMaxLength(100);
-
                 entity.Property(e => e.Ime).HasMaxLength(50);
-
-                entity.Property(e => e.KorisnickoIme).HasMaxLength(50);
-
-                entity.Property(e => e.LozinkaHash).HasMaxLength(50);
-
-                entity.Property(e => e.LozinkaSalt).HasMaxLength(50);
-
                 entity.Property(e => e.Prezime).HasMaxLength(50);
+                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Telefon).HasMaxLength(20);
+                entity.Property(e => e.KorisnickoIme).HasMaxLength(50);
+                entity.Property(e => e.LozinkaHash).HasMaxLength(50);
+                entity.Property(e => e.LozinkaSalt).HasMaxLength(50);
 
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Telefon).HasMaxLength(20);
             });
 
             modelBuilder.Entity<KorisniciUloge>(entity =>
@@ -155,13 +153,13 @@ namespace JamFix.Services.Database
 
                 entity.Property(e => e.ProizvodId).HasColumnName("ProizvodID");
 
-                entity.Property(e => e.Cijena).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
 
                 entity.Property(e => e.NazivProizvoda).HasMaxLength(50);
 
-                entity.Property(e => e.Opis).HasMaxLength(100);
+                entity.Property(e => e.Cijena).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
+                entity.Property(e => e.Opis).HasMaxLength(100);
                 
                 entity.Property(e => e.Snizen)
                     .IsRequired()
@@ -196,21 +194,40 @@ namespace JamFix.Services.Database
                 entity.Property(e => e.OpisUradjenog).HasMaxLength(50);
 
                 entity.Property(e => e.Naziv).HasMaxLength(50);
-
-                entity.HasOne(d => d.Radnik)
-                    .WithMany(p => p.RadniNalog)
-                    .HasForeignKey(d => d.NalogId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RadniNalog_Radnik");
+               
                 //entity.Property(e => e.Cijena).HasColumnType("decimal(18, 2)");
             });
             modelBuilder.Entity<VrsteProizvoda>(entity =>
             {
                 entity.HasKey(e => e.VrstaId);
 
+                entity.ToTable("VrsteProizvoda");
+
                 entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
 
                 entity.Property(e => e.Naziv).HasMaxLength(50);
+            });
+            modelBuilder.Entity<Novosti>(entity =>
+            {
+                entity.HasKey(e => e.NovostId);
+
+                entity.ToTable("Novosti");
+
+                entity.Property(e => e.NovostId).HasColumnName("NovostId");
+
+                entity.Property(e => e.Sadrzaj).HasMaxLength(50);
+            });
+            modelBuilder.Entity<Usluge>(entity =>
+            {
+                entity.HasKey(e => e.UslugaId);
+
+                entity.ToTable("Usluge");
+
+                entity.Property(e => e.UslugaId).HasColumnName("UslugaId");
+
+                entity.Property(e => e.Datum).HasColumnType("datetime");
+
+                entity.Property(e => e.ImePrezime).HasMaxLength(50);
             });
             modelBuilder.UseCollation("Latin1_General_CI_AI");
 

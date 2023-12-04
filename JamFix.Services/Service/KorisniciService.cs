@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,27 +22,22 @@ namespace JamFix.Services.Service
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
 
         }
-        public override Korisnici Insert(KorisniciInsertRequest insert)
-        {
+        //public override Korisnici Insert(KorisniciInsertRequest insert)
+        //{
 
-            if (insert.Password != insert.PasswordPotvrda)
-            {
-                throw new UserException("Password and confirmation must be the same");
-            }
+        //    if (insert.Password != insert.PasswordPotvrda)
+        //    {
+        //        throw new UserException("Password and confirmation must be the same");
+        //    }
 
-            var entity = base.Insert(insert);
+        //    var entity = base.Insert(insert);
 
-            _context.SaveChanges();
+        //    _context.SaveChanges();
 
-            return entity;
-        }
+        //    return entity;
+        //}
 
-
-        public List<Korisnik> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public static string GenerateSalt()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();

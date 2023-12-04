@@ -15,11 +15,8 @@ namespace JamFix.Services.Database
         public string BrojTelefona { get; set; }
         public string Opis{ get; set; }
         public DateTime DatumVrijeme { get; set; }
-        public string StatusZahtjeva { get; set; }
-        public int KorisnikId { get; set; }
-        public int StatusId { get; set; }
+        public int StatusZahtjevaId { get; set; }
         public bool HitnaIntervencija { get; set; }
-        public VrsteProizvoda VrsteProizvoda { get; set; }
-        public int VrstaId { get; set; }
+        public StatusZahtjeva StatusZahtjeva { get; set; }
     }
 }

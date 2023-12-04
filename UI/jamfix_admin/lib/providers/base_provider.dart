@@ -18,10 +18,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (response.statusCode < 299) {
       return true;
     } else if (response.statusCode == 401) {
-      throw new Exception("Unothorized");
+      throw new Exception("Unauthorized");
     } else {
       print(response.body);
-      throw new Exception("Something bad happend");
+      throw new Exception("Something bad happened please try again");
     }
   }
 
@@ -39,10 +39,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     print("Status code:${response.statusCode}");
     if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      var result = SearchResult<T>();
 
-      for (var item in data) {
+      var data = jsonDecode(response.body);
+
+      var result = SearchResult<T>();
+      result.count = data['count'];
+
+      for (var item in data['result']) {
         result.result.add(fromJson(item));
       }
 

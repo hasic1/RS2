@@ -22,48 +22,19 @@ namespace JamFix.Controllers
             _proizvodiService = service;
         }
         [HttpPut("{id}/activate")]
-        public virtual Proizvodi Activate(int id)
+        public virtual async Task<Proizvodi> Activate(int id)
         {
-            var result = _proizvodiService.Activate(id);
-
-            return result;
-        }
-        [HttpPost("{id}")]
-        public ActionResult AddProfileImage(int id, [FromForm] ProizvodAddImage x)
-        {
-            try
-            {
-                Proizvod proizvod = _context.Proizvod.FirstOrDefault(s => s.ProizvodId == id);
-
-                if (x.Slika != null && proizvod != null)
-                {
-                    string ekstenzija = Path.GetExtension(x.Slika.FileName);
-
-                    var filename = $"{Guid.NewGuid()}{ekstenzija}";
-
-                    x.Slika.CopyTo(new FileStream(Config.SlikeFolder + filename, FileMode.Create));
-                    proizvod.Slika = Config.SlikeURL + filename;
-                    _context.SaveChanges();
-                }
-
-                return Ok(proizvod);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message + ex.InnerException);
-            }
+            return await (_service as IProizvodiService).Activate(id);
         }
         [HttpPut("{id}/hide")]
-        public virtual Proizvodi Hide(int id)
+        public virtual async Task<Proizvodi> Hide(int id)
         {
-            var result = _proizvodiService.Hide(id);
-
-            return result;
+            return await (_service as IProizvodiService).Hide(id);
         }
         [HttpGet("{id}/allowedActions")]
-        public virtual List<string> AllowedActions(int id)
+        public virtual async Task<List<string>> AllowedActions(int id)
         {
-            return _proizvodiService.AllowedActions(id);
-        }
+            return await (_service as IProizvodiService).AllowedActions(id);
+        }       
     }
 }
