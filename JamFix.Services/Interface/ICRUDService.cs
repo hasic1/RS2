@@ -4,6 +4,6 @@
     {
         Task <T> Insert(TInsert insert);
         Task <T> Update(int id, TUpdate update);
-        bool Delete(int id);
+        Task<T> Delete(int id);
     }
 }

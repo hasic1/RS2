@@ -33,12 +33,12 @@ namespace JamFix.Controllers
 
             return await result;
         }
-        [HttpDelete("{id}")]
-        public bool Delete(int id)
+        [HttpPost("{id}")]
+        public virtual async Task<T> Delete(int id)
         {
             var result = _service.Delete(id);
 
-            return  result;
+            return await  result;
         }
     }
 }

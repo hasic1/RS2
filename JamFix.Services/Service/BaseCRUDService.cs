@@ -44,15 +44,15 @@ namespace JamFix.Services.Service
             await _context.SaveChangesAsync();
             return _mapper.Map<T>(entity);
         }
-        public bool Delete(int id)
+        public virtual async Task<T> Delete(int id)
         {
             var set = _context.Set<TDb>();
 
-            var entity = set.Find(id);
+            var entity = set.FindAsync(id);
             _context.Remove(entity);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return true;
+            return _mapper.Map<T>(entity);
         }
     }
 }
