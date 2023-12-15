@@ -39,7 +39,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     print("Status code:${response.statusCode}");
     if (isValidResponse(response)) {
-
       var data = jsonDecode(response.body);
 
       var result = SearchResult<T>();
@@ -55,36 +54,34 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T>insert(dynamic request)async{
+  Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri,headers: headers,body: jsonRequest);
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
 
-    if(isValidResponse(response))
-    {
+    if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
-    }else{
+    } else {
       throw new Exception("Unknown error");
     }
   }
 
-  Future<T>update(int id,[dynamic request])async{
+  Future<T> update(int id, [dynamic request]) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri,headers: headers,body: jsonRequest);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
 
-    if(isValidResponse(response))
-    {
+    if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
-    }else{
+    } else {
       throw new Exception("Unknown error");
     }
   }

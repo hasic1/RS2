@@ -33,7 +33,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title_widget: Text("Product list"),
       child: Container(
           child: Column(children: [_buildSearch(), _buildDataListView()])),
     );

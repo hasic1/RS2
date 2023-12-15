@@ -7,6 +7,7 @@ import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/screens/home_screen.dart';
+import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
 
@@ -113,7 +114,7 @@ class LoginPage extends StatelessWidget {
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) => const KorisniciListScreen(),
                           ),
                         );
                       } on Exception catch (e) {

@@ -17,3 +17,16 @@ class KorisniciProvider extends BaseProvider<Korisnici> {
     return Korisnici.fromJson(data);
   }
 }
+Future<String> fetchUlogeZaKorisnika(int? korisnikId) async {
+  var url = "https://localhost:7097/api/Uloge/uloge/$korisnikId";
+  var uri = Uri.parse(url);
+
+  var response = await http.get(uri);
+  if (response.statusCode == 200) {
+    final List<dynamic> data = json.decode(response.body);
+    if (data.isNotEmpty) {
+      return data.first.toString(); // Vrati prvu ulogu iz liste
+    }
+  }
+  throw Exception('Failed to load uloge za korisnika');
+}
