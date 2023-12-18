@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JamFix.Services.Service.Helper;
 
 namespace JamFix.Model.Modeli
 {
@@ -19,6 +14,8 @@ namespace JamFix.Model.Modeli
         public string LozinkaHash { get; set; } = null!;
         public string LozinkaSalt { get; set; } = null!;
         public virtual ICollection<KorisnikUloge> KorisniciUloge { get; set; }
+        public List<UserRole> Uloge { get; set; }
+
         //public string RoleNames => string.Join(", ", KorisnikUloge?.Select(x => x.Uloga?.Naziv)?.ToList());
 
     }

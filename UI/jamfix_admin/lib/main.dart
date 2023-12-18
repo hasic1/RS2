@@ -3,6 +3,9 @@
 //import 'package:eprodaja_admin/providers/product_provider.dart';
 //import 'package:eprodaja_admin/providers/vrste_proizvoda.dart';
 //import 'package:eprodaja_admin/utils/util.dart';
+import 'dart:convert';
+
+import 'package:jamfix_admin/providers/base_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
@@ -10,6 +13,7 @@ import 'package:jamfix_admin/screens/home_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import './screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +60,6 @@ class MyMaterialApp extends StatelessWidget {
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
-
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   late ProductProvider _productProvider;
@@ -67,7 +70,7 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
@@ -99,44 +102,72 @@ class LoginPage extends StatelessWidget {
                   height: 8,
                 ),
                 ElevatedButton(
-                    onPressed: () async {
-                      var username = _usernameController.text;
-                      var password = _passwordController.text;
-                      _passwordController.text = username;
+                  onPressed: () async {
+                    var username = _usernameController.text;
+                    var password = _passwordController.text;
 
-                      print("login proceed $username $password");
-
-                      Authorization.username = username;
-                      Authorization.password = password;
-
-                      try {
-                        await _productProvider.get();
-
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const KorisniciListScreen(),
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text(e.toString()),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text("OK"))
-                                  ],
-                                ));
-                      }
-                    },
-                    child: Text("Login"))
+                    try {
+                      loginUser(username, password);
+                      // Ovde možete dodati dodatne provere ili akcije nakon uspešnog logina
+                      // Na primer, navigacija na sledeći ekran
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const KorisniciListScreen(),
+                        ),
+                      );
+                    } on Exception catch (e) {
+                      // Prikazivanje poruke o grešci ako dođe do problema prilikom logina
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text("Error"),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK"),
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  child: Text("Login"),
+                ),
               ]),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> loginUser(String username, String password) async {
+    final String apiUrl = 'https://localhost:7097/token';
+
+    final Map<String, String> data = {
+      'username': username,
+      'password': password,
+    };
+
+    final http.Response response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(data),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        var token = response.body;
+        // Ovde možete postaviti token u svoj model korisnika ili ga koristiti na neki drugi način
+        // Na primer, kreirati funkciju koja postavlja token u trenutnog korisnika u vašem providera
+        Authorization.setJwtToken(token);
+      } else {
+        // Obrada greške ako je login neuspešan
+        throw Exception('Failed to log in. Check your credentials.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

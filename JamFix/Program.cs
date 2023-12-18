@@ -7,11 +7,45 @@ using JamFix.Services.Interface;
 using JamFix.Services.ProizvodiSM;
 using JamFix.Services.Service;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = config["Jwt:Issuer"],
+        ValidAudience = config["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey
+        (Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Identity.AdminUserPolicyName, p =>
+    p.RequireClaim(Identity.AdminUserClaimName, "true"));
+});
+
 
 builder.Services.AddControllers(x => 
 { 
@@ -47,6 +81,7 @@ builder.Services.AddTransient<IKorisniciService, KorisniciService>();
 builder.Services.AddTransient<IZahtjeviService, ZahtjeviService>();
 builder.Services.AddTransient<INovostiService, NovostiService>();
 builder.Services.AddTransient<IUslugeService, UslugeService>();
+builder.Services.AddTransient<IUlogaService, UlogaService>();
 builder.Services.AddTransient<IService<Uloge, BaseSO>, BaseService<Uloge, Uloga, BaseSO>>();
 
 builder.Services.AddTransient<BaseState>();
@@ -58,6 +93,7 @@ builder.Services.AddTransient<ActiveProductState>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<UserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 

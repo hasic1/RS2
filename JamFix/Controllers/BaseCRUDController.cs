@@ -1,4 +1,5 @@
-﻿using JamFix.Model.Modeli;
+﻿using JamFix.Handler;
+using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Interface;
@@ -33,6 +34,7 @@ namespace JamFix.Controllers
 
             return await result;
         }
+        [Authorize(Policy =Identity.AdminUserPolicyName)]
         [HttpPost("{id}")]
         public virtual async Task<T> Delete(int id)
         {

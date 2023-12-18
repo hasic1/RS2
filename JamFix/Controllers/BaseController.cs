@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
 {
+    //[Authorize]
     [Route("[controller]")]
-    [Authorize]
     public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch : class
     {
         protected readonly IService<T, TSearch> _service;
@@ -17,7 +17,7 @@ namespace JamFix.Controllers
             _service = service;
             _logger = logger;
         }
-
+        //[Authorize(Roles ="Administrator")]
         [HttpGet()]
         public async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
         {

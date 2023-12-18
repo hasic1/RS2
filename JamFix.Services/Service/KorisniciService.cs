@@ -7,6 +7,7 @@ using JamFix.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using JamFix.Services.Service.Helper;
 
 namespace JamFix.Services.Service
 {
@@ -14,29 +15,23 @@ namespace JamFix.Services.Service
     {
         public KorisniciService(Context context, IMapper mapper) : base(context, mapper)
         {
-        }
 
+        }
+        public List<UserRole> GetRolesForUser(int userId)
+        {
+            var userRoles = _context.KorisniciUloge
+                .Where(ku => ku.KorisnikId == userId)
+                .Select(ku => ku.Uloga.Naziv) // Pretpostavljamo da 'Naziv' sadrži vrednost enum-a
+                .ToList();
+
+            var enumUserRoles = userRoles.Select(role => Enum.Parse<UserRole>(role)).ToList();
+            return enumUserRoles;
+        }
         public override async Task BeforeInsert(Korisnik entity, KorisniciInsertRequest insert)
         {
             entity.LozinkaSalt = GenerateSalt();
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
-
         }
-        //public override Korisnici Insert(KorisniciInsertRequest insert)
-        //{
-
-        //    if (insert.Password != insert.PasswordPotvrda)
-        //    {
-        //        throw new UserException("Password and confirmation must be the same");
-        //    }
-
-        //    var entity = base.Insert(insert);
-
-        //    _context.SaveChanges();
-
-        //    return entity;
-        //}
-
         
         public static string GenerateSalt()
         {
@@ -83,6 +78,32 @@ namespace JamFix.Services.Service
                 return null;
             }
             return _mapper.Map<Korisnici>(entity);
+        }
+        public async Task<string> GetUlogaById(int korisnikId)
+        {
+            try
+            {
+                var uloga = await _context.KorisniciUloge
+                    .Where(ku => ku.KorisnikId == korisnikId)
+                    .Select(ku => ku.Uloga.Naziv) // Prilagodite prema stvarnom nazivu svoje klase za uloge
+                    .FirstOrDefaultAsync();
+
+                if (uloga != null)
+                {
+                    return uloga;
+                }
+                else
+                {
+                    // Ako korisnik nema pridruženu ulogu
+                    return "Nema pridružene uloge";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Logovanje greške
+                Console.WriteLine($"Greška prilikom dobijanja uloge za korisnika sa ID {korisnikId}: {ex.Message}");
+                throw;
+            }
         }
     }
 }

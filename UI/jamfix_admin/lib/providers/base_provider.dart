@@ -33,8 +33,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
       url = "$url?$queryString";
     }
     var uri = Uri.parse(url);
-    var headers = createHeaders();
 
+    var headers = createHeaders();
     var response = await http.get(uri, headers: headers);
 
     print("Status code:${response.statusCode}");
@@ -90,18 +90,31 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Method not implemented");
   }
 
+  // Map<String, String> createHeaders() {
+  //   String username = Authorization.username ?? "";
+  //   String password = Authorization.password ?? "";
+
+  //   print("passed creds; $username,$password");
+
+  //   String basicAuth =
+  //       "Basic ${base64Encode(utf8.encode('$username:$password'))}";
+  //   var headers = {
+  //     "Content-Type": "application/json",
+  //     "Authorization": basicAuth
+  //   };
+  //   return headers;
+  // }
+
   Map<String, String> createHeaders() {
-    String username = Authorization.username ?? "";
-    String password = Authorization.password ?? "";
+    String jwtToken = Authorization.jwtToken ?? "";
 
-    print("passed creds; $username,$password");
+    print("passed token: $jwtToken");
 
-    String basicAuth =
-        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": basicAuth
+      "Authorization": "Bearer $jwtToken",
     };
+
     return headers;
   }
 

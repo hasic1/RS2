@@ -80,15 +80,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
           SizedBox(
             height: 8,
           ),
-          ElevatedButton(
-              onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProductDetailScreen(product: null),
-                  ),
-                );
-              },
-              child: Text("Dodaj")),
+          Visibility(
+            visible: Authorization.isAdmin,
+            child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailScreen(product: null),
+                    ),
+                  );
+                },
+                child: Text("Dodaj")),
+          ),
         ]));
   }
 

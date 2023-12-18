@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JamFix.Services.Service.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace JamFix.Services.Database
         public string LozinkaHash { get; set; } = null!;
         public string LozinkaSalt { get; set; } = null!;
         public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; }
+
         //public virtual ICollection<Izlazi> Izlazis { get; set; }
         //public virtual ICollection<Ulazi> Ulazis { get; set; }
     }
