@@ -9,9 +9,9 @@ import 'package:jamfix_admin/providers/base_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
-import 'package:jamfix_admin/screens/home_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
+import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -107,16 +107,13 @@ class LoginPage extends StatelessWidget {
                     var password = _passwordController.text;
 
                     try {
-                      loginUser(username, password);
-                      // Ovde možete dodati dodatne provere ili akcije nakon uspešnog logina
-                      // Na primer, navigacija na sledeći ekran
+                      await loginUser(username, password);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const KorisniciListScreen(),
+                          builder: (context) => const ProductListScreen(),
                         ),
                       );
                     } on Exception catch (e) {
-                      // Prikazivanje poruke o grešci ako dođe do problema prilikom logina
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
@@ -143,31 +140,21 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> loginUser(String username, String password) async {
-    final String apiUrl = 'https://localhost:7097/token';
+    const String apiUrl = 'https://localhost:7097/token';
 
     final Map<String, String> data = {
       'username': username,
       'password': password,
     };
-
     final http.Response response = await http.post(
       Uri.parse(apiUrl),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(data),
     );
-
-    try {
-      if (response.statusCode == 200) {
-        var token = response.body;
-        // Ovde možete postaviti token u svoj model korisnika ili ga koristiti na neki drugi način
-        // Na primer, kreirati funkciju koja postavlja token u trenutnog korisnika u vašem providera
-        Authorization.setJwtToken(token);
-      } else {
-        // Obrada greške ako je login neuspešan
-        throw Exception('Failed to log in. Check your credentials.');
-      }
-    } catch (e) {
-      print(e);
+    print(response.statusCode);
+    if (isValidResponse(response)) {
+      var token = response.body;
+      Authorization.setJwtToken(token);
     }
   }
 }

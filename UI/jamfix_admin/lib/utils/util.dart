@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
@@ -30,15 +31,26 @@ class Authorization {
     // Ispisivanje uloge korisnika
     if (isAdmin) {
       print('Korisnik je administrator.');
+      print(token);
     }
     if (isZaposlenik) {
       print('Korisnik je zaposlenik.');
+      print(token);
     }
     if (isKorisnik) {
       print('Nije ni admin ni zaposleni nego korisnik.');
+      print(token);
     }
-    print('isAdmin: ${Authorization.isAdmin}');
-
+  }
+}
+bool isValidResponse(Response response) {
+  if (response.statusCode < 299) {
+    return true;
+  } else if (response.statusCode == 401) {
+      throw new Exception("Unauthorized!");
+  } else {
+    print(response.statusCode);
+      throw new Exception("Incorrect username or password!");
   }
 }
 

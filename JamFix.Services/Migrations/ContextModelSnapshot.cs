@@ -464,12 +464,7 @@ namespace JamFix.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StatusZahtjevaId")
-                        .HasColumnType("int");
-
                     b.HasKey("ZahtjevId");
-
-                    b.HasIndex("StatusZahtjevaId");
 
                     b.ToTable("Zahtjev");
                 });
@@ -521,17 +516,6 @@ namespace JamFix.Services.Migrations
                         .HasConstraintName("FK_Proizvodi_VrsteProizvoda");
 
                     b.Navigation("Vrsta");
-                });
-
-            modelBuilder.Entity("JamFix.Services.Database.Zahtjev", b =>
-                {
-                    b.HasOne("JamFix.Services.Database.StatusZahtjeva", "StatusZahtjeva")
-                        .WithMany()
-                        .HasForeignKey("StatusZahtjevaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StatusZahtjeva");
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>

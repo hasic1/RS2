@@ -12,7 +12,6 @@ class ProductProvider extends BaseProvider<Product> {
 
   @override
   Product fromJson(data) {
-    // TODO: implement fromJson
     return Product.fromJson(data);
   }
 }

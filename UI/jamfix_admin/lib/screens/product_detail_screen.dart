@@ -92,7 +92,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                     var request = new Map.from(_formKey.currentState!.value);
                     request['slika'] = _base65Image;
-                    print(request['slika']);
                     try {
                       if (widget.product == null) {
                         await _productProvider.insert(request);

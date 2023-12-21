@@ -103,8 +103,8 @@ builder.Services.AddDbContext<Context>(options =>
         options.UseSqlServer(connectionString));
 
 builder.Services.AddAutoMapper(typeof(IKorisniciService));
-builder.Services.AddAuthentication("BasicAuthentication")
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+//builder.Services.AddAuthentication("BasicAuthentication")
+//    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 var app = builder.Build();
 

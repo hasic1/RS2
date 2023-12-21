@@ -22,7 +22,15 @@ namespace JamFix.Controllers
         {
             return base.Insert(insert);
         }
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            // Implementirajte logiku za odjavu korisnika
+            // Na primer, uklonite token iz sesije ili izbrišite kolačić sa tokenom
+            HttpContext.Session.Remove("AccessToken");
 
+            return Ok(new { message = "Successfully logged out." });
+        }
         [HttpGet("uloga/{id}")]
         public async Task<IActionResult> GetUlogaById(int id)
         {

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamfix_admin/main.dart';
-import 'package:jamfix_admin/screens/home_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
+import 'package:jamfix_admin/screens/zahtijev_list.screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
+import 'package:http/http.dart' as http;
 
 import '../screens/product_list_screen.dart';
 
@@ -32,18 +33,41 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       drawer: Drawer(
         child: ListView(
           children: [
+            Visibility(
+              visible: Authorization.isKorisnik,
+              child: ListTile(
+                title: Text('Dodaj zahtjev'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ZahtjevListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
             ListTile(
-              title: Text('Pocetna'),
+              title: Text('Plati usluge'),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) => ProductListScreen(),
                   ),
                 );
               },
             ),
             ListTile(
-              title: Text('Korisnici'),
+              title: Text('Pocetna'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => KorisniciListScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Novosti'),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -53,14 +77,115 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Proizvodi'),
+              title: Text('O nama'),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ProductListScreen(),
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },
+            ),
+            ListTile(
+              title: Text('Postavke'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text('Placene usluge'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text('Radni nalog'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text('Proizvodi'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text('Uposlenici'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text('Korisnici'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text('Zahtjevi'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text('Izvjestaj'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisniciListScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
             ListTile(
               title: Text('Odjava'),
@@ -71,7 +196,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   ),
                 );
               },
-            )
+            ),
           ],
         ),
       ),

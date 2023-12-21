@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/utils/util.dart';
 
@@ -13,16 +14,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7097/");
-  }
-  bool isValidResponse(Response response) {
-    if (response.statusCode < 299) {
-      return true;
-    } else if (response.statusCode == 401) {
-      throw new Exception("Unauthorized");
-    } else {
-      print(response.body);
-      throw new Exception("Something bad happened please try again");
-    }
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -61,7 +52,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var jsonRequest = jsonEncode(request);
     var response = await http.post(uri, headers: headers, body: jsonRequest);
-
+    
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
@@ -107,14 +98,15 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   Map<String, String> createHeaders() {
     String jwtToken = Authorization.jwtToken ?? "";
-
-    print("passed token: $jwtToken");
-
+    if (jwtToken.isEmpty) {
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      );
+    }
     var headers = {
       "Content-Type": "application/json",
       "Authorization": "Bearer $jwtToken",
     };
-
     return headers;
   }
 
