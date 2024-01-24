@@ -15,7 +15,8 @@ class ProductProvider extends BaseProvider<Product> {
   }
 
   Future<SearchResult<Product>> fetchRecommendedProducts() async {
-    var url = "https://localhost:7097/Proizvodi/topRatedProducts/3";
+    var i = 3;
+    var url = "https://localhost:7097/Proizvodi/topRatedProducts/$i";
     var uri = Uri.parse(url);
 
     var response = await http.get(uri);
@@ -25,7 +26,14 @@ class ProductProvider extends BaseProvider<Product> {
       var data = jsonDecode(response.body);
 
       var result = SearchResult<Product>();
-      result.count = data['count'];
+
+      // Provjeri da li postoji 'count' u odgovoru i da li je tipa int
+      if (data.containsKey('count') && data['count'] is int) {
+        result.count = data['count'];
+      } else {
+        result.count =
+            0; // Postavi na neku podrazumijevanu vrijednost ako 'count' nije pronađen ili nije tipa int
+      }
 
       for (var item in data['result']) {
         result.result.add(fromJson(item));

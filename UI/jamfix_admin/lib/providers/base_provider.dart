@@ -32,7 +32,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var data = jsonDecode(response.body);
 
       var result = SearchResult<T>();
-      result.count = data['count'];
+
+      if (data.containsKey('count') && data['count'] is int) {
+        result.count = data['count'];
+      } else {
+        result.count =
+            0; 
+      }
 
       for (var item in data['result']) {
         result.result.add(fromJson(item));
