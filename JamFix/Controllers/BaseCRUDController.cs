@@ -34,13 +34,19 @@ namespace JamFix.Controllers
 
             return await result;
         }
-        [Authorize(Policy =Identity.AdminUserPolicyName)]
-        [HttpPost("{id}")]
-        public virtual async Task<T> Delete(int id)
+        [HttpDelete("{id}")]
+        public virtual async Task<IActionResult> Delete(int id)
         {
-            var result = _service.Delete(id);
+            var result = await _service.Delete(id);
 
-            return await  result;
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound(); 
+            }
         }
     }
 }

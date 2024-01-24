@@ -13,5 +13,7 @@ namespace JamFix.Model.Modeli
         public string NajPosMjesto { get; set; }
         public int CijenaUtrosAlata { get; set; }
         public string NajOprema { get; set; }
+        public DateTime Datum { get; set; }
+
     }
 }

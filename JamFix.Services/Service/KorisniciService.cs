@@ -21,7 +21,7 @@ namespace JamFix.Services.Service
         {
             var userRoles = _context.KorisniciUloge
                 .Where(ku => ku.KorisnikId == userId)
-                .Select(ku => ku.Uloga.Naziv) // Pretpostavljamo da 'Naziv' sadrži vrednost enum-a
+                .Select(ku => ku.Uloga.Naziv) 
                 .ToList();
 
             var enumUserRoles = userRoles.Select(role => Enum.Parse<UserRole>(role)).ToList();
@@ -32,7 +32,21 @@ namespace JamFix.Services.Service
             entity.LozinkaSalt = GenerateSalt();
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
         }
-        
+        public override async Task BeforeUpdate(Korisnik entity, KorisniciUpdateRequest insert)
+        {
+            entity.LozinkaSalt = GenerateSalt();
+            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.NoviPassword);
+        }
+        public override IQueryable<Korisnik> AddFilter(IQueryable<Korisnik> querry, KorisniciSO? search = null)
+        {
+            var fillteredQuery = base.AddFilter(querry, search);
+
+            if (!string.IsNullOrWhiteSpace(search?.FTS))
+            {
+                fillteredQuery = fillteredQuery.Where(x => x.Ime.Contains(search.FTS) || x.Prezime.Contains(search.FTS));
+            }
+            return fillteredQuery;
+        }
         public static string GenerateSalt()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
@@ -42,19 +56,7 @@ namespace JamFix.Services.Service
 
             return Convert.ToBase64String(byteArray);
         }
-        public static string GenerateHash(string salt, string password)
-        {
-            byte[] src = Convert.FromBase64String(salt);
-            byte[] bytes = Encoding.Unicode.GetBytes(password);
-            byte[] dst = new byte[src.Length + bytes.Length];
-
-            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
-            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
-
-            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
-            byte[] inArray = algorithm.ComputeHash(dst);
-            return Convert.ToBase64String(inArray);
-        }
+        
         public override IQueryable<Korisnik> AddInclude(IQueryable<Korisnik> query, KorisniciSO search = null)
         {
             if (search?.IsUlogeIncluded==true)
@@ -79,28 +81,38 @@ namespace JamFix.Services.Service
             }
             return _mapper.Map<Korisnici>(entity);
         }
+        public static string GenerateHash(string salt, string password)
+        {
+            byte[] src = Convert.FromBase64String(salt);
+            byte[] bytes = Encoding.Unicode.GetBytes(password);
+            byte[] dst = new byte[src.Length + bytes.Length];
+
+            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+
+            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
+            byte[] inArray = algorithm.ComputeHash(dst);
+            return Convert.ToBase64String(inArray);
+        }
         public async Task<string> GetUlogaById(int korisnikId)
         {
             try
             {
                 var uloga = await _context.KorisniciUloge
                     .Where(ku => ku.KorisnikId == korisnikId)
-                    .Select(ku => ku.Uloga.Naziv) // Prilagodite prema stvarnom nazivu svoje klase za uloge
+                    .Select(ku => ku.Uloga.Naziv)
                     .FirstOrDefaultAsync();
-
                 if (uloga != null)
                 {
                     return uloga;
                 }
                 else
                 {
-                    // Ako korisnik nema pridruženu ulogu
                     return "Nema pridružene uloge";
                 }
             }
             catch (Exception ex)
             {
-                // Logovanje greške
                 Console.WriteLine($"Greška prilikom dobijanja uloge za korisnika sa ID {korisnikId}: {ex.Message}");
                 throw;
             }

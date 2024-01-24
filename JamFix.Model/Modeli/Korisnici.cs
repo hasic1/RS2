@@ -15,8 +15,10 @@ namespace JamFix.Model.Modeli
         public string LozinkaSalt { get; set; } = null!;
         public virtual ICollection<KorisnikUloge> KorisniciUloge { get; set; }
         public List<UserRole> Uloge { get; set; }
+        public int DrzavaId { get; set; }
+        public bool? Aktivnost { get; set; }
+        public int? PozicijaId { get; set; }
 
         //public string RoleNames => string.Join(", ", KorisnikUloge?.Select(x => x.Uloga?.Naziv)?.ToList());
-
     }
 }

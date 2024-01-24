@@ -5,7 +5,6 @@ namespace JamFix.Model.Requests
 {
     public class KorisniciInsertRequest
     {
-        public int KorisnikId { get; set; }
         public string Ime { get; set; } = null!;
         public string Prezime { get; set; } = null!;
         public string? Email { get; set; }
@@ -14,6 +13,9 @@ namespace JamFix.Model.Requests
         public string KorisnickoIme { get; set; } = null!;
         public string Password { get; set; }
         public string PasswordPotvrda { get; set; }
-        public List<int> UlogeIdList { get; set; } = new List<int> { };
+        public int DrzavaId { get; set; }
+        public List<int>? UlogeIdList { get; set; } = new List<int> { };
+        public int? PozicijaId { get; set; }
+        public bool? Aktivnost { get; set; }
     }
 }

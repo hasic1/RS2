@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
+import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/models/search_result.dart';
+import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
+import 'package:jamfix_admin/providers/pozicija_provider.dart';
+import 'package:jamfix_admin/screens/korisnici_detail_screen.dart';
+import 'package:jamfix_admin/screens/postavke_screen.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -13,19 +19,57 @@ class KorisniciListScreen extends StatefulWidget {
 }
 
 class _KorisniciListScreen extends State<KorisniciListScreen> {
-  late KorisniciProvider _korisniciProvider;
-  final _formKey = GlobalKey<FormBuilderState>();
-  SearchResult<Korisnici>? korisniciResult;
+  KorisniciProvider _korisniciProvider = KorisniciProvider();
+  PozicijaProvider _pozicijaProvider = PozicijaProvider();
+  DrzavaProvider _drzavaProvider = DrzavaProvider();
 
-  bool isLoading = true;
+  SearchResult<Korisnici>? korisniciResult;
+  SearchResult<Pozicija>? pozicijaResult;
+  SearchResult<Drzava>? drzavaResult;
+
+  Map<String, dynamic> _initialValue = {};
+
+  bool aktivan = false;
+  String? selectedPozicijaId;
+  String? selectedDrzavaId;
+
+  TextEditingController _imePrezimeController = new TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _korisniciProvider = context.read<KorisniciProvider>();
+    _pozicijaProvider = context.read<PozicijaProvider>();
+    _drzavaProvider = context.read<DrzavaProvider>();
+
+    _ucitajPodatke();
+  }
+
+  Future<void> _ucitajPodatke() async {
+    var pozicije = await _pozicijaProvider.get();
+    var podaci = await _korisniciProvider.get();
+    var drzava = await _drzavaProvider.get();
+
+    setState(() {
+      pozicijaResult = pozicije;
+      korisniciResult = podaci;
+      drzavaResult = drzava;
+    });
+
+    for (var korisnik in podaci.result) {
+      String uloga = await fetchUlogeZaKorisnika(korisnik.korisnikId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    _korisniciProvider = context.read<KorisniciProvider>();
     return MasterScreenWidget(
       child: Container(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildSearch(),
+            const SizedBox(height: 16.0),
             _buildDataListView(),
           ],
         ),
@@ -34,16 +78,34 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
   }
 
   Widget _buildSearch() {
-    return ElevatedButton(
-      onPressed: () async {
-        print("login proceed");
-        var data = await _korisniciProvider.get();
-
-        setState(() {
-          korisniciResult = data;
-        });
-      },
-      child: Text("Pretraga"),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration:
+                      const InputDecoration(labelText: "Ime ili prezime"),
+                  controller: _imePrezimeController,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  var data = await _korisniciProvider.get(filter: {
+                    'fts': _imePrezimeController.text,
+                  });
+                  setState(() {
+                    korisniciResult = data;
+                  });
+                },
+                child: const Text("Pretraga"),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -51,44 +113,58 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
-          columns: [
-            const DataColumn(
-              label: const Expanded(
-                child: Text(
-                  'korisnikId',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
-                ),
+          columns: const [
+            DataColumn(
+              label: Text(
+                'Ime',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
-            const DataColumn(
-              label: const Expanded(
-                child: Text(
-                  'ime',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
-                ),
+            DataColumn(
+              label: Text(
+                'Prezime',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
-            const DataColumn(
-              label: const Expanded(
-                child: Text(
-                  'prezime',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
-                ),
+            DataColumn(
+                label: Text(
+              'Korisnicko ime',
+              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+            )),
+            DataColumn(
+              label: Text(
+                'Email',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
-            const DataColumn(
-              label: const Expanded(
-                child: Text(
-                  'email',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
-                ),
+            DataColumn(
+                label: Text(
+              'Pozicija',
+              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+            )),
+            DataColumn(
+              label: Text(
+                'Uloga',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
-            const DataColumn(
-              label: const Expanded(
-                child: Text(
-                  'uloge',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
+            DataColumn(
+              label: Text(
+                'Aktivan',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Akcija',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.blue,
                 ),
               ),
             ),
@@ -97,20 +173,34 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
                   .map(
                     (Korisnici e) => DataRow(
                       onSelectChanged: (selected) => {
-                        //uloga = _ulogaProvider.getAdmina(e.korisnikId),
+                        if (selected == true)
+                          {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    KorisnciDetailScreen(korisnici: e),
+                              ),
+                            )
+                          }
                       },
                       cells: [
-                        DataCell(Text(e.korisnikId?.toString() ?? "")),
                         DataCell(Text(e.ime ?? "")),
                         DataCell(Text(e.prezime ?? "")),
+                        DataCell(
+                          Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                e.korisnickoIme ?? "",
+                              )),
+                        ),
                         DataCell(Text(e.email ?? "")),
                         DataCell(
                           FutureBuilder<String>(
-                            future: fetchUlogeZaKorisnika(e.korisnikId),
+                            future: fetchPozicijaZaKorisnika(e.pozicijaId),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator(); 
+                                return const CircularProgressIndicator();
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
@@ -118,6 +208,39 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
                                 return Text(uloga);
                               }
                             },
+                          ),
+                        ),
+                        DataCell(
+                          FutureBuilder<String>(
+                            future: fetchUlogeZaKorisnika(e.korisnikId),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                String uloga = snapshot.data ?? '';
+                                return Text(uloga);
+                              }
+                            },
+                          ),
+                        ),
+                        DataCell(
+                          Align(
+                              alignment: Alignment.center,
+                              child: Text(e.aktivnost == true ? 'DA' : 'NE')),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  _korisniciProvider.delete(e.korisnikId);
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],

@@ -1,4 +1,5 @@
-﻿using JamFix.Model.Modeli;
+﻿using AutoMapper;
+using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 
@@ -9,6 +10,7 @@ namespace JamFix.Services.Interface
         Task<Proizvodi> Activate(int id);
         Task<Proizvodi> Hide(int id);
         Task<List<string>> AllowedActions(int id);
-        //List<Proizvodi> Recommend(int id);
+        List<Proizvodi> Recommend(int id);
+        Task<PagedResult<Proizvodi>> GetTopRatedProducts(int numberOfTopProducts);
     }
 }

@@ -11,6 +11,10 @@ import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/vrste_proizvoda.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
+import 'package:jamfix_admin/screens/plati_uslugu_screen.dart';
+import 'package:jamfix_admin/screens/product_list_screen.dart';
+import 'package:jamfix_admin/screens/usluge_screen.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -30,9 +34,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   VrsteProizvodaProvider _vrsteProizvodaProvider = VrsteProizvodaProvider();
   ProductProvider _productProvider = ProductProvider();
-
+  bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
   bool isLoading = true;
+  bool snizen = false;
 
   @override
   void initState() {
@@ -42,11 +47,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       'cijena': widget.product?.cijena.toString(),
       'nazivProizvoda': widget.product?.nazivProizvoda,
       'opis': widget.product?.opis,
-      //'snizen': widget.product?.snizen.toString(),
+      'snizen': widget.product?.snizen.toString(),
       'vrstaId': widget.product?.vrstaId?.toString(),
+      'brzinaInterneta': widget.product?.brzinaInterneta,
+      'brojMinuta': widget.product?.brojMinuta,
+      'brojKanala': widget.product?.brojKanala,
     };
-    // _korisniciProvider = context.read<KorisniciProvider>();
-    // _vrsteProizvodaProvider = context.read<VrsteProizvodaProvider>();
     _vrsteProizvodaProvider = context.read<VrsteProizvodaProvider>();
     _productProvider = context.read<ProductProvider>();
 
@@ -57,18 +63,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-
-    // if (widget.product != null) {
-    //   setState(() {
-    //     _formKey.currentState.patchValue({
-    //       'cijena':widget.product?.cijena
-    //     });
-    //   });
   }
 
   Future initForm() async {
     vrsteProizvodaResult = await _vrsteProizvodaProvider.get();
-    print(vrsteProizvodaResult);
 
     setState(() {
       isLoading = false;
@@ -77,48 +75,92 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      child: Column(children: [
+    return Scaffold(
+      body: MasterScreenWidget(
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: newMethod(context),
+        ),
+      title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
+      ),
+    );
+  }
+
+  Column newMethod(BuildContext context) {
+    return Column(
+      children: [
         isLoading ? Container() : _buildForm(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: ElevatedButton(
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: ElevatedButton(
                   onPressed: () async {
                     _formKey.currentState?.saveAndValidate();
-                    print(_formKey.currentState?.value);
-
-                    var request = new Map.from(_formKey.currentState!.value);
+                    var request = Map.from(_formKey.currentState!.value);
                     request['slika'] = _base65Image;
+                    Navigator.of(context).pop();
                     try {
                       if (widget.product == null) {
                         await _productProvider.insert(request);
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => ProductListScreen(),
+                          ),
+                        );
                       } else {
                         await _productProvider.update(
                             widget.product!.proizvodId!, request);
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => ProductListScreen(),
+                          ),
+                        );
                       }
                     } on Exception catch (e) {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
-                                title: Text("Error"),
+                                title: const Text("Error"),
                                 content: Text(e.toString()),
                                 actions: [
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("OK"))
+                                      child: const Text("OK"))
                                 ],
                               ));
                     }
                   },
-                  child: Text("Sacuvaj")),
-            )
+                  child: const Text("Sacuvaj"),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isKorisnik,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PlatiUsluguScreen(product: widget.product),
+                        ),
+                      );
+                    },
+                    child: const Text("Dodaj narudzbu"),
+                  ),
+                ),
+              ),
+            ),
           ],
         )
-      ]),
-      title: this.widget.product?.nazivProizvoda ?? 'Product details',
+      ],
     );
   }
 
@@ -131,63 +173,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: [
             Expanded(
               child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: "Cijena"),
+                decoration: const InputDecoration(labelText: "Cijena"),
+                enabled: userRole == Authorization.isAdmin,
                 name: "cijena",
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(
               child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: "Naziv"),
+                decoration: const InputDecoration(labelText: "Naziv"),
+                enabled: userRole == Authorization.isAdmin,
                 name: "nazivProizvoda",
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(
               child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: "opis"),
+                decoration: const InputDecoration(labelText: "opis"),
+                enabled: userRole == Authorization.isAdmin,
                 name: "opis",
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            // Expanded(
-            //   child: FormBuilderTextField(
-            //     decoration: InputDecoration(labelText: "snizen"),
-            //     name: "snizen",
-            //   ),
-            // ),
           ],
         ),
         Row(
           children: [
             Expanded(
-                child: FormBuilderDropdown<String>(
-              name: 'vrstaId',
-              decoration: InputDecoration(
-                labelText: 'Vrsta proizvoda',
-                suffix: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    _formKey.currentState!.fields['vrstaId']?.reset();
-                  },
-                ),
-                hintText: 'Odaberi vrstu',
+              child: FormBuilderTextField(
+                decoration:
+                    const InputDecoration(labelText: "Brzina interneta"),
+                enabled: userRole == Authorization.isAdmin,
+                name: "brzinaInterneta",
               ),
-              items: vrsteProizvodaResult?.result
-                      .map((item) => DropdownMenuItem(
-                            alignment: AlignmentDirectional.center,
-                            value: item.vrstaId.toString(),
-                            child: Text(item.naziv ?? ""),
-                          ))
-                      .toList() ??
-                  [],
-            ))
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: FormBuilderTextField(
+                decoration: const InputDecoration(labelText: "Broj minuta"),
+                enabled: userRole == Authorization.isAdmin,
+                name: "brojMinuta",
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: FormBuilderTextField(
+                decoration: const InputDecoration(labelText: "Broj kanala"),
+                enabled: userRole == Authorization.isAdmin,
+                name: "brojKanala",
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: FormBuilderDropdown<String>(
+                name: 'vrstaId',
+                decoration: InputDecoration(
+                  labelText: 'Vrsta proizvoda',
+                  suffix: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _formKey.currentState!.fields['vrstaId']?.reset();
+                    },
+                  ),
+                  hintText: 'Odaberi vrstu',
+                ),
+                enabled: userRole == Authorization.isAdmin,
+                items: vrsteProizvodaResult?.result
+                        .map((item) => DropdownMenuItem(
+                              alignment: AlignmentDirectional.center,
+                              value: item.vrstaId.toString(),
+                              child: Text(item.naziv ?? ""),
+                            ))
+                        .toList() ??
+                    [],
+                initialValue: _initialValue['vrstaId'],
+              ),
+            ),
           ],
         ),
         Row(
@@ -198,19 +272,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               builder: ((field) {
                 return InputDecorator(
                   decoration: InputDecoration(
-                      label: Text('Odaberite sliku'),
+                      label: const Text('Odaberite sliku'),
                       errorText: field.errorText),
                   child: ListTile(
-                    leading: Icon(Icons.photo),
-                    title: Text("Select image"),
-                    trailing: Icon(Icons.file_upload),
+                    enabled: userRole == Authorization.isAdmin,
+                    leading: const Icon(Icons.photo),
+                    title: const Text("Select image"),
+                    trailing: const Icon(Icons.file_upload),
                     onTap: getImage,
                   ),
                 );
               }),
             )),
           ],
-        )
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Visibility(
+          visible: Authorization.isAdmin,
+          child: Row(
+            children: [
+              Checkbox(
+                value: snizen,
+                onChanged: (value) {
+                  setState(() {
+                    snizen = value!;
+                  });
+                },
+              ),
+              const Text('Snizen'),
+            ],
+          ),
+        ),
       ]),
     );
   }

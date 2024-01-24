@@ -13,6 +13,9 @@ namespace JamFix.Model.Requests
         public string? Opis { get; set; }
         public byte[]? Slika { get; set; }
         public byte[]? SlikaThumb { get; set; }
-        public bool? Snizen { get; set; } = false;
+        public bool? Snizen { get; set; } = false; 
+        public string? BrzinaInterneta { get; set; }
+        public string? BrojMinuta { get; set; }
+        public string? BrojKanala { get; set; }
     }
 }

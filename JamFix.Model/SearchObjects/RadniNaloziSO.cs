@@ -8,6 +8,6 @@ namespace JamFix.Model.SearchObjects
 {
     public class RadniNaloziSO : BaseSO
     {
-        public string? NosilacPosla { get; set; }
+        public string? FTS { get; set; }
     }
 }

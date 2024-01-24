@@ -14,6 +14,10 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       json['slika'] as String?,
       json['snizen'] as bool?,
       json['vrstaId'] as int?,
+      json['brojKanala'] as String?,
+      json['brojMinuta'] as String?,
+      json['brzinaInterneta'] as String?,
+      (json['prosjecnaOcjena'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
@@ -24,4 +28,8 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'slika': instance.slika,
       'snizen': instance.snizen,
       'vrstaId': instance.vrstaId,
+      'brzinaInterneta': instance.brzinaInterneta,
+      'brojMinuta': instance.brojMinuta,
+      'brojKanala': instance.brojKanala,
+      'prosjecnaOcjena': instance.prosjecnaOcjena,
     };

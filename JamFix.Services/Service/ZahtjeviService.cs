@@ -17,5 +17,15 @@ namespace JamFix.Services.Service
         public ZahtjeviService(Context context, IMapper mapper) : base(context, mapper)
         {
         }
+        public override IQueryable<Zahtjev> AddFilter(IQueryable<Zahtjev> querry, ZahtjeviSO? search = null)
+        {
+            var fillteredQuery = base.AddFilter(querry, search);
+
+            if (!string.IsNullOrWhiteSpace(search?.FTS))
+            {
+                fillteredQuery = fillteredQuery.Where(x => x.ImePrezime.Contains(search.FTS));
+            }
+            return fillteredQuery;
+        }
     }
 }

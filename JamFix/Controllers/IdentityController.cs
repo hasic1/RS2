@@ -42,11 +42,18 @@ namespace JamFix.Controllers
                 var roleClaims = userRoles.Select(role => new Claim("role", role)).ToList();
                 var claims = new List<Claim>
                 {
-                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new(JwtRegisteredClaimNames.Sub, request.username),
-                    //new(JwtRegisteredClaimNames.Email, request.Email),
-                    //new("userid", request.UserId.ToString()),
-                    new(ClaimTypes.Role, string.Join(",", user.Uloge.Select(role => role.ToString()))),
+                   new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                   new(JwtRegisteredClaimNames.Sub, user.KorisnickoIme),
+                   new(ClaimTypes.MobilePhone, user.Telefon),
+                   new(ClaimTypes.NameIdentifier, user.KorisnikId.ToString()),
+                   new(ClaimTypes.Name, user.Ime), // Dodajte ime korisnika u claims
+                   new(ClaimTypes.Surname, user.Prezime), // Dodajte prezime korisnika u claims
+                   new(ClaimTypes.Email, user.Email), // Dodajte email korisnika u claims
+                   new(ClaimTypes.Rsa, user.Telefon), // Dodajte ime korisnika u claims
+                   new(ClaimTypes.Actor, user.KorisnickoIme), // Dodajte ime korisnika u claims
+
+                   new(ClaimTypes.Role, string.Join(",", user.Uloge.Select(role => role.ToString()))),
+
                 };
 
                 // Dodavanje uloga u listu claim-ova
@@ -69,8 +76,6 @@ namespace JamFix.Controllers
                 {
                     Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.Add(TokenLifetime),
-                    Issuer = "https://id.nickchapsas.com",
-                    Audience = "https://movies.nickchapsas.com",
                     SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);

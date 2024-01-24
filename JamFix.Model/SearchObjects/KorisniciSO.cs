@@ -8,6 +8,8 @@ namespace JamFix.Model.SearchObjects
 {
     public class KorisniciSO : BaseSO
     {
+        public string? FTS { get; set; }
+
         public bool? IsUlogeIncluded { get; set; }
     }
 }

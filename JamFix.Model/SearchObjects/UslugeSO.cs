@@ -8,6 +8,6 @@ namespace JamFix.Model.SearchObjects
 {
     public class UslugeSO : BaseSO
     {
-        public string? ImePrezime { get; set; }
+        public string? FTS { get; set; }
     }
 }

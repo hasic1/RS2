@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using JamFix.Model.Modeli;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,7 +26,11 @@ namespace JamFix.Services.Database
         public bool Snizen { get; set; } = false;
         public string? StateMachine { get; set; }
         public virtual ICollection<Ocjene> Ocjene { get; set; }
+        public string BrzinaInterneta { get; set; }
+        public string BrojMinuta { get; set; }
+        public string BrojKanala { get; set; }
         public virtual VrsteProizvoda Vrsta { get; set; } = null!;
+        public virtual ICollection<UslugaStavke> UslugaStavke { get; set; }
 
     }
 }

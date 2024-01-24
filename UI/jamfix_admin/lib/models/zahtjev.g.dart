@@ -7,6 +7,7 @@ part of 'zahtjev.dart';
 // **************************************************************************
 
 Zahtjev _$ZahtjevFromJson(Map<String, dynamic> json) => Zahtjev(
+      imePrezime: json['imePrezime'] as String?,
       zahtjevId: json['zahtjevId'] as int?,
       adresa: json['adresa'] as String?,
       brojTelefona: json['brojTelefona'] as String?,
@@ -15,13 +16,21 @@ Zahtjev _$ZahtjevFromJson(Map<String, dynamic> json) => Zahtjev(
           ? null
           : DateTime.parse(json['datumVrijeme'] as String),
       hitnaIntervencija: json['hitnaIntervencija'] as bool?,
+      statusZahtjeva: json['statusZahtjeva'] == null
+          ? null
+          : StatusZahtjeva.fromJson(
+              json['statusZahtjeva'] as Map<String, dynamic>),
+      statusZahtjevaId: json['statusZahtjevaId'] as int?,
     );
 
 Map<String, dynamic> _$ZahtjevToJson(Zahtjev instance) => <String, dynamic>{
       'zahtjevId': instance.zahtjevId,
-      'adresa': instance.adresa,
-      'brojTelefona': instance.brojTelefona,
+      'imePrezime': instance.imePrezime,
       'opis': instance.opis,
+      'adresa': instance.adresa,
       'datumVrijeme': instance.datumVrijeme?.toIso8601String(),
+      'brojTelefona': instance.brojTelefona,
       'hitnaIntervencija': instance.hitnaIntervencija,
+      'statusZahtjeva': instance.statusZahtjeva,
+      'statusZahtjevaId': instance.statusZahtjevaId,
     };

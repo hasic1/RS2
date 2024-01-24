@@ -17,5 +17,7 @@ namespace JamFix.Model.Modeli
         public bool Snizen { get; set; } = false;
         public int VrstaId { get; set; }
         public string StateMachine { get; set; }
+        public List<Ocjena> Ocjene { get; set; }
+        public double ProsjecnaOcjena { get; set; }
     }
 }

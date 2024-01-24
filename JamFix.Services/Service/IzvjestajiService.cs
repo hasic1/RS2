@@ -17,5 +17,15 @@ namespace JamFix.Services.Service
         public IzvjestajiService(Context context, IMapper mapper) : base(context, mapper)
         {
         }
+        public override IQueryable<Izvjestaj> AddFilter(IQueryable<Izvjestaj> querry, IzvjestajiSO? search = null)
+        {
+            var fillteredQuery = base.AddFilter(querry, search);
+
+            if (!string.IsNullOrWhiteSpace(search?.Datum)|| !string.IsNullOrWhiteSpace(search?.FTS))
+            {
+                fillteredQuery = fillteredQuery.Where(x => x.NajPosMjesto.Contains(search.FTS) || x.NajOprema.Contains(search.FTS) || x.Datum.Month.ToString()==search.Datum);
+            }
+            return fillteredQuery;
+        }
     }
 }

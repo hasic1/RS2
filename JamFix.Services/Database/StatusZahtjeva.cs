@@ -9,7 +9,13 @@ namespace JamFix.Services.Database
 {
     public class StatusZahtjeva
     {
+        public StatusZahtjeva()
+        {
+            Zahtjevi = new HashSet<Zahtjev>();
+        }
         public int StatusZahtjevaId { get; set; }
         public string Opis { get; set; }
+
+        public virtual ICollection<Zahtjev> Zahtjevi { get; set; }
     }
 }

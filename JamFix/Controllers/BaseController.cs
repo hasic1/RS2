@@ -17,7 +17,6 @@ namespace JamFix.Controllers
             _service = service;
             _logger = logger;
         }
-        //[Authorize(Roles ="Administrator")]
         [HttpGet()]
         public async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
         {

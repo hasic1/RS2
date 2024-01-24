@@ -20,53 +20,58 @@ class _ProductListScreenState extends State<ProductListScreen> {
   late ProductProvider _productProvider;
   SearchResult<Product>? result;
 
-  TextEditingController _ftsController = new TextEditingController();
-  TextEditingController _cijenaController = new TextEditingController();
+  final TextEditingController _ftsController = TextEditingController();
+  final TextEditingController _cijenaController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _productProvider = context.read<ProductProvider>();
+    _ucitajPodatke();
+  }
+
+  Future<void> _ucitajPodatke() async {
+    var podaci = await _productProvider.get();
+
+    setState(() {
+      result = podaci;
+    });
+  }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _productProvider = context.read<ProductProvider>();
   }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Container(
+          padding: EdgeInsets.all(16.0),
           child: Column(children: [_buildSearch(), _buildDataListView()])),
     );
   }
 
   Widget _buildSearch() {
     return Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(children: [
           Expanded(
             child: TextField(
-              decoration: InputDecoration(labelText: "Naziv ili cijena"),
+              decoration: const InputDecoration(labelText: "Naziv ili cijena"),
               controller: _ftsController,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(labelText: "Cijena"),
+              decoration: const InputDecoration(labelText: "Cijena"),
               controller: _cijenaController,
             ),
           ),
           ElevatedButton(
               onPressed: () async {
-                print("login proceed");
-
-                //Navigator.of(context).pop();
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const ProductDetailScreen(),
-                //   ),
-                // );
                 var data = await _productProvider.get(filter: {
                   'fts': _ftsController.text,
                   'cijena': _cijenaController.text
@@ -76,8 +81,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   result = data;
                 });
               },
-              child: Text("Pretraga")),
-          SizedBox(
+              child: const Text("Pretraga")),
+          const SizedBox(
             height: 8,
           ),
           Visibility(
@@ -90,7 +95,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     ),
                   );
                 },
-                child: Text("Dodaj")),
+                child: const Text("Dodaj")),
           ),
         ]));
   }
@@ -108,20 +113,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
             )),
             const DataColumn(
                 label: const Expanded(
-              child: Text('NazivProizvoda',
-                  style: const TextStyle(fontStyle: FontStyle.italic)),
-            )),
-            const DataColumn(
-                label: const Expanded(
-              child: Text('cijena',
+              child: Text('Naziv proizvoda',
                   style: const TextStyle(fontStyle: FontStyle.italic)),
             )),
             const DataColumn(
               label: const Expanded(
-                child: Text('opis',
+                child: Text('Opis',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
+            const DataColumn(
+                label: const Expanded(
+              child: Text('Cijena',
+                  style: const TextStyle(fontStyle: FontStyle.italic)),
+            )),
             const DataColumn(
               label: const Expanded(
                 child: Text('Snizen',
@@ -131,6 +137,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             const DataColumn(
               label: const Expanded(
                 child: Text('Slika',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
@@ -150,17 +157,29 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               },
                           cells: [
                             DataCell(Text(e.proizvodId?.toString() ?? "")),
-                            DataCell(Text(e.nazivProizvoda ?? "")),
-                            DataCell(Text(formatNumber(e.cijena))),
+                            DataCell(
+                              Align(
+                                  alignment: Alignment.center,
+                                  child: Text(e.nazivProizvoda ?? "")),
+                            ),
                             DataCell(Text(e.opis ?? "")),
-                            DataCell(Text(e.snizen.toString())),
+                            DataCell(
+                              Align(
+                                  alignment: Alignment.center,
+                                  child: Text(formatNumber(e.cijena))),
+                            ),
+                            DataCell(Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  e.snizen == true ? "DA" : "NE",
+                                ))),
                             DataCell(e.slika != ""
-                                ? Container(
+                                ? SizedBox(
                                     width: 100,
                                     height: 100,
                                     child: imageFromBase64String(e.slika!),
                                   )
-                                : Text("")),
+                                : const Text("")),
                           ]))
                   .toList() ??
               []),

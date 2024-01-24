@@ -10,5 +10,8 @@ namespace JamFix.Model.Requests
     {
         public string? ImePrezime { get; set; }
         public DateTime Datum { get; set; }
+        public string BrojRacuna { get; set; }
+        public string NazivPaketa { get; set; }
+        public string Cijena { get; set; }
     }
 }

@@ -6,7 +6,6 @@ class VrsteProizvodaProvider extends BaseProvider<VrsteProizvoda> {
 
   @override
   VrsteProizvoda fromJson(data) {
-    // TODO: implement fromJson
     return VrsteProizvoda.fromJson(data);
   }
 }

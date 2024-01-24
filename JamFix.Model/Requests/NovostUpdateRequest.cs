@@ -8,6 +8,8 @@ namespace JamFix.Model.Requests
 {
     public class NovostUpdateRequest
     {
-        public string? Sadrzaj { get; set; } = null!;
+        public string? Naslov { get; set; }
+        public string? Sadrzaj { get; set; }
+        public byte[]? Slika { get; set; }
     }
 }

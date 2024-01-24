@@ -11,5 +11,10 @@ namespace JamFix.Services.Database
         public int UslugaId { get; set; }
         public string? ImePrezime { get; set; }
         public DateTime Datum { get; set; }
+        public string BrojRacuna { get; set; }
+        public string Cijena { get; set; }
+        public string NazivPaketa { get; set; }
+        public bool Placeno { get; set; }
+        public virtual ICollection<UslugaStavke> UslugaStavke { get; set; }
     }
 }

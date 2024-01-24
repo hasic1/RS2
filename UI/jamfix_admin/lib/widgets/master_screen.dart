@@ -1,13 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamfix_admin/main.dart';
+import 'package:jamfix_admin/models/zahtjev.dart';
+import 'package:jamfix_admin/screens/izvjestaji_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
+import 'package:jamfix_admin/screens/novosti_list_screen.dart';
+import 'package:jamfix_admin/screens/oNama_screen.dart';
+import 'package:jamfix_admin/screens/pocetna_screen.dart';
+import 'package:jamfix_admin/screens/postavke_screen.dart';
+import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
+import 'package:jamfix_admin/screens/radni_nalog_screen.dart';
+import 'package:jamfix_admin/screens/usluge_screen.dart';
 import 'package:jamfix_admin/screens/zahtijev_list.screen.dart';
+import 'package:jamfix_admin/screens/zahtjevi_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
-import 'package:http/http.dart' as http;
 
 import '../screens/product_list_screen.dart';
 
@@ -29,6 +36,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     return Scaffold(
       appBar: AppBar(
         title: widget.title_widget ?? Text(widget.title ?? ""),
+        toolbarHeight: 30,
+        leadingWidth: 40,
       ),
       drawer: Drawer(
         child: ListView(
@@ -46,22 +55,24 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 },
               ),
             ),
-            ListTile(
-              title: Text('Plati usluge'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProductListScreen(),
-                  ),
-                );
-              },
-            ),
+            // Visibility(visible: Authorization.isKorisnik,
+            //   child: ListTile(
+            //     title: Text('Plati usluge'),
+            //     onTap: () {
+            //       Navigator.of(context).push(
+            //         MaterialPageRoute(
+            //           builder: (context) => KorisniciListScreen(),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             ListTile(
               title: Text('Pocetna'),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => KorisniciListScreen(),
+                    builder: (context) => PocetnaScreen(),
                   ),
                 );
               },
@@ -71,7 +82,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const KorisniciListScreen(),
+                    builder: (context) => NovostiListScreen(),
                   ),
                 );
               },
@@ -81,17 +92,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Postavke'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                    builder: (context) => ONamaScreen(),
                   ),
                 );
               },
@@ -103,7 +104,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
+                      builder: (context) => UslugeScreen(),
                     ),
                   );
                 },
@@ -116,33 +117,20 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
+                      builder: (context) => RadniNalogListScreen(),
                     ),
                   );
                 },
               ),
             ),
             Visibility(
-              visible: Authorization.isAdmin,
+              visible: Authorization.isAdmin || Authorization.isKorisnik,
               child: ListTile(
                 title: Text('Proizvodi'),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Visibility(
-              visible: Authorization.isAdmin,
-              child: ListTile(
-                title: Text('Uposlenici'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
+                      builder: (context) => ProductListScreen(),
                     ),
                   );
                 },
@@ -168,7 +156,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
+                      builder: (context) => ZahtjevScreen(),
                     ),
                   );
                 },
@@ -181,11 +169,21 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciListScreen(),
+                      builder: (context) => IzvjestajiScreen(),
                     ),
                   );
                 },
               ),
+            ),
+            ListTile(
+              title: Text('Postavke'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PostavkeScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               title: Text('Odjava'),

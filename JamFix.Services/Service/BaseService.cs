@@ -33,10 +33,22 @@ namespace JamFix.Services.Service
             {
                 query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
             }
-
+            if (typeof(T) == typeof(Proizvodi))
+            {
+                query = query.Include(p => (p as Proizvod).Ocjene);
+            }
             var list = await query.ToListAsync();
 
             var tmp = _mapper.Map<List<T>>(list);
+            if (tmp.Any() && tmp.First() is Proizvodi)
+            {
+                var proizvodi = tmp.Cast<Proizvodi>().ToList();
+
+                foreach (var proizvod in proizvodi)
+                {
+                    proizvod.ProsjecnaOcjena = proizvod.Ocjene.Count > 0 ? proizvod.Ocjene.Average(o => o.ocjena) : 0;
+                }
+            }
             result.Result = tmp;
             return result;
         }
@@ -45,17 +57,7 @@ namespace JamFix.Services.Service
             var entity = await _context.Set<TDb>().FindAsync(id);
 
             return _mapper.Map<T>(entity);
-        }
-        //public virtual async Task<T> DeleteById(int id)
-        //{
-        //    var set = _context.Set<TDb>();
-
-        //    var entity = set.FindAsync(id);
-        //    _context.Remove(entity);
-        //    _context.SaveChangesAsync();
-
-        //    return _mapper.Map<T>(entity);
-        //}
+        }       
         public virtual IQueryable<TDb> AddFilter(IQueryable<TDb> querry,TSearch? search = null)
         {
             return querry;

@@ -9,6 +9,8 @@ namespace JamFix.Model.Modeli
     public class Novost
     {
         public int NovostId { get; set; }
-        public string Sadrzaj { get; set; }
+        public string? Naslov { get; set; }
+        public string? Sadrzaj { get; set; }
+        public byte[]? Slika { get; set; }
     }
 }
