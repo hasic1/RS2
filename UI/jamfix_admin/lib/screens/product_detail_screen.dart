@@ -1,8 +1,5 @@
-// ignore_for_file: sort_child_properties_last
-
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -36,6 +33,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   ProductProvider _productProvider = ProductProvider();
   bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
+  SearchResult<Product>? preporuceniProizvodi;
+
   bool isLoading = true;
   bool snizen = false;
 
@@ -66,11 +65,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Future initForm() async {
-    vrsteProizvodaResult = await _vrsteProizvodaProvider.get();
+    var vrste = await _vrsteProizvodaProvider.get();
+    var recommend = await _productProvider
+        .fetchRecommendedProducts(widget.product!.proizvodId!);
 
-    setState(() {
-      isLoading = false;
-    });
+    print("Recommendation result: $recommend"); // Dodajte ovu liniju
+
+    if (recommend != null) {
+      setState(() {
+        vrsteProizvodaResult = vrste;
+        preporuceniProizvodi = recommend;
+        isLoading = false;
+      });
+    } else {
+      print("Error fetching recommended products."); // Dodajte ovu liniju
+    }
   }
 
   @override
@@ -81,7 +90,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           padding: const EdgeInsets.all(16.0),
           child: newMethod(context),
         ),
-      title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
+        title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
       ),
     );
   }
@@ -159,7 +168,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
           ],
-        )
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Preporučeni proizvodi',
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Wrap(
+          spacing: 15.0,
+          runSpacing: 15.0,
+          children: preporuceniProizvodi?.result.map((recommendedProduct) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailScreen(
+                          product: recommendedProduct,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(17.0),
+                    child: Container(
+                      width: 250,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: Image.memory(
+                          base64Decode(recommendedProduct.slika ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList() ??
+              [],
+        ),
       ],
     );
   }
@@ -264,27 +317,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
-        Row(
-          children: [
-            Expanded(
-                child: FormBuilderField(
-              name: 'imageId',
-              builder: ((field) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                      label: const Text('Odaberite sliku'),
-                      errorText: field.errorText),
-                  child: ListTile(
-                    enabled: userRole == Authorization.isAdmin,
-                    leading: const Icon(Icons.photo),
-                    title: const Text("Select image"),
-                    trailing: const Icon(Icons.file_upload),
-                    onTap: getImage,
-                  ),
-                );
-              }),
-            )),
-          ],
+        Visibility(
+          visible: Authorization.isAdmin,
+          child: Row(
+            children: [
+              Expanded(
+                  child: FormBuilderField(
+                name: 'imageId',
+                builder: ((field) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                        label: const Text('Odaberite sliku'),
+                        errorText: field.errorText),
+                    child: ListTile(
+                      enabled: userRole == Authorization.isAdmin,
+                      leading: const Icon(Icons.photo),
+                      title: const Text("Select image"),
+                      trailing: const Icon(Icons.file_upload),
+                      onTap: getImage,
+                    ),
+                  );
+                }),
+              )),
+            ],
+          ),
         ),
         const SizedBox(
           height: 20,

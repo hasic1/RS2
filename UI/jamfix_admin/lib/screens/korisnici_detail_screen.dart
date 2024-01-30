@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
+import 'package:jamfix_admin/models/korisnici_uloge.dart';
 import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/statusZahtjeva.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
+import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
 import 'package:jamfix_admin/providers/statusZahtjevaProvider.dart';
@@ -33,15 +35,18 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
   SearchResult<Drzava>? drzavaResult;
   SearchResult<Pozicija>? pozicijaResult;
   SearchResult<Korisnici>? korisniciResult;
+  SearchResult<KorisniciUloge>? korisniciUlogeResult;
   KorisniciProvider _korisniciProvider = KorisniciProvider();
   PozicijaProvider _pozicijaProvider = PozicijaProvider();
   DrzavaProvider _drzavaProvider = DrzavaProvider();
+  KorisniciUlogeProvider _korisniciUlogeProvider = KorisniciUlogeProvider();
 
   Map<String, dynamic> _initialValue = {};
   bool isLoading = true;
   bool aktivan = false;
   String? selectedPozicijaId;
   String? selectedDrzavaId;
+  String? selectedUloga;
 
   @override
   void initState() {
@@ -71,7 +76,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
     _korisniciProvider = context.read<KorisniciProvider>();
     _pozicijaProvider = context.read<PozicijaProvider>();
     _drzavaProvider = context.read<DrzavaProvider>();
-
+    _korisniciUlogeProvider = context.read<KorisniciUlogeProvider>();
     _ucitajPodatke();
   }
 
@@ -79,11 +84,13 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
     var pozicije = await _pozicijaProvider.get();
     var podaci = await _korisniciProvider.get();
     var drzava = await _drzavaProvider.get();
+    var uloge = await _korisniciUlogeProvider.get();
 
     setState(() {
       pozicijaResult = pozicije;
       korisniciResult = podaci;
       drzavaResult = drzava;
+      korisniciUlogeResult = uloge;
     });
 
     for (var korisnik in podaci.result) {
@@ -91,6 +98,12 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
     }
   }
 
+  Map<String, String> ulogeMap = {
+    '1': 'Administrator',
+    '2': 'Korisnik',
+    '3': 'Zaposlenik',
+    '4': 'Operater',
+  };
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -170,7 +183,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                                     .contains(
                                         _initialValue['drzavaId'].toString())
                             ? _initialValue['drzavaId'].toString()
-                            : null, // Dodajte ovo polje kako biste postavili inicijalnu vrijednost.
+                            : null,
                       ),
                     ),
                   ],
@@ -214,7 +227,48 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                                     .contains(
                                         _initialValue['pozicijaId'].toString())
                             ? _initialValue['pozicijaId'].toString()
-                            : null, // Dodajte ovo polje kako biste postavili inicijalnu vrijednost.
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+                //----------------------------------------------------------------------
+                Row(
+                  children: [
+                    Expanded(
+                      child: FormBuilderDropdown<String>(
+                        name: 'ulogaId',
+                        decoration: InputDecoration(
+                          labelText: 'Uloga',
+                          suffix: IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              setState(() {
+                                selectedUloga =
+                                    _initialValue['ulogaId']?.toString() ??
+                                        null;
+                              });
+                            },
+                          ),
+                          hintText: 'Odaberi ulogu korisnika',
+                        ),
+                        items: ulogeMap.entries
+                            .map((entry) => DropdownMenuItem<String>(
+                                  value: entry.key,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      entry.value,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedUloga = value;
+                          });
+                        },
+                        initialValue: ulogeMap.keys.first,
                       ),
                     ),
                   ],
@@ -238,10 +292,16 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () async {
+                      KorisniciUloge uloge = KorisniciUloge(
+                        ulogaId: int.parse(selectedUloga ?? ""),
+                        datumIzmjene: DateTime.now(),
+                      );
                       Korisnici request = Korisnici(
                         aktivnost: aktivan,
-                        pozicijaId: int.tryParse(selectedPozicijaId ?? ""),
-                        drzavaId: int.parse(selectedDrzavaId ?? ""),
+                        pozicijaId: int.tryParse(selectedPozicijaId ??
+                            _initialValue['pozicijaId'].toString()),
+                        drzavaId: int.parse(selectedDrzavaId ??
+                            _initialValue['drzavaId'].toString()),
                         ime: imeController.text,
                         prezime: prezimeController.text,
                         telefon: telefonController.text,
@@ -251,6 +311,8 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                       );
                       Navigator.of(context).pop();
                       try {
+                        _korisniciUlogeProvider.update(
+                            widget.korisnici!.korisnikId!, uloge);
                         _korisniciProvider.update(
                             widget.korisnici!.korisnikId!, request);
                         Navigator.of(context).pushReplacement(

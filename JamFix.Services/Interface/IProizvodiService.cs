@@ -2,6 +2,7 @@
 using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
+using static JamFix.Services.Service.ProizvodiService;
 
 namespace JamFix.Services.Interface
 {
@@ -10,7 +11,7 @@ namespace JamFix.Services.Interface
         Task<Proizvodi> Activate(int id);
         Task<Proizvodi> Hide(int id);
         Task<List<string>> AllowedActions(int id);
-        List<Proizvodi> Recommend(int id);
+        RecommendationResponse<Proizvodi> Recommend(int id);
         Task<PagedResult<Proizvodi>> GetTopRatedProducts(int numberOfTopProducts);
     }
 }

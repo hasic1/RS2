@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
+import 'package:jamfix_admin/screens/korisnici_detail_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/product_detail_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
@@ -33,11 +34,11 @@ class _PocetnaScreen extends State<PocetnaScreen> {
 
   Future<void> _ucitajPodatke() async {
     var podaci = await _productProvider.get();
-    var recommended=await _productProvider.fetchRecommendedProducts();
+    var recommended = await _productProvider.fetchBestProducts();
 
     setState(() {
       result = podaci;
-      recommendedProducts=recommended;
+      recommendedProducts = recommended;
     });
   }
 
@@ -53,34 +54,36 @@ class _PocetnaScreen extends State<PocetnaScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CarouselSlider(
-                items: result?.result.map((product) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetailScreen(product: product),
-                            ),
-                          );
-                        },
-                        child: Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Image.memory(
-                                  base64Decode(product.slika!),
-                                  height: 300,
-                                  width: 300,
-                                ),
+                items: result?.result.map(
+                      (product) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailScreen(product: product),
                               ),
                             );
                           },
-                        ),
-                      );
-                    }).toList() ??
+                          child: Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Image.memory(
+                                    base64Decode(product.slika!),
+                                    height: 300,
+                                    width: 300,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ).toList() ??
                     [],
                 options: CarouselOptions(
                   height: 200.0,
@@ -99,7 +102,7 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Preporučeni Proizvodi',
+                      'Najbolje ocjenjeni proizvodi',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -112,7 +115,8 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: recommendedProducts?.result.length ?? 0,
                         itemBuilder: (context, index) {
-                          var recommendedProduct = recommendedProducts?.result[index];
+                          var recommendedProduct =
+                              recommendedProducts?.result[index];
 
                           return Padding(
                             padding: EdgeInsets.all(16.0),
@@ -120,7 +124,8 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                               onTap: () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                    builder: (context) => KorisniciListScreen(),
+                                    builder: (context) => ProductDetailScreen(
+                                        product: recommendedProduct),
                                   ),
                                 );
                               },

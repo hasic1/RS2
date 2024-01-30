@@ -9,6 +9,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
+import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
@@ -34,6 +35,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
       ChangeNotifierProvider(create: (_) => StatusZahtjevaProvider()),
+      ChangeNotifierProvider(create: (_) => KorisniciUlogeProvider()),
       ChangeNotifierProvider(create: (_) => RadniNalogProvider()),
       ChangeNotifierProvider(create: (_) => KorisniciProvider()),
       ChangeNotifierProvider(create: (_) => IzvjestajProvider()),
@@ -43,6 +45,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
       ChangeNotifierProvider(create: (_) => DrzavaProvider()),
       ChangeNotifierProvider(create: (_) => UslugeProvider()),
+
     ],
     child: const MyMaterialApp(),
   ));

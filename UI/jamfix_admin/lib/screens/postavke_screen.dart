@@ -14,7 +14,6 @@ class PostavkeScreen extends StatefulWidget {
 }
 
 class _PostavkeScreen extends State<PostavkeScreen> {
-  // Kontroleri za unos podataka
   TextEditingController _imeController = TextEditingController();
   TextEditingController _prezimeController = TextEditingController();
   TextEditingController _noviPasswordController = TextEditingController();
@@ -57,31 +56,30 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 40.0),
                         Text(
                           'Prezime: ${Authorization.prezime}',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 40.0),
                         Text(
                           'Email: ${Authorization.email}',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 40.0),
                         Text(
                           'Telefon: ${Authorization.telefon}',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 40.0),
                         Text(
                           'Username: ${Authorization.korisnickoIme}',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        // Dodajte ostale podatke koje želite prikazati
                       ],
                     ),
                   ),
@@ -134,6 +132,11 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               } else {
                                 drzavaResult =
                                     snapshot.data as SearchResult<Drzava>?;
+                                selectedDrzavaId = (drzavaResult
+                                        ?.result.first.drzavaId
+                                        .toString()) ??
+                                    null;
+
                                 return Row(
                                   children: [
                                     Expanded(

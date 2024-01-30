@@ -97,8 +97,12 @@ namespace JamFix.Services.Service
 
             return result;
         }
-
-        public List<Proizvodi> Recommend(int id)
+        public class RecommendationResponse<T>
+        {
+            public List<T> Result { get; set; }
+            public int Count { get; set; }
+        }
+        public RecommendationResponse<Proizvodi> Recommend(int id)
         {
             if (mlContext == null)
             {
@@ -172,8 +176,16 @@ namespace JamFix.Services.Service
                 predictionResult.Add(new Tuple<Proizvod, float>(item, prediction.Score));
             }
             var finalResult = predictionResult.OrderByDescending(x => x.Item2)
-                .Select(x => x.Item1).Take(3).ToList();
-            return _mapper.Map<List<Proizvodi>>(finalResult);
+                                       .Select(x => x.Item1)
+                                       .Take(3)
+                                       .ToList();
+            var response = new RecommendationResponse<Proizvodi>
+            {
+                Result = _mapper.Map<List<Proizvodi>>(finalResult),
+                Count = finalResult.Count
+            };
+
+            return response;
         }
     }
 }

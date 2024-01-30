@@ -77,6 +77,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddTransient<IService<Uloge, BaseSO>, BaseService<Uloge, Uloga, BaseSO>>();
 builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
 builder.Services.AddTransient<IStatusZahtjevaService, StatusZahtjevaService>();
+builder.Services.AddTransient<IKorisnikUlogeService, KorisnikUlogeService>();
 builder.Services.AddTransient<IRadniNalogService, RadniNalogService>();
 builder.Services.AddTransient<IIzvjestajiService, IzvjestajiService>();
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
@@ -87,7 +88,6 @@ builder.Services.AddTransient<INovostiService, NovostiService>();
 builder.Services.AddTransient<IDrzaveService, DrzaveService>();
 builder.Services.AddTransient<IUslugeService, UslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
-builder.Services.AddTransient<IUlogaService, UlogaService>();
 builder.Services.AddTransient<IUlogaService, UlogaService>();
 
 

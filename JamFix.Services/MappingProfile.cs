@@ -56,6 +56,11 @@ namespace JamFix.Services
             CreateMap<OcjenaInsertRequest, Ocjene>();
             CreateMap<OcjenaUpdateRequest, Ocjene>();
             //-------------------------------------------------------
+            CreateMap<KorisniciUloge, KorisnikUloge>();
+            CreateMap<KorisnikUlogeUpdateRequest, KorisniciUloge>();
+            CreateMap<KorisnikUlogeInsertRequest, KorisniciUloge>();
+            //-------------------------------------------------------
+
         }
     }
 }

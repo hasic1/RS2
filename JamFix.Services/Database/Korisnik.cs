@@ -31,8 +31,5 @@ namespace JamFix.Services.Database
         public int PozicijaId { get; set; }
         public bool Aktivnost { get; set; }
         public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; }
-
-        //public virtual ICollection<Izlazi> Izlazis { get; set; }
-        //public virtual ICollection<Ulazi> Ulazis { get; set; }
     }
 }

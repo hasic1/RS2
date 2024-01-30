@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using static JamFix.Services.Service.ProizvodiService;
 
 namespace JamFix.Controllers
 {
@@ -46,9 +47,8 @@ namespace JamFix.Controllers
             var topRatedProducts = await _proizvodiService.GetTopRatedProducts(numberOfTopProducts);
             return topRatedProducts;
         }
-        [AllowAnonymous]
-        [HttpGet("{id}/recommend")]
-        public List<Proizvodi> Recommend(int id)
+        [HttpGet("recommend/{id}")]
+        public RecommendationResponse<Proizvodi> Recommend(int id)
         {
             return _proizvodiService.Recommend(id);
         }

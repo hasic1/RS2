@@ -75,17 +75,18 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: ListTile(
-        leading: novost.slika != ""
-            ? SizedBox(
-                width: 100,
-                height: 100,
-                child: imageFromBase64String(novost.slika!),
-              )
-            : const SizedBox.shrink(),
+        leading:
+            novost.slika != null && imageFromBase64String(novost.slika!) != ""
+                ? SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: imageFromBase64String(novost.slika!),
+                  )
+                : const SizedBox.shrink(),
         title: Text(novost.naslov ?? ''),
         subtitle: Text(novost.sadrzaj ?? ''),
         onTap: () {
-          _showNovostDetails(novost);
+          //_showNovostDetails(novost);
         },
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -100,6 +101,11 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               icon: Icon(Icons.delete),
               onPressed: () {
                 _novostiProvider.delete(novost.novostId);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => NovostiListScreen(),
+                  ),
+                );
               },
             ),
             IconButton(
@@ -117,7 +123,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   void _editNovost(Novosti novost) {
     naslovController.text = novost.naslov ?? '';
     sadrzajController.text = novost.sadrzaj ?? '';
-    _base65Image = novost.slika; // Koristi postojeću sliku za uređivanje
+    _base65Image = novost.slika ?? "";
     int? id = novost.novostId;
     showDialog(
       context: context,
@@ -191,7 +197,11 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => NovostiListScreen(),
+                  ),
+                );
               },
               child: const Text('Odustani'),
             ),
@@ -201,13 +211,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     );
   }
 
-  void _showNovostDetails(Novosti novost) {
-    // Dodaj logiku za prikaz pojedinačne novosti na zasebnoj stranici
-    // Možeš koristiti Navigator za prijelaz na novu stranicu
-  }
   void _handleAddReport() {
-    TextEditingController slikaController = TextEditingController();
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -254,7 +258,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 Novosti request = Novosti(
                   naslov: naslovController.text,
                   sadrzaj: sadrzajController.text,
-                  slika: _base65Image, // Postavljanje base64 slike u objekt
+                  slika: _base65Image,
                 );
 
                 try {
@@ -280,7 +284,11 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => NovostiListScreen(),
+                  ),
+                );
               },
               child: const Text('Odustani'),
             ),
@@ -297,7 +305,9 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     var result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
+      _image = result?.files.single.path != null
+          ? File(result!.files.single.path!)
+          : null;
       _base65Image = base64Encode(_image!.readAsBytesSync());
     }
   }

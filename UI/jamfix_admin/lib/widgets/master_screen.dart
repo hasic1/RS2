@@ -5,6 +5,7 @@ import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
 import 'package:jamfix_admin/screens/izvjestaji_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
+import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
 import 'package:jamfix_admin/screens/novosti_list_screen.dart';
 import 'package:jamfix_admin/screens/oNama_screen.dart';
 import 'package:jamfix_admin/screens/pocetna_screen.dart';
@@ -55,18 +56,6 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 },
               ),
             ),
-            // Visibility(visible: Authorization.isKorisnik,
-            //   child: ListTile(
-            //     title: Text('Plati usluge'),
-            //     onTap: () {
-            //       Navigator.of(context).push(
-            //         MaterialPageRoute(
-            //           builder: (context) => KorisniciListScreen(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
             ListTile(
               title: Text('Pocetna'),
               onTap: () {
@@ -124,13 +113,26 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isAdmin || Authorization.isKorisnik,
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text('Proizvodi admin'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isKorisnik || Authorization.isZaposlenik,
               child: ListTile(
                 title: Text('Proizvodi'),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ProductListScreen(),
+                      builder: (context) => KorisnikProductListScreen(),
                     ),
                   );
                 },

@@ -158,14 +158,11 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
-            ),
-            DataColumn(
+            ),DataColumn(
               label: Text(
                 'Akcija',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.blue,
-                ),
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
           ],
