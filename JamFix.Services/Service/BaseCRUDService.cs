@@ -46,6 +46,21 @@ namespace JamFix.Services.Service
                 }
             }
         }
+        //private async Task SetDefaultStatus(Zahtjev zahtjevEntity)
+        //{
+        //    if (zahtjevEntity != null)
+        //    {
+        //        var defaultZahtjev= await _context.StatusZahtjeva.SingleOrDefaultAsync(z => z.Opis == "Zaprimljen");
+
+        //        if (defaultZahtjev != null)
+        //        {
+        //            zahtjevEntity.StatusZahtjeva.Add(new StatusZahtjeva
+        //            {
+        //                a
+        //            });
+        //        }
+        //    }
+        //}
         public virtual async Task<T> Insert(TInsert insert)
         {
             if (insert is KorisniciInsertRequest korisnikInsert && await IsUsernameTaken(korisnikInsert.KorisnickoIme))
@@ -59,7 +74,13 @@ namespace JamFix.Services.Service
             if (entity is Korisnik korisnikEntity)
             {
                 await SetDefaultUserRole(korisnikEntity);
+
             }
+            if(entity is Zahtjev zahtjevEntity)
+            {
+                zahtjevEntity.StatusZahtjevaId = 1;
+            }
+
             set.Add(entity);
             await BeforeInsert(entity, insert);
 
