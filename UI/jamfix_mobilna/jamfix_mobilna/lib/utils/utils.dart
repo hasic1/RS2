@@ -8,7 +8,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 class Authorization {
   static String? username;
   static String? password;
-  static String? jwtToken; // Dodajte polje za JWT token
+  static String? jwtToken; 
   static bool isAdmin = false;
   static bool isZaposlenik = false;
   static bool isKorisnik = false;
@@ -37,7 +37,6 @@ class Authorization {
     telefon = decodedToken['certpublickey'] as String?;
     korisnickoIme = decodedToken['actort'] as String?;
 
-    // Ispisivanje uloge korisnika
     if (isAdmin) {
       rola = "Administrator";
     }
@@ -81,11 +80,4 @@ Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
 }
 
-// String formatNumber(dynamic) {
-//   var f = NumberFormat('###,00');
 
-//   if (dynamic == null) {
-//     return "";
-//   }
-//   return f.format(dynamic);
-// }

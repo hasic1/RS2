@@ -19,5 +19,9 @@ namespace JamFix.Model.Modeli
         public string StateMachine { get; set; }
         public List<Ocjena> Ocjene { get; set; }
         public double ProsjecnaOcjena { get; set; }
+        public string? BrzinaInterneta { get; set; }
+        public string? BrojMinuta { get; set; }
+        public string? BrojKanala { get; set; }
+
     }
 }

@@ -93,7 +93,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               : novost.sadrzaj ?? '',
         ),
         onTap: () {
-          //_showNovostDetails(novost);
         },
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

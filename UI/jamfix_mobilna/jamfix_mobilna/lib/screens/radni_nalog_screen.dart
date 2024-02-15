@@ -27,7 +27,6 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -134,7 +133,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate:
-          DateTime(2024, 1, 1), // Postavite initialDate na 1. januar 2024
+          DateTime(2024, 1, 1), 
       firstDate: DateTime(2024),
       lastDate: DateTime(2025),
     );

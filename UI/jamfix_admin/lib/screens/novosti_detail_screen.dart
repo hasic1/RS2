@@ -17,6 +17,7 @@ import 'package:jamfix_admin/providers/novosti_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/novosti_list_screen.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -65,85 +66,33 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-        ),
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  controller: naslovController,
-                  decoration: const InputDecoration(labelText: 'Ime'),
+                Text(
+                  'Naslov novosti:\n ' +
+                      (widget.novosti != null
+                          ? widget.novosti!.naslov.toString()
+                          : ''),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: sadrzajController,
-                  decoration: const InputDecoration(labelText: 'Prezime'),
+                Text(
+                  'Sadržaj novosti:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20.0),
-                Row(
-                  children: [
-                    Expanded(
-                        child: FormBuilderField(
-                      name: 'imageId',
-                      builder: ((field) {
-                        return InputDecorator(
-                          decoration: InputDecoration(
-                              label: const Text('Odaberite sliku'),
-                              errorText: field.errorText),
-                          child: ListTile(
-                            leading: const Icon(Icons.photo),
-                            title: const Text("Select image"),
-                            trailing: const Icon(Icons.file_upload),
-                            onTap: getImage,
-                          ),
-                        );
-                      }),
-                    )),
-                  ],
+                Text(
+                  widget.novosti != null
+                      ? widget.novosti!.sadrzaj.toString()
+                      : '',
+                  style: TextStyle(fontSize: 16),
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Novosti request = Novosti(
-                          naslov: naslovController.text,
-                          sadrzaj: sadrzajController.text);
-                      Navigator.of(context).pop();
-                      try {
-                        if (widget.novosti == null) {
-                          await _novostiProvider.insert(request);
-                        } else {
-                          await _novostiProvider.update(
-                              widget.novosti!.novostId!, request);
-                        }
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => NovostiListScreen(),
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("OK"),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Potvrdi Unos'),
-                  ),
-                ),
+                SizedBox(height: 20),
+                
               ],
             ),
           ),

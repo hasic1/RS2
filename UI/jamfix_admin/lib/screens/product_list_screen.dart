@@ -45,9 +45,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(children: [_buildSearch(), _buildDataListView()])),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(children: [_buildSearch(), _buildDataListView()])),
+      ),
     );
   }
 

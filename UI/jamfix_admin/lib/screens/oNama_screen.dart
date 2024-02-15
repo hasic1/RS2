@@ -110,15 +110,6 @@ class _ONamaScreen extends State<ONamaScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 60),
-                Text(
-                  'Kontakt: jamfix1@gmail.com',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
               ],
             ),
           ),

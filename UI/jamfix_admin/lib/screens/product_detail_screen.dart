@@ -26,6 +26,16 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  final TextEditingController nazivProizvodaController =
+      TextEditingController();
+  final TextEditingController cijenaController = TextEditingController();
+  final TextEditingController opisController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController brzinaInternetaController =
+      TextEditingController();
+  final TextEditingController brojKanalaController = TextEditingController();
+  final TextEditingController brojMinutaPotvrdaController =
+      TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
 
@@ -34,13 +44,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
   SearchResult<Product>? preporuceniProizvodi;
+  String? selectedVrstaProizvodaId;
 
   bool isLoading = true;
   bool snizen = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initialValue = {
       'cijena': widget.product?.cijena.toString(),
@@ -52,6 +62,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       'brojMinuta': widget.product?.brojMinuta,
       'brojKanala': widget.product?.brojKanala,
     };
+    cijenaController.text = _initialValue['cijena'] ?? '';
+    nazivProizvodaController.text = _initialValue['nazivProizvoda'] ?? '';
+    opisController.text = _initialValue['opis'] ?? '';
+    emailController.text = _initialValue['cijena'] ?? '';
+    brzinaInternetaController.text = _initialValue['brzinaInterneta'] ?? '';
+    brojKanalaController.text = _initialValue['brojKanala'] ?? '';
+    brojMinutaPotvrdaController.text = _initialValue['brojMinuta'] ?? '';
+
     _vrsteProizvodaProvider = context.read<VrsteProizvodaProvider>();
     _productProvider = context.read<ProductProvider>();
 
@@ -60,38 +78,45 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   Future initForm() async {
     var vrste = await _vrsteProizvodaProvider.get();
-    var recommend = await _productProvider
-        .fetchRecommendedProducts(widget.product!.proizvodId!);
 
-    print("Recommendation result: $recommend"); // Dodajte ovu liniju
-
-    if (recommend != null) {
+    if (widget.product != null && widget.product!.proizvodId != null) {
+      var recommend = await _productProvider
+          .fetchRecommendedProducts(widget.product!.proizvodId!);
+      if (recommend != null) {
+        setState(() {
+          vrsteProizvodaResult = vrste;
+          preporuceniProizvodi = recommend;
+          isLoading = false;
+        });
+      } else {
+        print("Error fetching recommended products.");
+      }
+    } else {
       setState(() {
         vrsteProizvodaResult = vrste;
-        preporuceniProizvodi = recommend;
         isLoading = false;
       });
-    } else {
-      print("Error fetching recommended products."); // Dodajte ovu liniju
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MasterScreenWidget(
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: newMethod(context),
+    return MasterScreenWidget(
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: newMethod(context),
+          ),
         ),
-        title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
       ),
+      title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
     );
   }
 
@@ -108,9 +133,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 padding: EdgeInsets.all(10),
                 child: ElevatedButton(
                   onPressed: () async {
-                    _formKey.currentState?.saveAndValidate();
-                    var request = Map.from(_formKey.currentState!.value);
-                    request['slika'] = _base65Image;
+                    Product request = Product(
+                      nazivProizvoda: nazivProizvodaController.text,
+                      cijena: double.parse(cijenaController.text),
+                      opis: opisController.text,
+                      slika: _base65Image ?? '',
+                      snizen: snizen,
+                      brzinaInterneta: brzinaInternetaController.text,
+                      brojMinuta: brojMinutaPotvrdaController.text,
+                      brojKanala: brojKanalaController.text,
+                      vrstaId: int.parse(selectedVrstaProizvodaId ??
+                          _initialValue['vrstaId'].toString()),
+                    );
+                    //request['slika'] = _base65Image;
                     Navigator.of(context).pop();
                     try {
                       if (widget.product == null) {
@@ -130,17 +165,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         );
                       }
                     } on Exception catch (e) {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text("OK"))
-                                ],
-                              ));
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (BuildContext context) => AlertDialog(
+                      //           title: const Text("Error"),
+                      //           content: Text(e.toString()),
+                      //           actions: [
+                      //             TextButton(
+                      //                 onPressed: () => Navigator.pop(context),
+                      //                 child: const Text("OK"))
+                      //           ],
+                      //         ));
                     }
                   },
                   child: const Text("Sacuvaj"),
@@ -169,7 +204,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
-        SizedBox(height: 20),
         Text(
           'Preporučeni proizvodi',
           style: TextStyle(
@@ -225,30 +259,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Row(
           children: [
             Expanded(
-              child: FormBuilderTextField(
+              child: TextFormField(
                 decoration: const InputDecoration(labelText: "Cijena"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "cijena",
+                controller: cijenaController,
               ),
             ),
             const SizedBox(
               width: 10,
             ),
             Expanded(
-              child: FormBuilderTextField(
+              child: TextFormField(
                 decoration: const InputDecoration(labelText: "Naziv"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "nazivProizvoda",
+                controller: nazivProizvodaController,
               ),
             ),
             const SizedBox(
               width: 10,
             ),
             Expanded(
-              child: FormBuilderTextField(
-                decoration: const InputDecoration(labelText: "opis"),
+              child: TextFormField(
+                decoration: const InputDecoration(labelText: "Opis"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "opis",
+                controller: opisController,
               ),
             ),
             const SizedBox(
@@ -259,31 +293,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Row(
           children: [
             Expanded(
-              child: FormBuilderTextField(
+              child: TextFormField(
                 decoration:
                     const InputDecoration(labelText: "Brzina interneta"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "brzinaInterneta",
+                controller: brzinaInternetaController,
               ),
             ),
             const SizedBox(
               width: 10,
             ),
             Expanded(
-              child: FormBuilderTextField(
+              child: TextFormField(
                 decoration: const InputDecoration(labelText: "Broj minuta"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "brojMinuta",
+                controller: brojMinutaPotvrdaController,
               ),
             ),
             const SizedBox(
               width: 10,
             ),
             Expanded(
-              child: FormBuilderTextField(
+              child: TextFormField(
                 decoration: const InputDecoration(labelText: "Broj kanala"),
                 enabled: userRole == Authorization.isAdmin,
-                name: "brojKanala",
+                controller: brojKanalaController,
               ),
             ),
           ],
@@ -298,7 +332,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   suffix: IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () {
-                      _formKey.currentState!.fields['vrstaId']?.reset();
+                      selectedVrstaProizvodaId =
+                          _initialValue['vrstaId']?.toString() ?? null;
                     },
                   ),
                   hintText: 'Odaberi vrstu',
@@ -312,6 +347,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ))
                         .toList() ??
                     [],
+                onChanged: (value) {
+                  setState(() {
+                    selectedVrstaProizvodaId = value;
+                  });
+                },
                 initialValue: _initialValue['vrstaId'],
               ),
             ),

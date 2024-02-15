@@ -4,7 +4,6 @@ using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
-using JamFix.Services.ProizvodiSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;

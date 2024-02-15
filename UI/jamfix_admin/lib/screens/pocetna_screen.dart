@@ -96,16 +96,24 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                 ),
               ),
               SizedBox(height: 20.0),
+              Divider(
+                color: Colors.black,
+                thickness: 1,
+                height: 20,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Najbolje ocjenjeni proizvodi',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                    Align(alignment: Alignment.center,
+                      child:
+                      Text(
+                        'Najbolje ocenjeni proizvodi',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0),
@@ -133,8 +141,8 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                                 alignment: Alignment.topCenter,
                                 child: Image.memory(
                                   base64Decode(recommendedProduct?.slika ?? ''),
-                                  height: 150,
-                                  width: 150,
+                                  height: 375,
+                                  width: 375,
                                 ),
                               ),
                             ),

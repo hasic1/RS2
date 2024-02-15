@@ -63,15 +63,18 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSearch(),
-            const SizedBox(height: 16.0),
-            _buildDataListView(),
-          ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildSearch(),
+              const SizedBox(height: 16.0),
+              _buildDataListView(),
+            ],
+          ),
         ),
       ),
     );
@@ -115,56 +118,73 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
         child: DataTable(
           columns: const [
             DataColumn(
-              label: Text(
-                'Ime',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              label: const Expanded(
+                child: Text(
+                  'Ime',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
+                ),
               ),
             ),
             DataColumn(
-              label: Text(
+                label: const Expanded(
+              child: Text(
                 'Prezime',
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
-            ),
-            DataColumn(
-                label: Text(
-              'Korisnicko ime',
-              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
             )),
             DataColumn(
-              label: Text(
-                'Email',
+              label: const Expanded(
+                  child: Text(
+                'Korisnicko ime',
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              )),
+            ),
+            DataColumn(
+              label: const Expanded(
+                child: Text(
+                  'Email',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
+                ),
               ),
             ),
             DataColumn(
-                label: Text(
-              'Pozicija',
-              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-            )),
-            DataColumn(
-              label: Text(
-                'Uloga',
+              label: const Expanded(
+                  child: Text(
+                'Pozicija',
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              )),
+            ),
+            DataColumn(
+              label: const Expanded(
+                child: Text(
+                  'Uloga',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
+                ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'Aktivan',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              label: const Expanded(
+                child: Text(
+                  'Aktivan',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
+                ),
               ),
-            ),DataColumn(
-              label: Text(
+            ),
+            DataColumn(
+                label: const Expanded(
+              child: Text(
                 'Akcija',
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
-            ),
+            )),
           ],
           rows: korisniciResult?.result
                   .map(

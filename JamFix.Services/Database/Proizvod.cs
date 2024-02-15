@@ -31,6 +31,5 @@ namespace JamFix.Services.Database
         public string BrojKanala { get; set; }
         public virtual VrsteProizvoda Vrsta { get; set; } = null!;
         public virtual ICollection<UslugaStavke> UslugaStavke { get; set; }
-
     }
 }

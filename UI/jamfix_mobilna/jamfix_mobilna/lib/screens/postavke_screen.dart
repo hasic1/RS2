@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_mobilna/models/drzava.dart';
 import 'package:jamfix_mobilna/models/korisnici.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
@@ -30,6 +31,14 @@ class _PostavkeScreen extends State<PostavkeScreen> {
   void initState() {
     super.initState();
     _drzavaProvider = context.read<DrzavaProvider>();
+    _ucitajPodatke();
+  }
+
+  Future<void> _ucitajPodatke() async {
+    var drzava = await _drzavaProvider.get();
+    setState(() {
+      drzavaResult = drzava;
+    });
   }
 
   @override
@@ -37,12 +46,11 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: Text(Authorization.rola!),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 Expanded(
@@ -121,49 +129,32 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               InputDecoration(labelText: 'Password potvrda'),
                         ),
                         SizedBox(height: 8.0),
-                        FutureBuilder(
-                          future: _drzavaProvider.get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              drzavaResult =
-                                  snapshot.data as SearchResult<Drzava>?;
-                              selectedDrzavaId = (drzavaResult
-                                      ?.result.first.drzavaId
-                                      .toString()) ??
-                                  null;
-
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: DropdownButton<String>(
-                                      value: selectedDrzavaId,
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedDrzavaId = newValue;
-                                        });
-                                      },
-                                      items: (drzavaResult?.result
-                                              .map<DropdownMenuItem<String>>(
-                                                (item) =>
-                                                    DropdownMenuItem<String>(
-                                                  value:
-                                                      item.drzavaId.toString(),
-                                                  child: Text(item.naziv ?? ""),
-                                                ),
-                                              )
-                                              .toList()) ??
-                                          [],
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                          },
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderDropdown<String>(
+                                name: 'drzavaId',
+                                decoration: InputDecoration(
+                                  labelText: 'Drzava',
+                                  hintText: 'Odaberi drzavu',
+                                ),
+                                items: drzavaResult?.result
+                                        .map((item) => DropdownMenuItem(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              value: item.drzavaId.toString(),
+                                              child: Text(item.naziv ?? ""),
+                                            ))
+                                        .toList() ??
+                                    [],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedDrzavaId = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 16),
                         Align(

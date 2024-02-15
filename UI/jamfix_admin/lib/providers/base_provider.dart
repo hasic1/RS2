@@ -36,8 +36,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       if (data.containsKey('count') && data['count'] is int) {
         result.count = data['count'];
       } else {
-        result.count =
-            0; 
+        result.count = 0;
       }
 
       for (var item in data['result']) {
@@ -75,7 +74,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var jsonRequest = jsonEncode(request);
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
+    if (isValidInsertUpdate(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
@@ -91,7 +90,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var jsonRequest = jsonEncode(request);
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
+    if (isValidInsertUpdate(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
@@ -116,21 +115,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
   T fromJson(data) {
     throw Exception("Method not implemented");
   }
-
-  // Map<String, String> createHeaders() {
-  //   String username = Authorization.username ?? "";
-  //   String password = Authorization.password ?? "";
-
-  //   print("passed creds; $username,$password");
-
-  //   String basicAuth =
-  //       "Basic ${base64Encode(utf8.encode('$username:$password'))}";
-  //   var headers = {
-  //     "Content-Type": "application/json",
-  //     "Authorization": basicAuth
-  //   };
-  //   return headers;
-  // }
 
   Map<String, String> createHeaders() {
     String jwtToken = Authorization.jwtToken ?? "";

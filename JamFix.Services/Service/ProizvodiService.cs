@@ -4,7 +4,6 @@ using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
-using JamFix.Services.ProizvodiSM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
@@ -14,14 +13,12 @@ namespace JamFix.Services.Service
 {
     public class ProizvodiService : BaseCRUDService<Proizvodi, Proizvod, ProizvodiSO, ProizvodiInsertRequest, ProizvodiUpdateRequest>, IProizvodiService
     {
-        public BaseState _baseState { get; set; }
         protected IMapper _mapper { get; set; }
         protected Context _context;
         static MLContext mlContext = null;
         static ITransformer model = null;
-        public ProizvodiService(BaseState baseState, Context context, IMapper mapper) : base(context, mapper)
+        public ProizvodiService( Context context, IMapper mapper) : base(context, mapper)
         {
-            _baseState = baseState;
             _mapper = mapper;
             _context = context;
         }
@@ -43,41 +40,41 @@ namespace JamFix.Services.Service
             return filteredQuery;
         }
 
-        public override Task<Proizvodi> Insert(ProizvodiInsertRequest insert)
-        {
-            var state = _baseState.CreateState("initial");
-            return state.Insert(insert);
-        }
+        //public override Task<Proizvodi> Insert(ProizvodiInsertRequest insert)
+        //{
+        //    var state = _baseState.CreateState("initial");
+        //    return state.Insert(insert);
+        //}
 
-        public override async Task<Proizvodi> Update(int id, ProizvodiUpdateRequest update)
-        {
-            var entity = await _context.Proizvod.FindAsync(id);
-            var state = _baseState.CreateState(entity.StateMachine);
-            return await state.Update(id, update);
-        }
+        //public override async Task<Proizvodi> Update(int id, ProizvodiUpdateRequest update)
+        //{
+        //    var entity = await _context.Proizvod.FindAsync(id);
+        //    var state = _baseState.CreateState(entity.StateMachine);
+        //    return await state.Update(id, update);
+        //}
 
-        public async Task<Proizvodi> Activate(int id)
-        {
-            var entity = await _context.Proizvod.FindAsync(id);
-            var state = _baseState.CreateState(entity.StateMachine);
-            return await state.Activate(id);
-        }
+        //public async Task<Proizvodi> Activate(int id)
+        //{
+        //    var entity = await _context.Proizvod.FindAsync(id);
+        //    var state = _baseState.CreateState(entity.StateMachine);
+        //    return await state.Activate(id);
+        //}
 
-        public async Task<Proizvodi> Hide(int id)
-        {
-            var product = _context.Proizvod.Find(id);
-            var state = _baseState.CreateState(product.StateMachine);
-            state.CurrentEntity = product;
-            state.Hide();
-            return await GetById(id);
-        }
+        //public async Task<Proizvodi> Hide(int id)
+        //{
+        //    var product = _context.Proizvod.Find(id);
+        //    var state = _baseState.CreateState(product.StateMachine);
+        //    state.CurrentEntity = product;
+        //    state.Hide();
+        //    return await GetById(id);
+        //}
 
-        public async Task<List<string>> AllowedActions(int id)
-        {
-            var entity = await _context.Proizvod.FindAsync(id);
-            var state = _baseState.CreateState(entity?.StateMachine ?? "initial");
-            return await state.AllowedActions();
-        }
+        //public async Task<List<string>> AllowedActions(int id)
+        //{
+        //    var entity = await _context.Proizvod.FindAsync(id);
+        //    var state = _baseState.CreateState(entity?.StateMachine ?? "initial");
+        //    return await state.AllowedActions();
+        //}
 
         public virtual async Task<PagedResult<Proizvodi>> GetTopRatedProducts( int numberOfTopProducts)
         {

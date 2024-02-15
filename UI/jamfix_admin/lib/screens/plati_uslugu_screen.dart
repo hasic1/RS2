@@ -14,6 +14,7 @@ import 'package:flutter_stripe/flutter_stripe.dart'
         SetupPaymentSheetParameters,
         Stripe,
         StripeException;
+import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
 import 'package:jamfix_admin/screens/product_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -99,7 +100,7 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
             SizedBox(height: 10),
             TextField(
               controller: imePrezimeController,
-              keyboardType: TextInputType.text, // Promijenjeno na text
+              keyboardType: TextInputType.text,  
               decoration: InputDecoration(labelText: 'Ime i prezime'),
             ),
             SizedBox(height: 10),
@@ -107,6 +108,11 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
               controller: brojZiroracunaController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: 'Broj žiro računa'),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Iznos u KM'),
             ),
             SizedBox(height: 10),
             Row(
@@ -137,15 +143,13 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
                     cijena: cijenaString,
                   );
                   try {
-                    // Podaci na server
                     await sendPaymentDataToServer(request);
                     double cijenaDoubleForStripe =
-                        cijenaDouble ?? 0.0; // Default na 0.0 ako je null
-                    // Plaćanja putem Stripe-a
+                        cijenaDouble ?? 0.0; 
                     await stripeMakePayment(cijenaDoubleForStripe);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => ProductListScreen(),
+                        builder: (context) => KorisnikProductListScreen(),
                       ),
                     );
                   } on Exception catch (e) {
@@ -258,7 +262,8 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
   }
 
   // Kreiranje plaćanja
-  Future<Map<String, dynamic>> createPaymentIntent(double amount, String currency) async {
+  Future<Map<String, dynamic>> createPaymentIntent(
+      double amount, String currency) async {
     try {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),

@@ -62,7 +62,6 @@ class _ONamaScreen extends State<ONamaScreen> {
                       ),
                       SizedBox(width: 10),
                       Expanded(
-                        // Dodao Expanded widget oko slike
                         child: Image.asset(
                           "assets/images/aboutus.jpg",
                           height: 250,
@@ -86,7 +85,6 @@ class _ONamaScreen extends State<ONamaScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        // Dodao Expanded widget oko slike
                         child: Image.asset(
                           "assets/images/goals.jpg",
                           height: 250,
@@ -115,14 +113,6 @@ class _ONamaScreen extends State<ONamaScreen> {
                   ),
                 ),
                 SizedBox(height: 60),
-                Text(
-                  'Kontakt: jamfix1@gmail.com',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
               ],
             ),
           ),

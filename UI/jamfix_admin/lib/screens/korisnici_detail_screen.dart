@@ -109,7 +109,6 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),

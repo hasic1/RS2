@@ -62,7 +62,6 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Padding(

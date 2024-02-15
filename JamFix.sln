@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JamFix.Services", "JamFix.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JamFix.Model", "JamFix.Model\JamFix.Model.csproj", "{356ED628-8005-428E-9548-5B27C31D6668}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamFix.Subscriber", "JamFix.Subscriber\JamFix.Subscriber.csproj", "{21C95667-BB39-4C6F-9D27-B959EB1A5D28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JamFix.Subscriber", "JamFix.Subscriber\JamFix.Subscriber.csproj", "{21C95667-BB39-4C6F-9D27-B959EB1A5D28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

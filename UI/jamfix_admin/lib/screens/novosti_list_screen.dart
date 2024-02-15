@@ -6,14 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
+import 'package:jamfix_admin/screens/novosti_detail_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:jamfix_admin/models/novosti.dart';
 import 'package:provider/provider.dart';
 
 class NovostiListScreen extends StatefulWidget {
-  const NovostiListScreen({Key? key}) : super(key: key);
-
+  Novosti? novosti;
+  NovostiListScreen({this.novosti, Key? key}) : super(key: key);
   @override
   State<NovostiListScreen> createState() => _NovostiListScreenState();
 }
@@ -53,6 +54,16 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             _buildNovostiList(),
           ],
         ),
+        floatingActionButton: Visibility(
+          visible: Authorization.isAdmin || Authorization.isZaposlenik,
+          child: FloatingActionButton(
+            onPressed: () {
+              _handleAddReport();
+            },
+            child: Icon(Icons.add),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       ),
     );
   }
@@ -86,33 +97,39 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         title: Text(novost.naslov ?? ''),
         subtitle: Text(novost.sadrzaj ?? ''),
         onTap: () {
-          //_showNovostDetails(novost);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NovostiDetailScreen(
+                novosti: novost,
+              ),
+            ),
+          );
         },
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                _editNovost(novost);
-              },
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  _editNovost(novost);
+                },
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                _novostiProvider.delete(novost.novostId);
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => NovostiListScreen(),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                _handleAddReport();
-              },
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  _novostiProvider.delete(novost.novostId);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => NovostiListScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

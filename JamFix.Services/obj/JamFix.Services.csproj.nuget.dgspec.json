@@ -40,6 +40,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
               "version": "[2.1.2, )"
@@ -49,6 +53,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.11, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[7.3.1, )"
             },
             "Microsoft.ML": {
               "target": "Package",
@@ -60,7 +68,11 @@
             },
             "Stripe.net": {
               "target": "Package",
-              "version": "[43.10.0, )"
+              "version": "[43.14.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[7.3.1, )"
             }
           },
           "imports": [
@@ -74,6 +86,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -123,17 +149,29 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "AutoMapper": {
               "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[13.0.1, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.10.4, )"
             },
             "EasyNetQ": {
               "target": "Package",
-              "version": "[7.6.0, )"
+              "version": "[7.8.0, )"
             },
             "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
               "version": "[2.1.2, )"
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.1.22, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.1.5, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -155,6 +193,10 @@
               "target": "Package",
               "version": "[7.0.11, )"
             },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[7.3.1, )"
+            },
             "Microsoft.ML": {
               "target": "Package",
               "version": "[3.0.1, )"
@@ -169,15 +211,23 @@
             },
             "RabbitMQ.Client": {
               "target": "Package",
-              "version": "[6.6.0, )"
+              "version": "[6.8.1, )"
             },
             "Stripe.net": {
               "target": "Package",
-              "version": "[43.10.0, )"
+              "version": "[43.14.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[7.3.1, )"
+            },
+            "System.Security.Cryptography.Xml": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
@@ -191,6 +241,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"

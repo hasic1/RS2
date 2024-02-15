@@ -7,17 +7,17 @@ part of 'product.dart';
 // **************************************************************************
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product(
-      json['proizvodId'] as int?,
-      json['nazivProizvoda'] as String?,
-      (json['cijena'] as num?)?.toDouble(),
-      json['opis'] as String?,
-      json['slika'] as String?,
-      json['snizen'] as bool?,
-      json['vrstaId'] as int?,
-      json['brojKanala'] as String?,
-      json['brojMinuta'] as String?,
-      json['brzinaInterneta'] as String?,
-      (json['prosjecnaOcjena'] as num?)?.toDouble(),
+      proizvodId: json['proizvodId'] as int?,
+      nazivProizvoda: json['nazivProizvoda'] as String?,
+      cijena: (json['cijena'] as num?)?.toDouble(),
+      opis: json['opis'] as String?,
+      slika: json['slika'] as String?,
+      snizen: json['snizen'] as bool?,
+      vrstaId: json['vrstaId'] as int?,
+      brojKanala: json['brojKanala'] as String?,
+      brojMinuta: json['brojMinuta'] as String?,
+      brzinaInterneta: json['brzinaInterneta'] as String?,
+      prosjecnaOcjena: (json['prosjecnaOcjena'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{

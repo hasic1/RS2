@@ -27,15 +27,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: widget.title_widget ?? Text(widget.title ?? ""),
-        toolbarHeight: 30,
+        toolbarHeight: 40,
         leadingWidth: 40,
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik,
+              visible: Authorization.isKorisnik||Authorization.isAdmin,
               child: ListTile(
                 title: Text('Dodaj zahtjev'),
                 onTap: () {
@@ -78,7 +79,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             Visibility(
-              visible: Authorization.isKorisnik,
+              visible: Authorization.isAdmin||Authorization.isOperater,
               child: ListTile(
                 title: Text('Radni nalog'),
                 onTap: () {
@@ -113,7 +114,23 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
           ],
         ),
       ),
-      body: widget.child!,
+      body: Column(
+        children: [
+          Expanded(
+            child: widget.child!, 
+          ),
+          Container(
+            height: 60,
+            color: Colors.blue,
+            child: Center(
+              child: Text(
+                'jamfix1@gmail.com',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

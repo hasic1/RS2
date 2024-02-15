@@ -40,7 +40,6 @@ class _KorisnikProductListScreen extends State<KorisnikProductListScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Padding(

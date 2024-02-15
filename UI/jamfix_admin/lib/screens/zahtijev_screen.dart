@@ -5,6 +5,8 @@ import 'package:jamfix_admin/models/statusZahtjeva.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
 import 'package:jamfix_admin/providers/statusZahtjevaProvider.dart';
 import 'package:jamfix_admin/providers/zahtjev_provider.dart';
+import 'package:jamfix_admin/screens/zahtjevi_list_screen.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -69,9 +71,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-        ),
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -97,52 +97,56 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                   controller: opisController,
                   decoration: const InputDecoration(labelText: 'Opis problema'),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FormBuilderDropdown<String>(
-                        name: 'statusZahtjevaId',
-                        decoration: InputDecoration(
-                          labelText: 'Status zahtjeva',
-                          suffix: IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              setState(() {
-                                selectedStatusZahtjevaId =
-                                    _initialValue['statusZahtjevaId']
-                                            ?.toString() ??
-                                        null;
-                              });
-                            },
+                Visibility(
+                  visible: Authorization.isAdmin,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FormBuilderDropdown<String>(
+                          name: 'statusZahtjevaId',
+                          decoration: InputDecoration(
+                            labelText: 'Status zahtjeva',
+                            suffix: IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                setState(() {
+                                  selectedStatusZahtjevaId =
+                                      _initialValue['statusZahtjevaId']
+                                              ?.toString() ??
+                                          null;
+                                });
+                              },
+                            ),
+                            hintText: 'Odaberi status zahtjeva',
                           ),
-                          hintText: 'Odaberi status zahtjeva',
+                          items: result?.result
+                                  .map((item) => DropdownMenuItem(
+                                        alignment: AlignmentDirectional.center,
+                                        value: item.statusZahtjevaId.toString(),
+                                        child: Text(item.opis ?? ""),
+                                      ))
+                                  .toList() ??
+                              [],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedStatusZahtjevaId = value;
+                            });
+                          },
+                          initialValue: _initialValue['statusZahtjevaId'] !=
+                                      null &&
+                                  result?.result != null &&
+                                  result!.result
+                                      .map((item) =>
+                                          item.statusZahtjevaId.toString())
+                                      .contains(
+                                          _initialValue['statusZahtjevaId']
+                                              .toString())
+                              ? _initialValue['statusZahtjevaId'].toString()
+                              : null,
                         ),
-                        items: result?.result
-                                .map((item) => DropdownMenuItem(
-                                      alignment: AlignmentDirectional.center,
-                                      value: item.statusZahtjevaId.toString(),
-                                      child: Text(item.opis ?? ""),
-                                    ))
-                                .toList() ??
-                            [],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatusZahtjevaId = value;
-                          });
-                        },
-                        initialValue: _initialValue['statusZahtjevaId'] !=
-                                    null &&
-                                result?.result != null &&
-                                result!.result
-                                    .map((item) =>
-                                        item.statusZahtjevaId.toString())
-                                    .contains(_initialValue['statusZahtjevaId']
-                                        .toString())
-                            ? _initialValue['statusZahtjevaId'].toString()
-                            : null, // Dodajte ovo polje kako biste postavili inicijalnu vrijednost.
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 35.0),
                 Row(
@@ -154,11 +158,13 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                       child: const Text('Odaberi Datum i Vrijeme'),
                     ),
                     const SizedBox(width: 8.0),
-                    selectedDate != null
-                        ? Text(selectedDate!.toString())
-                        : const Text('Nije odabrano'),
                   ],
                 ),
+                Row(children: [
+                  selectedDate != null
+                      ? Text(selectedDate!.toString())
+                      : const Text('Nije odabrano'),
+                ]),
                 const SizedBox(height: 25.0),
                 Row(
                   children: [

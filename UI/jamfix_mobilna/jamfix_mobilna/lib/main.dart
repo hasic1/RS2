@@ -66,7 +66,6 @@ class LoginPage extends StatelessWidget {
       ),
       body: Center(
         child: SingleChildScrollView(
-          // Dodao SingleChildScrollView ovde
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),
             child: Padding(

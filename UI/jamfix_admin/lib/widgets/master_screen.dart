@@ -13,8 +13,8 @@ import 'package:jamfix_admin/screens/postavke_screen.dart';
 import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
 import 'package:jamfix_admin/screens/radni_nalog_screen.dart';
 import 'package:jamfix_admin/screens/usluge_screen.dart';
-import 'package:jamfix_admin/screens/zahtijev_list.screen.dart';
-import 'package:jamfix_admin/screens/zahtjevi_screen.dart';
+import 'package:jamfix_admin/screens/zahtijev_screen.dart';
+import 'package:jamfix_admin/screens/zahtjevi_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 
 import '../screens/product_list_screen.dart';
@@ -36,15 +36,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: widget.title_widget ?? Text(widget.title ?? ""),
-        toolbarHeight: 30,
+        toolbarHeight: 40,
         leadingWidth: 40,
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik,
+              visible: Authorization.isKorisnik||Authorization.isAdmin,
               child: ListTile(
                 title: Text('Dodaj zahtjev'),
                 onTap: () {
@@ -100,7 +101,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isZaposlenik,
+              visible: Authorization.isZaposlenik||Authorization.isAdmin,
               child: ListTile(
                 title: Text('Radni nalog'),
                 onTap: () {
@@ -126,7 +127,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isKorisnik || Authorization.isZaposlenik,
+              visible: Authorization.isKorisnik || Authorization.isZaposlenik||Authorization.isAdmin,
               child: ListTile(
                 title: Text('Proizvodi'),
                 onTap: () {
@@ -200,7 +201,23 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
           ],
         ),
       ),
-      body: widget.child!,
+      body: Column(
+        children: [
+          Expanded(
+            child: widget.child!, 
+          ),
+          Container(
+            height: 60,
+            color: Colors.blue,
+            child: Center(
+              child: Text(
+                'jamfix1@gmail.com',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

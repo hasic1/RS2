@@ -5,6 +5,7 @@ import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -97,6 +98,10 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                         return Text('Error: ${snapshot.error}');
                       } else {
                         drzavaResult = snapshot.data as SearchResult<Drzava>?;
+                        if (drzavaResult?.result.isNotEmpty ?? false) {
+                          selectedDrzavaId =
+                              drzavaResult!.result.first.drzavaId.toString();
+                        }
                         return Row(
                           children: [
                             Expanded(
@@ -107,9 +112,12 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                                     selectedDrzavaId = newValue;
                                   });
                                 },
+                                alignment: Alignment.center,
                                 items: (drzavaResult?.result
                                         .map<DropdownMenuItem<String>>(
                                           (item) => DropdownMenuItem<String>(
+                                            alignment:
+                                                AlignmentDirectional.center,
                                             value: item.drzavaId.toString(),
                                             child: Text(item.naziv ?? ""),
                                           ),
@@ -137,11 +145,11 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                               korisnickoIme: korisnickoImeController.text,
                               password: passwordController.text,
                               passwordPotvrda: passwordPotvrdaController.text,
-                              drzavaId: int.parse(
-                                  selectedDrzavaId!), // Obratite pažnju na '!'
+                              drzavaId: int.parse(selectedDrzavaId!),
+                              pozicijaId: Authorization.pozicijaID,
                             );
                             try {
-                              _korisniciProvider.insert(request);
+                              await _korisniciProvider.insert(request);
                               Navigator.pop(context);
                             } on Exception catch (e) {
                               showDialog(

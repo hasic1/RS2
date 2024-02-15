@@ -70,6 +70,10 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                   child: const Text('Odaberi Datum i Vrijeme'),
                 ),
                 const SizedBox(width: 8.0),
+              ],
+            ),
+            Row(
+              children: [
                 selectedDate != null
                     ? Text(selectedDate!.toString())
                     : const Text('Nije odabrano'),

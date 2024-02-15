@@ -95,6 +95,10 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                         return Text('Error: ${snapshot.error}');
                       } else {
                         drzavaResult = snapshot.data as SearchResult<Drzava>?;
+                        if (drzavaResult?.result.isNotEmpty ?? false) {
+                          selectedDrzavaId =
+                              drzavaResult!.result.first.drzavaId.toString();
+                        }
                         return Row(
                           children: [
                             Expanded(
@@ -105,9 +109,12 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                                     selectedDrzavaId = newValue;
                                   });
                                 },
+                                alignment: Alignment.center,
                                 items: (drzavaResult?.result
                                         .map<DropdownMenuItem<String>>(
                                           (item) => DropdownMenuItem<String>(
+                                            alignment:
+                                                AlignmentDirectional.center,
                                             value: item.drzavaId.toString(),
                                             child: Text(item.naziv ?? ""),
                                           ),
@@ -128,17 +135,17 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                         onPressed: () async {
                           if (selectedDrzavaId != null) {
                             var request = Korisnici(
-                                ime: imeController.text,
-                                prezime: prezimeController.text,
-                                email: emailController.text,
-                                telefon: telefonController.text,
-                                korisnickoIme: korisnickoImeController.text,
-                                password: passwordController.text,
-                                passwordPotvrda: passwordPotvrdaController.text,
-                                drzavaId: int.parse(selectedDrzavaId!),
-                                aktivnost: true,
-                                pozicijaId: 1,
-                                );
+                              ime: imeController.text,
+                              prezime: prezimeController.text,
+                              email: emailController.text,
+                              telefon: telefonController.text,
+                              korisnickoIme: korisnickoImeController.text,
+                              password: passwordController.text,
+                              passwordPotvrda: passwordPotvrdaController.text,
+                              drzavaId: int.parse(selectedDrzavaId!),
+                              aktivnost: true,
+                              pozicijaId: 1,
+                            );
                             try {
                               _korisniciProvider.insert(request);
                               Navigator.pop(context);

@@ -24,23 +24,23 @@ namespace JamFix.Controllers
             _proizvodiService = service;
         }
 
-        [HttpPut("{id}/activate")]
-        public virtual async Task<Proizvodi> Activate(int id)
-        {
-            return await (_service as IProizvodiService).Activate(id);
-        }
+        //[HttpPut("{id}/activate")]
+        //public virtual async Task<Proizvodi> Activate(int id)
+        //{
+        //    return await (_service as IProizvodiService).Activate(id);
+        //}
 
-        [HttpPut("{id}/hide")]
-        public virtual async Task<Proizvodi> Hide(int id)
-        {
-            return await (_service as IProizvodiService).Hide(id);
-        }
+        //[HttpPut("{id}/hide")]
+        //public virtual async Task<Proizvodi> Hide(int id)
+        //{
+        //    return await (_service as IProizvodiService).Hide(id);
+        //}
 
-        [HttpGet("{id}/allowedActions")]
-        public virtual async Task<List<string>> AllowedActions(int id)
-        {
-            return await (_service as IProizvodiService).AllowedActions(id);
-        }
+        //[HttpGet("{id}/allowedActions")]
+        //public virtual async Task<List<string>> AllowedActions(int id)
+        //{
+        //    return await (_service as IProizvodiService).AllowedActions(id);
+        //}
         [HttpGet("topRatedProducts/{numberOfTopProducts}")]
         public async Task<PagedResult<Proizvodi>> GetTopRatedProducts(int numberOfTopProducts)
         {

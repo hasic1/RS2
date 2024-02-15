@@ -46,17 +46,16 @@ namespace JamFix.Controllers
                    new(JwtRegisteredClaimNames.Sub, user.KorisnickoIme),
                    new(ClaimTypes.MobilePhone, user.Telefon),
                    new(ClaimTypes.NameIdentifier, user.KorisnikId.ToString()),
-                   new(ClaimTypes.Name, user.Ime), // Dodajte ime korisnika u claims
-                   new(ClaimTypes.Surname, user.Prezime), // Dodajte prezime korisnika u claims
-                   new(ClaimTypes.Email, user.Email), // Dodajte email korisnika u claims
-                   new(ClaimTypes.Rsa, user.Telefon), // Dodajte ime korisnika u claims
-                   new(ClaimTypes.Actor, user.KorisnickoIme), // Dodajte ime korisnika u claims
-
+                   new(ClaimTypes.Name, user.Ime), 
+                   new(ClaimTypes.Surname, user.Prezime), 
+                   new(ClaimTypes.Email, user.Email),
+                   new(ClaimTypes.Rsa, user.Telefon), 
+                   new(ClaimTypes.Actor, user.KorisnickoIme),
+                   new(ClaimTypes.Upn, user.PozicijaId.ToString()),
                    new(ClaimTypes.Role, string.Join(",", user.Uloge.Select(role => role.ToString()))),
 
                 };
 
-                // Dodavanje uloga u listu claim-ova
                 claims.AddRange(roleClaims);
 
                 //foreach (var claimPair in request.CustomClaims)

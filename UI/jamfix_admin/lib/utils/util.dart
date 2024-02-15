@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -22,6 +23,7 @@ class Authorization {
   static String? korisnickoIme;
   static String? rola;
   static int? id;
+  static int? pozicijaID;
 
   static void setJwtToken(String token) {
     jwtToken = token;
@@ -39,8 +41,7 @@ class Authorization {
     email = decodedToken?['email'] as String?;
     telefon = decodedToken?['certpublickey'] as String?;
     korisnickoIme = decodedToken?['actort'] as String?;
-
-    // Ispisivanje uloge korisnika
+    pozicijaID= int.tryParse(decodedToken?['upn']?.toString() ?? "");
     if (isAdmin) {
       print('Korisnik je administrator.');
       rola = "Administrator";
@@ -50,6 +51,7 @@ class Authorization {
       rola = "Zaposlenik";
     }
     if (isKorisnik) {
+      print(decodedToken);
       print('Nije ni admin ni zaposleni nego korisnik.');
       rola = "Korisnik";
     }
@@ -61,13 +63,50 @@ class Authorization {
 }
 
 bool isValidResponse(Response response) {
-  if (response.statusCode < 299) {
+  if (response.statusCode == 200) {
+    if (response.body != "") {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (response.statusCode == 204) {
     return true;
+  } else if (response.statusCode == 400) {
+    throw Exception("Pogresna sifra ili korisnicko ime");
   } else if (response.statusCode == 401) {
-    throw new Exception("Unauthorized!");
+    throw Exception("Unauthorized");
+  } else if (response.statusCode == 403) {
+    throw Exception("Forbidden");
+  } else if (response.statusCode == 404) {
+    throw Exception("Not found");
+  } else if (response.statusCode == 500) {
+    throw Exception("Internal server error");
   } else {
-    print(response.statusCode);
-    throw new Exception("Incorrect username or password!");
+    throw Exception("Exception... handle this gracefully");
+  }
+}
+
+bool isValidInsertUpdate(Response response) {
+  if (response.statusCode == 200) {
+    if (response.body != "") {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (response.statusCode == 204) {
+    return true;
+  } else if (response.statusCode == 400) {
+    throw Exception("Bad request");
+  } else if (response.statusCode == 401) {
+    throw Exception("Unauthorized");
+  } else if (response.statusCode == 403) {
+    throw Exception("Forbidden");
+  } else if (response.statusCode == 404) {
+    throw Exception("Not found");
+  } else if (response.statusCode == 500) {
+    throw Exception("Niste unijeli pravilno podatke");
+  } else {
+    throw Exception("Exception... handle this gracefully");
   }
 }
 

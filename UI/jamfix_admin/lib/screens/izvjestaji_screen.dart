@@ -44,29 +44,32 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 16.0),
-                _buildDataListView(),
-              ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 16.0),
+                  _buildDataListView(),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 16.0,
-            right: 16.0,
-            child: ElevatedButton(
-              onPressed: () async {
-                _handleAddReport();
-              },
-              child: Text("Dodaj novi izvjestaj"),
+            Positioned(
+              bottom: 16.0,
+              right: 16.0,
+              child: ElevatedButton(
+                onPressed: () async {
+                  _handleAddReport();
+                },
+                child: Text("Dodaj novi izvjestaj"),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -98,20 +101,23 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                     const InputDecoration(labelText: 'Najkoristenija oprema'),
                 controller: najOpremaController,
               ),
+              SizedBox(height: 10,),
               Row(
                 children: [
-                  const Text('Datum i Vrijeme:'),
-                  const SizedBox(width: 8.0),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: const Text('Odaberi Datum i Vrijeme'),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => _selectDate(context),
+                      child: const Text('Odaberi Datum i Vrijeme'),
+                    ),
                   ),
                   const SizedBox(width: 8.0),
-                  _selectedDate != null
-                      ? Text(_selectedDate!.toString())
-                      : const Text('Nije odabrano'),
                 ],
               ),
+              Row(children: [
+                selectedDate != null
+                    ? Text(selectedDate!.toString())
+                    : const Text('Nije odabrano'),
+              ]),
             ]),
           ),
           actions: [
@@ -180,124 +186,133 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
             ),
             const SizedBox(width: 16.0),
             Expanded(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Expanded(child: Text(""))),
-                  DataColumn(label: Expanded(child: Text(""))),
-                ],
-                rows: [
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("ID"),
+              child: result != null && result!.result.isNotEmpty
+                  ? DataTable(
+                      columns: const [
+                        DataColumn(label: Expanded(child: Text(""))),
+                        DataColumn(label: Expanded(child: Text(""))),
+                      ],
+                      rows: [
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("ID"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(result?.result.first.izvjestajId
+                                      ?.toString() ??
+                                  ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Broj intervencija"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(result?.result.first.brojIntervencija
+                                      .toString() ??
+                                  ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Najposjećenije mjesto"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child:
+                                  Text(result?.result.first.najPosMjesto ?? ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Cijena utrošenog alata"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(result?.result.first.cijenaUtrosAlata
+                                      .toString() ??
+                                  ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Najkorištenija oprema"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(result?.result.first.najOprema ?? ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Datum"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                  result?.result.first.datum.toString() ?? ""),
+                            ),
+                          ),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Obrisi izvjestaj"),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  _izvjestajProvider
+                                      .delete(result?.result.first.izvjestajId);
+                                },
+                                child: const Text('Obrisi'),
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ],
+                    )
+                  : Center(
+                      child: Text(
+                        "Nema izvještaja za odabrani mjesec.",
+                        style: TextStyle(fontSize: 16.0),
                       ),
                     ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            result?.result.first.izvjestajId?.toString() ?? ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Broj intervencija"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            result?.result.first.brojIntervencija.toString() ??
-                                ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Najposjećenije mjesto"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(result?.result.first.najPosMjesto ?? ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Cijena utrošenog alata"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            result?.result.first.cijenaUtrosAlata.toString() ??
-                                ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Najkorištenija oprema"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(result?.result.first.najOprema ?? ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Datum"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child:
-                            Text(result?.result.first.datum.toString() ?? ""),
-                      ),
-                    ),
-                  ]),
-                  DataRow(cells: [
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Obrisi izvjestaj"),
-                      ),
-                    ),
-                    DataCell(
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            _izvjestajProvider
-                                .delete(result?.result.first.izvjestajId);
-                          },
-                          child: const Text('Obrisi'),
-                        ),
-                      ),
-                    ),
-                  ]),
-                ],
-              ),
             ),
           ],
         ),
@@ -336,7 +351,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
         setState(() {
           result = null;
         });
-        
+
         showDialog(
           context: context,
           builder: (BuildContext context) {

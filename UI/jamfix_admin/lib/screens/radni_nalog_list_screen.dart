@@ -42,15 +42,18 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSearch(),
-            const SizedBox(height: 16.0),
-            _buildDataListView(),
-          ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildSearch(),
+              const SizedBox(height: 16.0),
+              _buildDataListView(),
+            ],
+          ),
         ),
       ),
     );
@@ -69,21 +72,8 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                       const InputDecoration(labelText: "Ime ili prezime"),
                 ),
               ),
-              // SizedBox(width: 8),
-              // Expanded(
-              //   child: TextField(
-              //     decoration: InputDecoration(labelText: ""),
-              //     controller: _cijenaController,
-              //   ),
-              // )
               ElevatedButton(
                 onPressed: () async {
-                  //Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const ProductDetailScreen(),
-                  //   ),
-                  // );
                   var data = await _radniNalogProvider.get(filter: {});
                   setState(() {
                     result = data;
@@ -161,8 +151,10 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
               ),
             ),
             DataColumn(
-              label: Center(
-                child: Text("Akcija"),
+              label: Text(
+                'Akcija',
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
               ),
             ),
           ],
@@ -180,21 +172,9 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  // Implementirajte logiku za uređivanje
-                                },
-                              ),
-                              IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  // Implementirajte logiku za brisanje
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  // Implementirajte logiku za dodavanje
+                                  _radniNalogProvider.delete(e.nalogId);
                                 },
                               ),
                             ],

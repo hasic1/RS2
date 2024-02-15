@@ -24,7 +24,7 @@ class _UslugeScreen extends State<UslugeScreen> {
   void initState() {
     super.initState();
     _uslugeProvider = context.read<UslugeProvider>();
-    _ucitajPodatke(); // Dodajte ovu liniju kako biste pozvali funkciju prilikom inicijalizacije.
+    _ucitajPodatke();
   }
 
   Future<void> _ucitajPodatke() async {
@@ -38,15 +38,18 @@ class _UslugeScreen extends State<UslugeScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSearch(),
-            const SizedBox(height: 16.0),
-            _buildDataListView(),
-          ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildSearch(),
+              const SizedBox(height: 16.0),
+              _buildDataListView(),
+            ],
+          ),
         ),
       ),
     );
@@ -99,43 +102,53 @@ class _UslugeScreen extends State<UslugeScreen> {
               ),
             ),
             DataColumn(
-              label: Text(
-                'Ime i prezime',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Datum i vrijeme uplate',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Naziv paketa',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.blue,
+              label: Expanded(
+                child: Text(
+                  'Ime i prezime',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
                 ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'Uplaceno',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.blue,
+              label: Expanded(
+                child: Text(
+                  'Datum i vrijeme uplate',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.blue),
                 ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'Akcija',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.blue,
+              label: Expanded(
+                child: Text(
+                  'Naziv paketa',
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Expanded(
+                child: Text(
+                  'Uplaceno',
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Expanded(
+                child: Text(
+                  'Akcija',
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ),
@@ -155,8 +168,13 @@ class _UslugeScreen extends State<UslugeScreen> {
                               IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  // Implementirajte logiku za brisanje
                                   _uslugeProvider.delete(e.uslugaId);
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UslugeScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
