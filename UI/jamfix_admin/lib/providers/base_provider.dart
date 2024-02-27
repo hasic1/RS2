@@ -27,7 +27,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
     var response = await http.get(uri, headers: headers);
 
-    print("Status code:${response.statusCode}");
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
@@ -57,7 +56,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
     var response = await http.get(uri, headers: headers);
 
-    print("Status code:${response.statusCode}");
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
@@ -97,7 +95,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw Exception("Unknown error");
     }
   }
-
   Future<T> delete(int? id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);

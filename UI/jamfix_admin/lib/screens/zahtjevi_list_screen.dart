@@ -23,7 +23,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   SearchResult<Zahtjev>? zahtjevResult;
 
-  TextEditingController _imePrezimeController = new TextEditingController();
+  final TextEditingController _imePrezimeController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -106,16 +106,16 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
         future: _statusZahtjevaProvider.getSviStatusiZahtjeva(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Greška pri učitavanju'));
+            return const Center(child: Text('Greška pri učitavanju'));
           } else {
             _statusiZahtjeva = snapshot.data!;
             return SingleChildScrollView(
               child: DataTable(
                 columns: const [
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Ime i prezime',
                         style: TextStyle(
@@ -124,7 +124,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                     ),
                   ),
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Opis',
                         style: TextStyle(
@@ -133,7 +133,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                     ),
                   ),
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Datum i vrijeme',
                         style: TextStyle(
@@ -142,7 +142,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                     ),
                   ),
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Status zahtjeva',
                         style: TextStyle(
@@ -151,7 +151,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                     ),
                   ),
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Akcija',
                         style: TextStyle(
@@ -160,7 +160,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                     ),
                   ),
                   DataColumn(
-                    label: const Expanded(
+                    label: Expanded(
                       child: Text(
                         'Hitna intervencija',
                         style: TextStyle(
@@ -204,15 +204,14 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.check_sharp),
-                                      onPressed: () async {
-                                        await _zahtjevProvider
-                                            .delete(e.zahtjevId);
+                                      icon: const Icon(Icons.check_sharp),
+                                      onPressed: () {
+                                        _zahtjevProvider.delete(e.zahtjevId);
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ZahtjevScreen(),
+                                                const ZahtjevScreen(),
                                           ),
                                         );
                                       },
@@ -226,7 +225,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       if (e.hitnaIntervencija == true)
-                                        Icon(
+                                        const Icon(
                                           Icons.warning,
                                           color: Colors.red,
                                         ),

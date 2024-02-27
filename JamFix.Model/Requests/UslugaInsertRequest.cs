@@ -13,5 +13,7 @@ namespace JamFix.Model.Requests
         public string BrojRacuna { get; set; }
         public string NazivPaketa { get; set; }
         public string Cijena { get; set; }
+        public int ProizvodId { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using JamFix.Model.Modeli;
+using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Interface
 {
-    public interface IDrzaveService : IService<Drzave,DrzaveSO>
+    public interface IDrzaveService : ICRUDService<Drzave,DrzaveSO,DrzavaInsertRequest,DrzavaUpdateRequest>
     {
     }
 }

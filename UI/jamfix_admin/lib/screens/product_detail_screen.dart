@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:jamfix_admin/models/ocjena.dart';
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/vrste_proizvoda.dart';
+import 'package:jamfix_admin/providers/ocjene_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/screens/plati_uslugu_screen.dart';
 import 'package:jamfix_admin/screens/product_list_screen.dart';
-import 'package:jamfix_admin/screens/usluge_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -37,15 +38,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final TextEditingController brojMinutaPotvrdaController =
       TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formKey1 = GlobalKey<FormState>();
   Map<String, dynamic> _initialValue = {};
 
   VrsteProizvodaProvider _vrsteProizvodaProvider = VrsteProizvodaProvider();
   ProductProvider _productProvider = ProductProvider();
+  OcjeneProvider _ocjeneProvider=OcjeneProvider();
+  
   bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
   SearchResult<Product>? preporuceniProizvodi;
   String? selectedVrstaProizvodaId;
 
+  double _rating = 1;
   bool isLoading = true;
   bool snizen = false;
 
@@ -72,8 +77,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     _vrsteProizvodaProvider = context.read<VrsteProizvodaProvider>();
     _productProvider = context.read<ProductProvider>();
-
-    initForm();
+    _ucitajPodatke();
   }
 
   @override
@@ -81,7 +85,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.didChangeDependencies();
   }
 
-  Future initForm() async {
+  Future<void> _ucitajPodatke() async {
     var vrste = await _vrsteProizvodaProvider.get();
 
     if (widget.product != null && widget.product!.proizvodId != null) {
@@ -107,16 +111,44 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: "Prosjecna ocjena: ${widget.product?.prosjecnaOcjena}",
       child: Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: newMethod(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Slider(
+                  value: _rating,
+                  min: 1,
+                  max: 5,
+                  divisions: 4,
+                  label: _rating.toString(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _rating = newValue;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    var request= Ocjene(
+                      proizvodId: widget.product!.proizvodId,
+                      ocjena: _rating.round(),
+                      datum: DateTime.now(),
+                    );
+                    _ocjeneProvider.insert(request);
+                  },
+                  child: Text('Ocijeni'),
+                ),
+                newMethod(context),
+              ],
+            ),
           ),
         ),
       ),
-      title: "Prosjecna ocjena:  ${this.widget.product?.prosjecnaOcjena}",
     );
   }
 
@@ -130,29 +162,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Visibility(
               visible: Authorization.isAdmin,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: ElevatedButton(
                   onPressed: () async {
-                    Product request = Product(
-                      nazivProizvoda: nazivProizvodaController.text,
-                      cijena: double.parse(cijenaController.text),
-                      opis: opisController.text,
-                      slika: _base65Image ?? '',
-                      snizen: snizen,
-                      brzinaInterneta: brzinaInternetaController.text,
-                      brojMinuta: brojMinutaPotvrdaController.text,
-                      brojKanala: brojKanalaController.text,
-                      vrstaId: int.parse(selectedVrstaProizvodaId ??
-                          _initialValue['vrstaId'].toString()),
-                    );
-                    //request['slika'] = _base65Image;
-                    Navigator.of(context).pop();
-                    try {
+                    if (_formKey1.currentState!.validate()) {
+                      Product request = Product(
+                        nazivProizvoda: nazivProizvodaController.text,
+                        cijena: double.parse(cijenaController.text),
+                        opis: opisController.text,
+                        slika: _base65Image ?? '',
+                        snizen: snizen,
+                        brzinaInterneta: brzinaInternetaController.text,
+                        brojMinuta: brojMinutaPotvrdaController.text,
+                        brojKanala: brojKanalaController.text,
+                        vrstaId: int.parse(selectedVrstaProizvodaId ??
+                            _initialValue['vrstaId'].toString()),
+                      );
+                      Navigator.of(context).pop();
                       if (widget.product == null) {
                         await _productProvider.insert(request);
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => ProductListScreen(),
+                            builder: (context) => const ProductListScreen(),
                           ),
                         );
                       } else {
@@ -160,22 +191,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             widget.product!.proizvodId!, request);
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => ProductListScreen(),
+                            builder: (context) => const ProductListScreen(),
                           ),
                         );
                       }
-                    } on Exception catch (e) {
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (BuildContext context) => AlertDialog(
-                      //           title: const Text("Error"),
-                      //           content: Text(e.toString()),
-                      //           actions: [
-                      //             TextButton(
-                      //                 onPressed: () => Navigator.pop(context),
-                      //                 child: const Text("OK"))
-                      //           ],
-                      //         ));
                     }
                   },
                   child: const Text("Sacuvaj"),
@@ -187,7 +206,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -204,7 +223,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
-        Text(
+        const Text(
           'Preporučeni proizvodi',
           style: TextStyle(
             fontSize: 20.0,
@@ -255,153 +274,171 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
-      child: Column(children: [
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Cijena"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: cijenaController,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Naziv"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: nazivProizvodaController,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Opis"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: opisController,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                decoration:
-                    const InputDecoration(labelText: "Brzina interneta"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: brzinaInternetaController,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Broj minuta"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: brojMinutaPotvrdaController,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Broj kanala"),
-                enabled: userRole == Authorization.isAdmin,
-                controller: brojKanalaController,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: FormBuilderDropdown<String>(
-                name: 'vrstaId',
-                decoration: InputDecoration(
-                  labelText: 'Vrsta proizvoda',
-                  suffix: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      selectedVrstaProizvodaId =
-                          _initialValue['vrstaId']?.toString() ?? null;
-                    },
-                  ),
-                  hintText: 'Odaberi vrstu',
-                ),
-                enabled: userRole == Authorization.isAdmin,
-                items: vrsteProizvodaResult?.result
-                        .map((item) => DropdownMenuItem(
-                              alignment: AlignmentDirectional.center,
-                              value: item.vrstaId.toString(),
-                              child: Text(item.naziv ?? ""),
-                            ))
-                        .toList() ??
-                    [],
-                onChanged: (value) {
-                  setState(() {
-                    selectedVrstaProizvodaId = value;
-                  });
-                },
-                initialValue: _initialValue['vrstaId'],
-              ),
-            ),
-          ],
-        ),
-        Visibility(
-          visible: Authorization.isAdmin,
-          child: Row(
+      child: Form(
+        key: _formKey1,
+        child: Column(children: [
+          Row(
             children: [
               Expanded(
-                  child: FormBuilderField(
-                name: 'imageId',
-                builder: ((field) {
-                  return InputDecorator(
-                    decoration: InputDecoration(
-                        label: const Text('Odaberite sliku'),
-                        errorText: field.errorText),
-                    child: ListTile(
-                      enabled: userRole == Authorization.isAdmin,
-                      leading: const Icon(Icons.photo),
-                      title: const Text("Select image"),
-                      trailing: const Icon(Icons.file_upload),
-                      onTap: getImage,
-                    ),
-                  );
-                }),
-              )),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Visibility(
-          visible: Authorization.isAdmin,
-          child: Row(
-            children: [
-              Checkbox(
-                value: snizen,
-                onChanged: (value) {
-                  setState(() {
-                    snizen = value!;
-                  });
-                },
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Cijena"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: cijenaController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                ),
               ),
-              const Text('Snizen'),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Naziv"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: nazivProizvodaController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Opis"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: opisController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
             ],
           ),
-        ),
-      ]),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: "Brzina interneta"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: brzinaInternetaController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Broj minuta"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: brojMinutaPotvrdaController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Broj kanala"),
+                  enabled: userRole == Authorization.isAdmin,
+                  controller: brojKanalaController,
+                  validator: (name) =>
+                      name!.length < 3 ? 'Ime mora imati bar 3 slova' : null,
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible: Authorization.isAdmin || Authorization.isZaposlenik,
+            child: Row(
+              children: [
+                Expanded(
+                  child: FormBuilderDropdown<String>(
+                    name: 'vrstaId',
+                    decoration: InputDecoration(
+                      labelText: 'Vrsta proizvoda',
+                      suffix: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          selectedVrstaProizvodaId =
+                              _initialValue['vrstaId']?.toString();
+                        },
+                      ),
+                      hintText: 'Odaberi vrstu',
+                    ),
+                    enabled: userRole == Authorization.isAdmin,
+                    items: vrsteProizvodaResult?.result
+                            .map((item) => DropdownMenuItem(
+                                  alignment: AlignmentDirectional.center,
+                                  value: item.vrstaId.toString(),
+                                  child: Text(item.naziv ?? ""),
+                                ))
+                            .toList() ??
+                        [],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedVrstaProizvodaId = value;
+                      });
+                    },
+                    initialValue: _initialValue['vrstaId'],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: Authorization.isAdmin,
+            child: Row(
+              children: [
+                Expanded(
+                    child: FormBuilderField(
+                  name: 'imageId',
+                  builder: ((field) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                          label: const Text('Odaberite sliku'),
+                          errorText: field.errorText),
+                      child: ListTile(
+                        enabled: userRole == Authorization.isAdmin,
+                        leading: const Icon(Icons.photo),
+                        title: const Text("Select image"),
+                        trailing: const Icon(Icons.file_upload),
+                        onTap: getImage,
+                      ),
+                    );
+                  }),
+                )),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Visibility(
+            visible: Authorization.isAdmin,
+            child: Row(
+              children: [
+                Checkbox(
+                  value: snizen,
+                  onChanged: (value) {
+                    setState(() {
+                      snizen = value!;
+                    });
+                  },
+                ),
+                const Text('Snizen'),
+              ],
+            ),
+          ),
+        ]),
+      ),
     );
   }
 

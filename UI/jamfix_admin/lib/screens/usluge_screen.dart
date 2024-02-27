@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/usluge.dart';
-import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/usluge_provider.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +17,7 @@ class _UslugeScreen extends State<UslugeScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   SearchResult<Usluge>? uslugeResult;
 
-  TextEditingController _imePrezimeController = new TextEditingController();
+  final TextEditingController _imePrezimeController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -157,16 +155,16 @@ class _UslugeScreen extends State<UslugeScreen> {
                   .map(
                     (Usluge e) => DataRow(
                       cells: [
-                        DataCell(Text(e.uslugaId?.toString() ?? "")),
-                        DataCell(Text(e.imePrezime ?? "")),
-                        DataCell(Text(e.datum.toString() ?? "")),
-                        DataCell(Text(e.nazivPaketa.toString() ?? "")),
-                        DataCell(Text(e.cijena.toString() + " KM" ?? "")),
+                        DataCell(Text(e.uslugaId.toString())),
+                        DataCell(Text(e.imePrezime.toString())),
+                        DataCell(Text(e.datum.toString())),
+                        DataCell(Text(e.nazivPaketa.toString())),
+                        DataCell(Text(e.cijena.toString())),
                         DataCell(
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _uslugeProvider.delete(e.uslugaId);
                                   Navigator.of(context).pushReplacement(

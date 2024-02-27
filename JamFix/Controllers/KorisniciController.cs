@@ -18,10 +18,7 @@ namespace JamFix.Controllers
         {
             _korisnikService = service;
         }
-        public override Task<Korisnici> Insert([FromBody] KorisniciInsertRequest insert)
-        {
-            return base.Insert(insert);
-        }
+      
         [HttpGet("uloga/{id}")]
         public async Task<IActionResult> GetUlogaById(int id)
         {

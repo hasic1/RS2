@@ -463,6 +463,9 @@ namespace JamFix.Services.Migrations
                     b.Property<bool>("Placeno")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ProizvodId")
+                        .HasColumnType("int");
+
                     b.HasKey("UslugaId");
 
                     b.ToTable("Usluge", (string)null);

@@ -2,14 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
-import 'package:jamfix_admin/screens/korisnici_detail_screen.dart';
-import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/product_detail_screen.dart';
-import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +65,8 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                             builder: (BuildContext context) {
                               return Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Align(
                                   alignment: Alignment.topCenter,
                                   child: Image.memory(
@@ -88,27 +85,27 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                 options: CarouselOptions(
                   height: 200.0,
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 3),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
                   scrollDirection: Axis.horizontal,
                 ),
               ),
-              SizedBox(height: 20.0),
-              Divider(
+              const SizedBox(height: 20.0),
+              const Divider(
                 color: Colors.black,
                 thickness: 1,
                 height: 20,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(alignment: Alignment.center,
-                      child:
-                      Text(
+                    const Align(
+                      alignment: Alignment.center,
+                      child: Text(
                         'Najbolje ocenjeni proizvodi',
                         style: TextStyle(
                           fontSize: 20.0,
@@ -116,7 +113,7 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     Container(
                       height: 150.0,
                       child: ListView.builder(
@@ -127,7 +124,7 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                               recommendedProducts?.result[index];
 
                           return Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding:const EdgeInsets.all(16.0),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).pushReplacement(

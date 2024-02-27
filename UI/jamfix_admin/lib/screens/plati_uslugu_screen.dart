@@ -10,12 +10,11 @@ import 'package:flutter_stripe/flutter_stripe.dart'
     show
         Address,
         BillingDetails,
-        PaymentSheetResultStatus,
+        //PaymentSheetResultStatus,
         SetupPaymentSheetParameters,
         Stripe,
         StripeException;
 import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
-import 'package:jamfix_admin/screens/product_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlatiUsluguScreen extends StatefulWidget {
@@ -31,6 +30,7 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
   bool isCheckboxChecked = false;
   TextEditingController brojZiroracunaController = TextEditingController();
   TextEditingController imePrezimeController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   UslugeProvider _uslugeProvider = UslugeProvider();
   @override
   void initState() {
@@ -39,13 +39,22 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
     _uslugeProvider = context.read<UslugeProvider>();
   }
 
+  String? validateCreditCardNumber(String? creditCardNumber) {
+    RegExp cardRegex = RegExp(r'^\d{4} \d{4} \d{4} \d{4}$');
+    final isCardValid = cardRegex.hasMatch(creditCardNumber ?? '');
+    if (!isCardValid) {
+      return 'Please enter a valid credit card number in the format XXXX XXXX XXXX XXXX';
+    }
+    return null;
+  }
+
   void _showUgovorDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ugovor o plaćanju'),
-          content: SingleChildScrollView(
+          title: const Text('Ugovor o plaćanju'),
+          content: const SingleChildScrollView(
             child: Column(
               children: [
                 Text(
@@ -74,7 +83,7 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Zatvori'),
+              child: const Text('Zatvori'),
             ),
           ],
         );
@@ -86,110 +95,83 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stranica za plaćanje'),
+        title: const Text('Stranica za plaćanje'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Molimo pročitajte uvjete plaćanja prije nastavka:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: imePrezimeController,
-              keyboardType: TextInputType.text,  
-              decoration: InputDecoration(labelText: 'Ime i prezime'),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: brojZiroracunaController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Broj žiro računa'),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Iznos u KM'),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Checkbox(
-                  value: isCheckboxChecked,
-                  onChanged: (value) {
-                    _showUgovorDialog();
-                    setState(() {
-                      isCheckboxChecked = value ?? false;
-                    });
-                  },
-                ),
-                Text('Prihvaćam uvjete plaćanja'),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                if (isCheckboxChecked) {
-                  double? cijenaDouble = widget.product?.cijena;
-                  String cijenaString = cijenaDouble.toString();
-                  Usluge request = Usluge(
-                    imePrezime: imePrezimeController.text,
-                    datum: DateTime.now(),
-                    brojRacuna: brojZiroracunaController.text,
-                    nazivPaketa: widget.product?.nazivProizvoda,
-                    cijena: cijenaString,
-                  );
-                  try {
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Molimo pročitajte uvjete plaćanja prije nastavka:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: imePrezimeController,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(labelText: 'Ime i prezime'),
+                validator: (name) => name!.isEmpty ? 'Polje je obavezno' : null,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: brojZiroracunaController,
+                keyboardType: TextInputType.number,
+                decoration:
+                    const InputDecoration(labelText: 'Broj kartice računa'),
+                validator: validateCreditCardNumber,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Iznos u KM'),
+                validator: (name) => name!.isEmpty ? 'Polje je obavezno' : null,
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isCheckboxChecked,
+                    onChanged: (value) {
+                      _showUgovorDialog();
+                      setState(() {
+                        isCheckboxChecked = value ?? false;
+                      });
+                    },
+                  ),
+                  const Text('Prihvaćam uvjete plaćanja'),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    double? cijenaDouble = widget.product?.cijena;
+                    String cijenaString = cijenaDouble.toString();
+                    Usluge request = Usluge(
+                        imePrezime: imePrezimeController.text,
+                        datum: DateTime.now(),
+                        brojRacuna: brojZiroracunaController.text,
+                        nazivPaketa: widget.product?.nazivProizvoda,
+                        cijena: cijenaString,
+                        proizvodId: widget.product?.proizvodId);
+                    await _uslugeProvider.insert(request);
                     await sendPaymentDataToServer(request);
-                    double cijenaDoubleForStripe =
-                        cijenaDouble ?? 0.0; 
+                    double cijenaDoubleForStripe = cijenaDouble ?? 0.0;
                     await stripeMakePayment(cijenaDoubleForStripe);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => KorisnikProductListScreen(),
-                      ),
-                    );
-                  } on Exception catch (e) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text("OK"),
-                          )
-                        ],
+                        builder: (context) => const KorisnikProductListScreen(),
                       ),
                     );
                   }
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Greška'),
-                        content: Text('Morate prihvatiti uvjete plaćanja.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-              child: Text('Plati'),
-            ),
-          ],
+                },
+                child: const Text('Plati'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -207,7 +189,6 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
       );
 
       if (response.statusCode == 200) {
-        print('Uspješno poslano na server');
       } else {
         throw Exception(
             'Neuspješno slanje na server. Status: ${response.statusCode}');
@@ -223,7 +204,7 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
       await Stripe.instance
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
-                  billingDetails: BillingDetails(
+                  billingDetails: const BillingDetails(
                       name: 'YOUR NAME',
                       email: 'YOUREMAIL@gmail.com',
                       phone: 'YOUR NUMBER',
@@ -234,14 +215,13 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
                           line2: 'YOUR ADDRESS 2',
                           postalCode: 'YOUR PINCODE',
                           state: 'YOUR STATE')),
-                  paymentIntentClientSecret: paymentIntent!['client_secret'],
+                  paymentIntentClientSecret: paymentIntent['client_secret'],
                   style: ThemeMode.dark,
                   merchantDisplayName: 'Ikay'))
           .then((value) {});
 
       await displayPaymentSheet();
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
   }
@@ -256,12 +236,11 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
         Fluttertoast.showToast(
             msg: 'Greška od Stripes-a: ${e.error.localizedMessage}');
       } else {
-        Fluttertoast.showToast(msg: 'Neočekivana greška: ${e}');
+        Fluttertoast.showToast(msg: 'Neočekivana greška: $e');
       }
     }
   }
 
-  // Kreiranje plaćanja
   Future<Map<String, dynamic>> createPaymentIntent(
       double amount, String currency) async {
     try {
@@ -284,7 +263,6 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
     }
   }
 
-  // Izračunavanje iznosa
   String calculateAmount(double amount) {
     final calculatedAmount = (amount * 100).toInt();
     return calculatedAmount.toString();

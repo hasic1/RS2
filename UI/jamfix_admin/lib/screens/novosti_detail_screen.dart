@@ -3,21 +3,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jamfix_admin/models/drzava.dart';
-import 'package:jamfix_admin/models/korisnici.dart';
-import 'package:jamfix_admin/models/korisnici_uloge.dart';
 import 'package:jamfix_admin/models/novosti.dart';
-import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/models/search_result.dart';
-import 'package:jamfix_admin/providers/drzava_provider.dart';
-import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
-import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
-import 'package:jamfix_admin/providers/pozicija_provider.dart';
-import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
-import 'package:jamfix_admin/screens/novosti_list_screen.dart';
-import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -78,10 +66,10 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
                       (widget.novosti != null
                           ? widget.novosti!.naslov.toString()
                           : ''),
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style:const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16.0),
-                Text(
+           const     Text(
                   'Sadržaj novosti:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -89,9 +77,9 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
                   widget.novosti != null
                       ? widget.novosti!.sadrzaj.toString()
                       : '',
-                  style: TextStyle(fontSize: 16),
+                  style:const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 
               ],
             ),

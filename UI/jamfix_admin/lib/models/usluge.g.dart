@@ -15,6 +15,7 @@ Usluge _$UslugeFromJson(Map<String, dynamic> json) => Usluge(
       brojRacuna: json['brojRacuna'] as String?,
       cijena: json['cijena'] as String?,
       nazivPaketa: json['nazivPaketa'] as String?,
+      proizvodId: json['proizvodId'] as int?,
     );
 
 Map<String, dynamic> _$UslugeToJson(Usluge instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$UslugeToJson(Usluge instance) => <String, dynamic>{
       'brojRacuna': instance.brojRacuna,
       'nazivPaketa': instance.nazivPaketa,
       'cijena': instance.cijena,
+      'proizvodId': instance.proizvodId,
     };

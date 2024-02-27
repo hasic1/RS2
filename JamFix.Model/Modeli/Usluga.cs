@@ -15,6 +15,7 @@ namespace JamFix.Model.Modeli
         public string NazivPaketa { get; set; }
         public string Cijena { get; set; }
         public bool Placeno { get; set; }
+        public int ProizvodId { get; set; }
 
     }
 }

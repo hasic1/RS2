@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/pozicija.dart';
@@ -8,7 +7,6 @@ import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
 import 'package:jamfix_admin/screens/korisnici_detail_screen.dart';
-import 'package:jamfix_admin/screens/postavke_screen.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -27,13 +25,11 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
   SearchResult<Pozicija>? pozicijaResult;
   SearchResult<Drzava>? drzavaResult;
 
-  Map<String, dynamic> _initialValue = {};
-
   bool aktivan = false;
   String? selectedPozicijaId;
   String? selectedDrzavaId;
 
-  TextEditingController _imePrezimeController = new TextEditingController();
+  final TextEditingController _imePrezimeController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -118,7 +114,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
         child: DataTable(
           columns: const [
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                 child: Text(
                   'Ime',
                   style: TextStyle(
@@ -127,7 +123,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               ),
             ),
             DataColumn(
-                label: const Expanded(
+                label: Expanded(
               child: Text(
                 'Prezime',
                 style:
@@ -135,7 +131,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               ),
             )),
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                   child: Text(
                 'Korisnicko ime',
                 style:
@@ -143,7 +139,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               )),
             ),
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                 child: Text(
                   'Email',
                   style: TextStyle(
@@ -152,7 +148,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               ),
             ),
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                   child: Text(
                 'Pozicija',
                 style:
@@ -160,7 +156,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               )),
             ),
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                 child: Text(
                   'Uloga',
                   style: TextStyle(
@@ -169,7 +165,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               ),
             ),
             DataColumn(
-              label: const Expanded(
+              label: Expanded(
                 child: Text(
                   'Aktivan',
                   style: TextStyle(
@@ -178,7 +174,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               ),
             ),
             DataColumn(
-                label: const Expanded(
+                label: Expanded(
               child: Text(
                 'Akcija',
                 style:
@@ -252,7 +248,7 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _korisniciProvider.delete(e.korisnikId);
                                 },

@@ -8,7 +8,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 class Authorization {
   static String? username;
   static String? password;
-  static String? jwtToken; 
+  static String? jwtToken;
   static bool isAdmin = false;
   static bool isZaposlenik = false;
   static bool isKorisnik = false;
@@ -20,6 +20,8 @@ class Authorization {
   static String? korisnickoIme;
   static String? rola;
   static int? id;
+  static int? drzavaID;
+  static int? pozicijaID;
 
   static void setJwtToken(String token) {
     jwtToken = token;
@@ -53,31 +55,29 @@ class Authorization {
 }
 
 bool isValidResponse(Response response) {
-    if (response.statusCode == 200) {
-      if (response.body != "") {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (response.statusCode == 204) {
+  if (response.statusCode == 200) {
+    if (response.body != "") {
       return true;
-    } else if (response.statusCode == 400) {
-      throw Exception("Bad request");
-    } else if (response.statusCode == 401) {
-      throw Exception("Unauthorized");
-    } else if (response.statusCode == 403) {
-      throw Exception("Forbidden");
-    } else if (response.statusCode == 404) {
-      throw Exception("Not found");
-    } else if (response.statusCode == 500) {
-      throw Exception("Internal server error");
     } else {
-      throw Exception("Exception... handle this gracefully");
+      return false;
     }
+  } else if (response.statusCode == 204) {
+    return true;
+  } else if (response.statusCode == 400) {
+    throw Exception("Bad request");
+  } else if (response.statusCode == 401) {
+    throw Exception("Unauthorized");
+  } else if (response.statusCode == 403) {
+    throw Exception("Forbidden");
+  } else if (response.statusCode == 404) {
+    throw Exception("Not found");
+  } else if (response.statusCode == 500) {
+    throw Exception("Internal server error");
+  } else {
+    throw Exception("Exception... handle this gracefully");
   }
+}
 
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
 }
-
-

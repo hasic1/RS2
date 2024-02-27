@@ -47,14 +47,14 @@ class _KorisnikProductListScreen extends State<KorisnikProductListScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+               const Text(
                   'Naši proizvodi',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 15.0),
+               const SizedBox(height: 15.0),
                 Wrap(
                   spacing: 15.0,
                   runSpacing: 15.0,

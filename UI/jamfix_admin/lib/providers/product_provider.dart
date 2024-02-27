@@ -50,7 +50,6 @@ class ProductProvider extends BaseProvider<Product> {
     var headers = createHeaders();
     var response = await http.get(uri, headers: headers);
 
-    print("Status code:${response.statusCode}");
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 

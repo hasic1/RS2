@@ -52,25 +52,14 @@ namespace JamFix.Controllers
                    new(ClaimTypes.Rsa, user.Telefon), 
                    new(ClaimTypes.Actor, user.KorisnickoIme),
                    new(ClaimTypes.Upn, user.PozicijaId.ToString()),
+                   new(ClaimTypes.SerialNumber, user.DrzavaId.ToString()),
+
                    new(ClaimTypes.Role, string.Join(",", user.Uloge.Select(role => role.ToString()))),
 
                 };
 
                 claims.AddRange(roleClaims);
 
-                //foreach (var claimPair in request.CustomClaims)
-                //{
-                //    var jsonElement = (JsonElement)claimPair.Value;
-                //    var valueType = jsonElement.ValueKind switch
-                //    {
-                //        JsonValueKind.True => ClaimValueTypes.Boolean,
-                //        JsonValueKind.False => ClaimValueTypes.Boolean,
-                //        JsonValueKind.Number => ClaimValueTypes.Double,
-                //        _ => ClaimValueTypes.String
-                //    };
-                //    var claim = new Claim(claimPair.Key, claimPair.Value.ToString()!, valueType);
-                //    claims.Add(claim);
-                //}
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),

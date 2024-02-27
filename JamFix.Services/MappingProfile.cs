@@ -24,9 +24,13 @@ namespace JamFix.Services
             CreateMap<VrsteProizvoda,VrstaProizvoda>();
             //-------------------------------------------------------
             CreateMap<Drzava,Drzave>();
+            CreateMap<DrzavaInsertRequest, Drzava>();
+            CreateMap<DrzavaUpdateRequest, Drzava>();
             //-------------------------------------------------------
-            CreateMap<KorisniciUloge, KorisnikUloge>();
             CreateMap<Uloga, Uloge>();
+            CreateMap<UlogeInsertRequest, Uloga>();
+            CreateMap<UlogeUpdateRequest, Uloga>();
+
             //-------------------------------------------------------
             CreateMap<NovostUpdateRequest, Novosti>();
             CreateMap<NovostInsertRequest, Novosti>();
@@ -49,8 +53,12 @@ namespace JamFix.Services
             CreateMap<RadniNalog, RadniNalozi>();
             //-------------------------------------------------------
             CreateMap<StatusZahtjeva, StatusiZahtjeva>();
+            CreateMap<StatusZahtjevaInsertRequest, StatusZahtjeva>();
+            CreateMap<StatusZahtjevaUpdateRequest, StatusZahtjeva>();
             //-------------------------------------------------------
             CreateMap<Pozicija,Pozicije>();
+            CreateMap<PozicijaUpdateRequest, Pozicija>();
+            CreateMap<PozicijaInsertRequest, Pozicija>();
             //-------------------------------------------------------
             CreateMap<Ocjene, Ocjena>();
             CreateMap<OcjenaInsertRequest, Ocjene>();
@@ -60,7 +68,10 @@ namespace JamFix.Services
             CreateMap<KorisnikUlogeUpdateRequest, KorisniciUloge>();
             CreateMap<KorisnikUlogeInsertRequest, KorisniciUloge>();
             //-------------------------------------------------------
-
+            CreateMap<UslugaStavke, UslugeStavke>();
+            CreateMap<UslugeStavkeUpdateRequest, UslugaStavke>();
+            CreateMap<UslugeStavkeInsertRequest, UslugaStavke>();
+            //-------------------------------------------------------
         }
     }
 }

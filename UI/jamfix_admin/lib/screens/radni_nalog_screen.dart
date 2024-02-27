@@ -8,16 +8,27 @@ class RadniNalogScreen extends StatefulWidget {
 }
 
 class _RadniNalogScreenState extends State<RadniNalogScreen> {
-  TextEditingController _nosilacPoslaController = TextEditingController();
-  TextEditingController _opisPrijavljenogController = TextEditingController();
-  TextEditingController _opisUradjenogController = TextEditingController();
-  TextEditingController _imePrezimeController = TextEditingController();
-  TextEditingController _telefonController = TextEditingController();
-  TextEditingController _adresaController = TextEditingController();
-  TextEditingController _mjestoController = TextEditingController();
-  TextEditingController _nazivController = TextEditingController();
-  TextEditingController _kolicinaController = TextEditingController();
-  RadniNalogProvider _radniNalogProvider = RadniNalogProvider();
+  final TextEditingController _nosilacPoslaController = TextEditingController();
+  final TextEditingController _opisPrijavljenogController =
+      TextEditingController();
+  final TextEditingController _opisUradjenogController =
+      TextEditingController();
+  final TextEditingController _imePrezimeController = TextEditingController();
+  final TextEditingController _telefonController = TextEditingController();
+  final TextEditingController _adresaController = TextEditingController();
+  final TextEditingController _mjestoController = TextEditingController();
+  final TextEditingController _nazivController = TextEditingController();
+  final TextEditingController _kolicinaController = TextEditingController();
+  final RadniNalogProvider _radniNalogProvider = RadniNalogProvider();
+  final _formKey = GlobalKey<FormState>();
+  String? validatePhoneNumber(String? phoneNumber) {
+    RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
+    final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
+    if (!isPhoneValid) {
+      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+    }
+    return null;
+  }
 
   DateTime? selectedDate;
 
@@ -25,120 +36,188 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Radni Nalog'),
+        title: const Text('Radni Nalog'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text('Nosilac Posla'),
-              subtitle: TextField(
-                controller: _nosilacPoslaController,
-              ),
-            ),
-            ListTile(
-              title: Text('Opis Prijavljenog'),
-              subtitle: TextField(
-                controller: _opisPrijavljenogController,
-              ),
-            ),
-            ListTile(
-              title: Text('Opis Uradjenog'),
-              subtitle: TextField(
-                controller: _opisUradjenogController,
-              ),
-            ),
-            ListTile(
-              title: Text('Ime i Prezime'),
-              subtitle: TextField(
-                controller: _imePrezimeController,
-              ),
-            ),
-            ListTile(
-              title: Text('Telefon'),
-              subtitle: TextField(
-                controller: _telefonController,
-              ),
-            ),
-            Row(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                const Text('Datum i Vrijeme:'),
-                const SizedBox(width: 8.0),
-                ElevatedButton(
-                  onPressed: () => _selectDate(context),
-                  child: const Text('Odaberi Datum i Vrijeme'),
-                ),
-                const SizedBox(width: 8.0),
-              ],
-            ),
-            Row(
-              children: [
-                selectedDate != null
-                    ? Text(selectedDate!.toString())
-                    : const Text('Nije odabrano'),
-              ],
-            ),
-            ListTile(
-              title: Text('Adresa'),
-              subtitle: TextField(
-                controller: _adresaController,
-              ),
-            ),
-            ListTile(
-              title: Text('Mjesto'),
-              subtitle: TextField(
-                controller: _mjestoController,
-              ),
-            ),
-            ListTile(
-              title: Text('Naziv'),
-              subtitle: TextField(
-                controller: _nazivController,
-              ),
-            ),
-            ListTile(
-              title: Text('Količina'),
-              subtitle: TextField(
-                controller: _kolicinaController,
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                var request = RadniNalog(
-                    nosilacPosla: _nosilacPoslaController.text,
-                    opisPrijavljenog: _opisPrijavljenogController.text,
-                    opisUradjenog: _opisUradjenogController.text,
-                    imePrezime: _imePrezimeController.text,
-                    telefon: _telefonController.text,
-                    adresa: _adresaController.text,
-                    mjesto: _mjestoController.text,
-                    datum: selectedDate,
-                    naziv: _nazivController.text,
-                    kolicina: int.parse(_kolicinaController.text));
-                try {
-                  _radniNalogProvider.insert(request);
-                } on Exception catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("OK"),
-                        )
-                      ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _nosilacPoslaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nosilac posla',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
                     ),
-                  );
-                }
-              },
-              child: Text('Spremi Radni Nalog'),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _mjestoController,
+                        decoration: const InputDecoration(
+                          labelText: 'Mijesto',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    const Text('Datum i Vrijeme:'),
+                    const SizedBox(width: 8.0),
+                    ElevatedButton(
+                      onPressed: () => _selectDate(context),
+                      child: const Text('Odaberi Datum i Vrijeme'),
+                    ),
+                    const SizedBox(width: 8.0),
+                  ],
+                ),
+                Row(
+                  children: [
+                    selectedDate != null
+                        ? Text(selectedDate!.toString())
+                        : const Text('Nije odabrano'),
+                  ],
+                ),
+                const Text(
+                  'Korisnik usluga',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const Divider(
+                  thickness: 2,
+                  color: Colors.grey,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Ime i prezime',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _adresaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Adresa',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _telefonController,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefon',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                  ],
+                ),
+                TextFormField(
+                  controller: _opisPrijavljenogController,
+                  decoration: const InputDecoration(
+                    labelText: 'Opis prijavljenog',
+                  ),
+                  validator: (name) =>
+                      name!.isEmpty ? 'Polje je obavezno' : null,
+                ),
+                TextFormField(
+                  controller: _opisUradjenogController,
+                  decoration: const InputDecoration(
+                    labelText: 'Opis uradjenog',
+                  ),
+                  validator: (name) =>
+                      name!.isEmpty ? 'Polje je obavezno' : null,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Utrošeni materijal',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const Divider(
+                  thickness: 2,
+                  color: Colors.grey,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _nazivController,
+                        decoration: const InputDecoration(
+                          labelText: 'Naziv',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _kolicinaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Kolicina',
+                        ),
+                        validator: (name) =>
+                            name!.isEmpty ? 'Polje je obavezno' : null,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      var request = RadniNalog(
+                          nosilacPosla: _nosilacPoslaController.text,
+                          opisPrijavljenog: _opisPrijavljenogController.text,
+                          opisUradjenog: _opisUradjenogController.text,
+                          imePrezime: _imePrezimeController.text,
+                          telefon: _telefonController.text,
+                          adresa: _adresaController.text,
+                          mjesto: _mjestoController.text,
+                          datum: selectedDate,
+                          naziv: _nazivController.text,
+                          kolicina: int.parse(_kolicinaController.text));
+                      _radniNalogProvider.insert(request);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('Spremi Radni Nalog'),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -148,8 +227,8 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2024),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2025),
     );
 
     if (pickedDate != null) {

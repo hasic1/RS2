@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/radni_nalog.dart';
 import 'package:jamfix_admin/models/search_result.dart';
-import 'package:jamfix_admin/models/usluge.dart';
-import 'package:jamfix_admin/models/zahtjev.dart';
-import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
-import 'package:jamfix_admin/providers/usluge_provider.dart';
-import 'package:jamfix_admin/providers/zahtjev_provider.dart';
 import 'package:jamfix_admin/screens/radni_nalog_screen.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -66,10 +60,9 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
         children: [
           Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Ime ili prezime"),
+                  decoration: InputDecoration(labelText: "Ime ili prezime"),
                 ),
               ),
               ElevatedButton(
@@ -172,7 +165,7 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon:const Icon(Icons.delete),
                                 onPressed: () {
                                   _radniNalogProvider.delete(e.nalogId);
                                 },

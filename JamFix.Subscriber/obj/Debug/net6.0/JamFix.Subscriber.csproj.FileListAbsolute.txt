@@ -175,3 +175,9 @@ C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\obj\Debug\net6.0\refin
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\obj\Debug\net6.0\JamFix.Subscriber.pdb
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\obj\Debug\net6.0\JamFix.Subscriber.genruntimeconfig.cache
 C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\obj\Debug\net6.0\ref\JamFix.Subscriber.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\bakah\OneDrive\Desktop\RS2\RS2\JamFix.Subscriber\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

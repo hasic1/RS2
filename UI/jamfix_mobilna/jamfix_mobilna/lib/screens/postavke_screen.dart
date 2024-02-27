@@ -24,12 +24,26 @@ class _PostavkeScreen extends State<PostavkeScreen> {
   KorisniciProvider _korisniciProvider = KorisniciProvider();
   DrzavaProvider _drzavaProvider = DrzavaProvider();
   SearchResult<Drzava>? drzavaResult;
+  final _formKey = GlobalKey<FormState>();
+  Map<String, dynamic> _initialValue = {};
 
   String? selectedDrzavaId;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _initialValue = {
+        'ime': Authorization.ime,
+        'prezime': Authorization.prezime,
+        'telefon': Authorization.telefon,
+        'email': Authorization.email,
+      };
+      _imeController.text = _initialValue['ime'] ?? '';
+      _prezimeController.text = _initialValue['prezime'] ?? '';
+      _telefonController.text = _initialValue['telefon'] ?? '';
+      _emailController.text = _initialValue['email'] ?? '';
+    });
     _drzavaProvider = context.read<DrzavaProvider>();
     _ucitajPodatke();
   }
@@ -39,6 +53,24 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     setState(() {
       drzavaResult = drzava;
     });
+  }
+
+  String? validateEmail(String? email) {
+    RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
+    final isEmailValid = emailRegex.hasMatch(email ?? '');
+    if (!isEmailValid) {
+      return 'Molimo unesite validan email';
+    }
+    return null;
+  }
+
+  String? validatePhoneNumber(String? phoneNumber) {
+    RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
+    final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
+    if (!isPhoneValid) {
+      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+    }
+    return null;
   }
 
   @override
@@ -53,150 +85,125 @@ class _PostavkeScreen extends State<PostavkeScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ime: ${Authorization.ime}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 40.0),
-                      Text(
-                        'Prezime: ${Authorization.prezime}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 40.0),
-                      Text(
-                        'Email: ${Authorization.email}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 40.0),
-                      Text(
-                        'Telefon: ${Authorization.telefon}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 40.0),
-                      Text(
-                        'Username: ${Authorization.korisnickoIme}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
                 Flexible(
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(
-                          controller: _imeController,
-                          decoration: InputDecoration(labelText: 'Ime'),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _prezimeController,
-                          decoration: InputDecoration(labelText: 'Prezime'),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(labelText: 'Email'),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _telefonController,
-                          decoration: InputDecoration(labelText: 'Telefon'),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _noviPasswordController,
-                          decoration:
-                              InputDecoration(labelText: 'Novi password'),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _passwordPotvrdaController,
-                          decoration:
-                              InputDecoration(labelText: 'Password potvrda'),
-                        ),
-                        SizedBox(height: 8.0),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: FormBuilderDropdown<String>(
-                                name: 'drzavaId',
-                                decoration: InputDecoration(
-                                  labelText: 'Drzava',
-                                  hintText: 'Odaberi drzavu',
-                                ),
-                                items: drzavaResult?.result
-                                        .map((item) => DropdownMenuItem(
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              value: item.drzavaId.toString(),
-                                              child: Text(item.naziv ?? ""),
-                                            ))
-                                        .toList() ??
-                                    [],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedDrzavaId = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              var request = Korisnici(
-                                ime: _imeController.text,
-                                prezime: _prezimeController.text,
-                                email: _emailController.text,
-                                telefon: _telefonController.text,
-                                noviPassword: _noviPasswordController.text,
-                                passwordPotvrda:
-                                    _passwordPotvrdaController.text,
-                                drzavaId: int.parse(selectedDrzavaId!),
-                                pozicijaId: 1,
-                              );
-                              try {
-                                _korisniciProvider.update(
-                                    Authorization.id, request);
-                                Navigator.pop(context);
-                              } on Exception catch (e) {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    title: const Text("Error"),
-                                    content: Text(e.toString()),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text("OK"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text('Ažuriraj podatke'),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            controller: _imeController,
+                            decoration: const InputDecoration(labelText: 'Ime'),
+                            validator: (name) => name!.length < 3
+                                ? 'Ime mora imati bar 3 slova'
+                                : null,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 8.0),
+                          TextFormField(
+                            controller: _prezimeController,
+                            decoration:
+                                const InputDecoration(labelText: 'Prezime'),
+                            validator: (name) => name!.length < 3
+                                ? 'Prezime mora imati bar 3 slova'
+                                : null,
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextFormField(
+                            controller: _emailController,
+                            decoration:
+                                const InputDecoration(labelText: 'Email'),
+                            validator: validateEmail,
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextFormField(
+                            controller: _telefonController,
+                            decoration:
+                                const InputDecoration(labelText: 'Telefon'),
+                            validator: validatePhoneNumber,
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextFormField(
+                            controller: _noviPasswordController,
+                            decoration:
+                                const InputDecoration(labelText: 'Lozinka'),
+                            obscureText: true,
+                            validator: (name) => name!.length < 5
+                                ? 'Lozinka mora imati bar 5 znakova'
+                                : null,
+                          ),
+                          const SizedBox(height: 8.0),
+                          TextFormField(
+                            controller: _passwordPotvrdaController,
+                            decoration: const InputDecoration(
+                                labelText: 'Potvrdi lozinku'),
+                            obscureText: true,
+                            validator: (name) =>
+                                name!.length < 5 ? 'Unesite lozinku' : null,
+                          ),
+                          SizedBox(height: 8.0),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: FormBuilderDropdown<String>(
+                                  name: 'drzavaId',
+                                  decoration: InputDecoration(
+                                    labelText: 'Drzava',
+                                    hintText: 'Odaberi drzavu',
+                                  ),
+                                  items: drzavaResult?.result
+                                          .map((item) => DropdownMenuItem(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                value: item.drzavaId.toString(),
+                                                child: Text(item.naziv ?? ""),
+                                              ))
+                                          .toList() ??
+                                      [],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedDrzavaId = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  String drzavaId = selectedDrzavaId ??
+                                      Authorization.drzavaID.toString();
+                                  var request = Korisnici(
+                                    ime: _imeController.text,
+                                    prezime: _prezimeController.text,
+                                    telefon: _telefonController.text,
+                                    email: _emailController.text,
+                                    drzavaId: int.parse(drzavaId),
+                                    noviPassword: _noviPasswordController.text,
+                                    passwordPotvrda:
+                                        _passwordPotvrdaController.text,
+                                    pozicijaId: Authorization.pozicijaID,
+                                  );
+                                  _korisniciProvider.update(
+                                      Authorization.id, request);
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => PostavkeScreen(),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text('Ažuriraj podatke'),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

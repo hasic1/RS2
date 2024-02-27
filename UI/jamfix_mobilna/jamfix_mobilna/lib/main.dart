@@ -91,6 +91,7 @@ class LoginPage extends StatelessWidget {
                   decoration: const InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
                   controller: _passwordController,
+                  obscureText: true,
                 ),
                 const SizedBox(
                   height: 15,
@@ -154,7 +155,6 @@ class LoginPage extends StatelessWidget {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(data),
     );
-    print(response.statusCode);
     if (isValidResponse(response)) {
       var token = response.body;
       Authorization.setJwtToken(token);

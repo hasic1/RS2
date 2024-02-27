@@ -40,42 +40,6 @@ namespace JamFix.Services.Service
             return filteredQuery;
         }
 
-        //public override Task<Proizvodi> Insert(ProizvodiInsertRequest insert)
-        //{
-        //    var state = _baseState.CreateState("initial");
-        //    return state.Insert(insert);
-        //}
-
-        //public override async Task<Proizvodi> Update(int id, ProizvodiUpdateRequest update)
-        //{
-        //    var entity = await _context.Proizvod.FindAsync(id);
-        //    var state = _baseState.CreateState(entity.StateMachine);
-        //    return await state.Update(id, update);
-        //}
-
-        //public async Task<Proizvodi> Activate(int id)
-        //{
-        //    var entity = await _context.Proizvod.FindAsync(id);
-        //    var state = _baseState.CreateState(entity.StateMachine);
-        //    return await state.Activate(id);
-        //}
-
-        //public async Task<Proizvodi> Hide(int id)
-        //{
-        //    var product = _context.Proizvod.Find(id);
-        //    var state = _baseState.CreateState(product.StateMachine);
-        //    state.CurrentEntity = product;
-        //    state.Hide();
-        //    return await GetById(id);
-        //}
-
-        //public async Task<List<string>> AllowedActions(int id)
-        //{
-        //    var entity = await _context.Proizvod.FindAsync(id);
-        //    var state = _baseState.CreateState(entity?.StateMachine ?? "initial");
-        //    return await state.AllowedActions();
-        //}
-
         public virtual async Task<PagedResult<Proizvodi>> GetTopRatedProducts( int numberOfTopProducts)
         {
             PagedResult<Proizvodi> result = new PagedResult<Proizvodi>();

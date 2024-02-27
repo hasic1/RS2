@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JamFix.Services.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240122175526_migracija3")]
-    partial class migracija3
+    [Migration("20240226133217_migracija")]
+    partial class migracija
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -465,6 +465,9 @@ namespace JamFix.Services.Migrations
 
                     b.Property<bool>("Placeno")
                         .HasColumnType("bit");
+
+                    b.Property<int>("ProizvodId")
+                        .HasColumnType("int");
 
                     b.HasKey("UslugaId");
 

@@ -12,14 +12,11 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Service
 {
-    public class NovostiService : BaseCRUDService<Novost, Novosti, NovostSO, NovostInsertRequest, KorisniciUpdateRequest>, INovostiService
+    public class NovostiService : BaseCRUDService<Novost, Novosti, NovostSO, NovostInsertRequest, NovostUpdateRequest>, INovostiService
     {
         public NovostiService(Context context, IMapper mapper) : base(context, mapper)
         {
         }
-        public async Task<Novost> Update(int id, NovostUpdateRequest update)
-        {
-            return await Update(id, update);
-        }
+        
     }
 }

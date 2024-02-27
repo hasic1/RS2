@@ -6,7 +6,6 @@ class KorisniciUlogeProvider extends BaseProvider<KorisniciUloge> {
 
   @override
   KorisniciUloge fromJson(data) {
-    // TODO: implement fromJson
     return KorisniciUloge.fromJson(data);
   }
 }

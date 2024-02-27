@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JamFix.Model.Modeli;
+using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Service
 {
-    public class DrzaveService : BaseService<Drzave, Drzava, DrzaveSO>, IDrzaveService
+    public class DrzaveService : BaseCRUDService<Drzave, Drzava, DrzaveSO,DrzavaInsertRequest,DrzavaUpdateRequest>, IDrzaveService
     {
         public DrzaveService(Context context, IMapper mapper) : base(context, mapper)
         {

@@ -10,6 +10,7 @@ namespace JamFix.Model.Requests
     {
         public int UlogaId { get; set; }
         public DateTime DatumIzmjene { get; set; }
+        public int KorisnikId { get; set; }
 
     }
 }

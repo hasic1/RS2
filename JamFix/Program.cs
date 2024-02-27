@@ -16,7 +16,6 @@ using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Stripe;
-//StripeConfiguration.ApiKey = "sk_test_51OYqyiFJavMmN9lEHYOinCIgUffaB493XjhUGTvXmXgHizTZMQyfiBDD2gwT3ooovIwGBU91gXRwAEytsmByPcbc00V5LeI9dl";
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -71,12 +70,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-// Add services to the container.
-//Dodaj ovde dependency injection  
 builder.Services.AddTransient<IService<Uloge, BaseSO>, BaseService<Uloge, Uloga, BaseSO>>();
 builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
 builder.Services.AddTransient<IStatusZahtjevaService, StatusZahtjevaService>();
 builder.Services.AddTransient<IKorisnikUlogeService, KorisnikUlogeService>();
+builder.Services.AddTransient<IUslugeStavkeService, UslugeStavkeService>();
 builder.Services.AddTransient<IRadniNalogService, RadniNalogService>();
 builder.Services.AddTransient<IIzvjestajiService, IzvjestajiService>();
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
@@ -90,17 +88,10 @@ builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddTransient<IUlogaService, UlogaService>();
 
 
-//builder.Services.AddTransient<BaseState>();
-//builder.Services.AddTransient<InitialProductState>();
-//builder.Services.AddTransient<DraftProductState>();
-//builder.Services.AddTransient<ActiveProductState>();
-
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<UserService>();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(options => 
@@ -112,7 +103,6 @@ builder.Services.AddAutoMapper(typeof(IKorisniciService));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

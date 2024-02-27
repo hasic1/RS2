@@ -23,8 +23,8 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
   SearchResult<Izvjestaj>? result;
   String selectedMonth = "Januar";
   DateTime? selectedDate;
-  DateTime? _selectedDate;
   bool hitnaIntervencija = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -65,7 +65,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                 onPressed: () async {
                   _handleAddReport();
                 },
-                child: Text("Dodaj novi izvjestaj"),
+                child: const Text("Dodaj novi izvjestaj"),
               ),
             ),
           ],
@@ -80,71 +80,75 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
-            child: Column(children: [
-              TextField(
-                decoration:
-                    const InputDecoration(labelText: 'Cijena utrosenog alata'),
-                controller: cijenaUtrosAlataController,
-              ),
-              TextField(
-                decoration:
-                    const InputDecoration(labelText: 'Najposjecenije mjesto'),
-                controller: najPosMjestoController,
-              ),
-              TextField(
-                decoration:
-                    const InputDecoration(labelText: 'Broj intervnecija'),
-                controller: brojIntervencijaController,
-              ),
-              TextField(
-                decoration:
-                    const InputDecoration(labelText: 'Najkoristenija oprema'),
-                controller: najOpremaController,
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => _selectDate(context),
-                      child: const Text('Odaberi Datum i Vrijeme'),
+            child: Form(
+              key: _formKey,
+              child: Column(children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                      labelText: 'Cijena utrosenog alata'),
+                  controller: cijenaUtrosAlataController,
+                  validator: (name) => name!.isEmpty ? 'Unesite cijenu' : null,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Najposjecenije mjesto'),
+                  controller: najPosMjestoController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Unesite najposjecenije mjesto' : null,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Broj intervnecija'),
+                  controller: brojIntervencijaController,
+                  validator: (name) =>
+                      name!.isEmpty ? 'Unesite broj intervnecija' : null,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Najkoristenija oprema'),
+                  validator: (name) =>
+                      name!.isEmpty ? 'Unesite najkoristenija oprema' : null,
+                  controller: najOpremaController,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => _selectDate(context),
+                        child: const Text('Odaberi Datum i Vrijeme'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8.0),
-                ],
-              ),
-              Row(children: [
-                selectedDate != null
-                    ? Text(selectedDate!.toString())
-                    : const Text('Nije odabrano'),
+                    const SizedBox(width: 8.0),
+                  ],
+                ),
+                Row(children: [
+                  selectedDate != null
+                      ? Text(selectedDate!.toString())
+                      : const Text('Nije odabrano'),
+                ]),
               ]),
-            ]),
+            ),
           ),
           actions: [
             ElevatedButton(
               onPressed: () async {
-                Izvjestaj request = Izvjestaj(
-                  najPosMjesto: najPosMjestoController.text,
-                  najOprema: najOpremaController.text,
-                  brojIntervencija: int.parse(brojIntervencijaController.text),
-                  cijenaUtrosAlata: int.parse(cijenaUtrosAlataController.text),
-                  datum: _selectedDate,
-                );
-                try {
+                if (_formKey.currentState!.validate()) {
+                  Izvjestaj request = Izvjestaj(
+                    najPosMjesto: najPosMjestoController.text,
+                    najOprema: najOpremaController.text,
+                    brojIntervencija:
+                        int.parse(brojIntervencijaController.text),
+                    cijenaUtrosAlata:
+                        int.parse(cijenaUtrosAlataController.text),
+                    datum: selectedDate ?? DateTime.now(),
+                  );
                   _izvjestajProvider.insert(request);
-                  Navigator.of(context).pop();
-                } on Exception catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("OK"),
-                        )
-                      ],
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const IzvjestajiScreen(),
                     ),
                   );
                 }
@@ -194,7 +198,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                       ],
                       rows: [
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("ID"),
@@ -210,7 +214,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Broj intervencija"),
@@ -226,7 +230,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Najposjećenije mjesto"),
@@ -241,7 +245,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Cijena utrošenog alata"),
@@ -257,7 +261,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Najkorištenija oprema"),
@@ -271,7 +275,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Datum"),
@@ -286,7 +290,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                           ),
                         ]),
                         DataRow(cells: [
-                          DataCell(
+                          const DataCell(
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Obrisi izvjestaj"),
@@ -307,7 +311,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                         ]),
                       ],
                     )
-                  : Center(
+                  : const Center(
                       child: Text(
                         "Nema izvještaja za odabrani mjesec.",
                         style: TextStyle(fontSize: 16.0),
@@ -439,7 +443,7 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
 
       if (pickedTime != null) {
         setState(() {
-          _selectedDate = DateTime(
+          selectedDate = DateTime(
             pickedDate.year,
             pickedDate.month,
             pickedDate.day,

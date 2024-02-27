@@ -48,7 +48,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Container(
-            padding: EdgeInsets.all(16.0),
+            padding:const EdgeInsets.all(16.0),
             child: Column(children: [_buildSearch(), _buildDataListView()])),
       ),
     );

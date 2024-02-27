@@ -42,26 +42,6 @@ namespace JamFix.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Kupci",
-                columns: table => new
-                {
-                    KupacID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Prezime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DatumRegistracije = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    KorisnickoIme = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LozinkaHash = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LozinkaSalt = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Kupci", x => x.KupacID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Novosti",
                 columns: table => new
                 {
@@ -148,7 +128,9 @@ namespace JamFix.Services.Migrations
                     Datum = table.Column<DateTime>(type: "datetime", nullable: false),
                     BrojRacuna = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cijena = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NazivPaketa = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NazivPaketa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Placeno = table.Column<bool>(type: "bit", nullable: false),
+                    ProizvodId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,7 +271,7 @@ namespace JamFix.Services.Migrations
                     OcjenaID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProizvodID = table.Column<int>(type: "int", nullable: false),
-                    KupacID = table.Column<int>(type: "int", nullable: false),
+                    KupacId = table.Column<int>(type: "int", nullable: false),
                     Datum = table.Column<DateTime>(type: "datetime", nullable: false),
                     Ocjena = table.Column<int>(type: "int", nullable: false)
                 },
@@ -297,15 +279,34 @@ namespace JamFix.Services.Migrations
                 {
                     table.PrimaryKey("PK_Ocjene", x => x.OcjenaID);
                     table.ForeignKey(
-                        name: "FK_Ocjene_Kupci",
-                        column: x => x.KupacID,
-                        principalTable: "Kupci",
-                        principalColumn: "KupacID");
-                    table.ForeignKey(
                         name: "FK_Ocjene_Proizvodi",
                         column: x => x.ProizvodID,
                         principalTable: "Proizvod",
                         principalColumn: "ProizvodID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UslugaStavke",
+                columns: table => new
+                {
+                    UslugaStavkeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProizvodID = table.Column<int>(type: "int", nullable: false),
+                    UslugeID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UslugaStavke", x => x.UslugaStavkeID);
+                    table.ForeignKey(
+                        name: "FK_UslugaStavke_Proizvod",
+                        column: x => x.ProizvodID,
+                        principalTable: "Proizvod",
+                        principalColumn: "ProizvodID");
+                    table.ForeignKey(
+                        name: "FK_UslugaStavke_Usluge",
+                        column: x => x.UslugeID,
+                        principalTable: "Usluge",
+                        principalColumn: "UslugaId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -342,11 +343,6 @@ namespace JamFix.Services.Migrations
                 column: "PozicijaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ocjene_KupacID",
-                table: "Ocjene",
-                column: "KupacID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ocjene_ProizvodID",
                 table: "Ocjene",
                 column: "ProizvodID");
@@ -355,6 +351,16 @@ namespace JamFix.Services.Migrations
                 name: "IX_Proizvod_VrstaID",
                 table: "Proizvod",
                 column: "VrstaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UslugaStavke_ProizvodID",
+                table: "UslugaStavke",
+                column: "ProizvodID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UslugaStavke_UslugeID",
+                table: "UslugaStavke",
+                column: "UslugeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Zahtjev_StatusZahtjevaId",
@@ -381,7 +387,7 @@ namespace JamFix.Services.Migrations
                 name: "RadniNalog");
 
             migrationBuilder.DropTable(
-                name: "Usluge");
+                name: "UslugaStavke");
 
             migrationBuilder.DropTable(
                 name: "Zahtjev");
@@ -393,10 +399,10 @@ namespace JamFix.Services.Migrations
                 name: "Uloga");
 
             migrationBuilder.DropTable(
-                name: "Kupci");
+                name: "Proizvod");
 
             migrationBuilder.DropTable(
-                name: "Proizvod");
+                name: "Usluge");
 
             migrationBuilder.DropTable(
                 name: "StatusZahtjeva");

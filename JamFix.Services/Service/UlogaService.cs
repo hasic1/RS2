@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using JamFix.Model.Modeli;
+using JamFix.Model.Requests;
+using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -11,29 +13,10 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Service
 {
-    public class UlogaService : IUlogaService
+    public class UlogaService : BaseCRUDService<Uloge,Uloga,UlogeSO, UlogeInsertRequest, UlogeUpdateRequest>, IUlogaService
     {
-        protected readonly Context _context;
-        protected IMapper _mapper { get; set; }
-
-        public UlogaService(Context context,IMapper mapper)
+        public UlogaService(Context context, IMapper mapper) : base(context, mapper)
         {
-            _mapper = mapper;
-            _context = context;
         }
-
-        public async Task<Uloge> GetById(int ulogaId)
-        {
-            var entity = await _context.Set<Korisnik>().FindAsync(ulogaId);
-
-            return _mapper.Map<Uloge>(entity);
-        }
-
-        public async Task<IEnumerable<Uloga>> GetAllUlogeAsync()
-        {
-            return await _context.Uloga.ToListAsync();
-        }
-
-        // Implementirajte ostale metode prema potrebi
     }
 }

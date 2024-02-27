@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JamFix.Model.Modeli;
+using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JamFix.Services.Service
 {
-    public class PozicijaService : BaseService<Pozicije, Pozicija, PozicijaSO>, IPozicijaService
+    public class PozicijaService : BaseCRUDService<Pozicije, Pozicija, PozicijaSO,PozicijaInsertRequest,PozicijaUpdateRequest>, IPozicijaService
     {
         public PozicijaService(Context context, IMapper mapper) : base(context, mapper)
         {

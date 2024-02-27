@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/main.dart';
-import 'package:jamfix_admin/models/zahtjev.dart';
 import 'package:jamfix_admin/screens/izvjestaji_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
@@ -11,7 +10,6 @@ import 'package:jamfix_admin/screens/oNama_screen.dart';
 import 'package:jamfix_admin/screens/pocetna_screen.dart';
 import 'package:jamfix_admin/screens/postavke_screen.dart';
 import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
-import 'package:jamfix_admin/screens/radni_nalog_screen.dart';
 import 'package:jamfix_admin/screens/usluge_screen.dart';
 import 'package:jamfix_admin/screens/zahtijev_screen.dart';
 import 'package:jamfix_admin/screens/zahtjevi_list_screen.dart';

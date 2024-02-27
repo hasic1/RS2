@@ -22,6 +22,7 @@ class NovostiListScreen extends StatefulWidget {
 class _NovostiListScreenState extends State<NovostiListScreen> {
   final TextEditingController naslovController = TextEditingController();
   final TextEditingController sadrzajController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   late NovostiProvider _novostiProvider;
   SearchResult<Novosti>? result;
@@ -46,7 +47,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Novosti iz svijeta tehnologija"),
+          title: const Text("Novosti iz svijeta tehnologija"),
           automaticallyImplyLeading: false,
         ),
         body: Stack(
@@ -60,7 +61,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             onPressed: () {
               _handleAddReport();
             },
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -111,7 +112,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             Visibility(
               visible: Authorization.isAdmin || Authorization.isZaposlenik,
               child: IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                 onPressed: () {
                   _editNovost(novost);
                 },
@@ -120,7 +121,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             Visibility(
               visible: Authorization.isAdmin || Authorization.isZaposlenik,
               child: IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                   _novostiProvider.delete(novost.novostId);
                   Navigator.of(context).pushReplacement(
@@ -234,67 +235,59 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Naslov'),
-                  controller: naslovController,
-                ),
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Sadržaj'),
-                  controller: sadrzajController,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FormBuilderField(
-                        name: 'imageId',
-                        builder: ((field) {
-                          return InputDecorator(
-                            decoration: InputDecoration(
-                                label: const Text('Odaberite sliku'),
-                                errorText: field.errorText),
-                            child: ListTile(
-                              leading: const Icon(Icons.photo),
-                              title: const Text("Select image"),
-                              trailing: const Icon(Icons.file_upload),
-                              onTap: getImage,
-                            ),
-                          );
-                        }),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Naslov'),
+                    controller: naslovController,
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Sadržaj'),
+                    controller: sadrzajController,
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FormBuilderField(
+                          name: 'imageId',
+                          builder: ((field) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                  label: const Text('Odaberite sliku'),
+                                  errorText: field.errorText),
+                              child: ListTile(
+                                leading: const Icon(Icons.photo),
+                                title: const Text("Select image"),
+                                trailing: const Icon(Icons.file_upload),
+                                onTap: getImage,
+                              ),
+                            );
+                          }),
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           actions: [
             ElevatedButton(
               onPressed: () async {
-                Novosti request = Novosti(
-                  naslov: naslovController.text,
-                  sadrzaj: sadrzajController.text,
-                  slika: _base65Image,
-                );
-
-                try {
+                if (_formKey.currentState!.validate()) {
+                  Novosti request = Novosti(
+                    naslov: naslovController.text,
+                    sadrzaj: sadrzajController.text,
+                    slika: _base65Image,
+                  );
                   _novostiProvider.insert(request);
                   Navigator.of(context).pop();
-                } on Exception catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("OK"),
-                        )
-                      ],
-                    ),
-                  );
                 }
               },
               child: const Text('Spremi'),
@@ -322,8 +315,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     var result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      _image = result?.files.single.path != null
-          ? File(result!.files.single.path!)
+      _image = result.files.single.path != null
+          ? File(result.files.single.path!)
           : null;
       _base65Image = base64Encode(_image!.readAsBytesSync());
     }

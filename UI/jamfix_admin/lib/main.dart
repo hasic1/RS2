@@ -6,17 +6,18 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
 import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
+import 'package:jamfix_admin/providers/ocjene_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/providers/statusZahtjevaProvider.dart';
+import 'package:jamfix_admin/providers/uloge_provider.dart';
+import 'package:jamfix_admin/providers/usluga_stavke_provider.dart';
 import 'package:jamfix_admin/providers/usluge_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/providers/zahtjev_provider.dart';
@@ -37,6 +38,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
       ChangeNotifierProvider(create: (_) => StatusZahtjevaProvider()),
       ChangeNotifierProvider(create: (_) => KorisniciUlogeProvider()),
+      ChangeNotifierProvider(create: (_) => UslugaStavkeProvider()),
       ChangeNotifierProvider(create: (_) => RadniNalogProvider()),
       ChangeNotifierProvider(create: (_) => KorisniciProvider()),
       ChangeNotifierProvider(create: (_) => IzvjestajProvider()),
@@ -46,6 +48,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
       ChangeNotifierProvider(create: (_) => DrzavaProvider()),
       ChangeNotifierProvider(create: (_) => UslugeProvider()),
+      ChangeNotifierProvider(create: (_) => OcjeneProvider()),
+      ChangeNotifierProvider(create: (_) => UlogeProvider()),
     ],
     child: const MyMaterialApp(),
   ));
@@ -70,12 +74,9 @@ class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late ProductProvider _productProvider;
 
   @override
   Widget build(BuildContext context) {
-    _productProvider = context.read<ProductProvider>();
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -104,6 +105,7 @@ class LoginPage extends StatelessWidget {
                   decoration: const InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
                   controller: _passwordController,
+                  obscureText: true,
                 ),
                 const SizedBox(
                   height: 15,
