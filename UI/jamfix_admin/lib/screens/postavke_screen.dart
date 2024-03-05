@@ -40,7 +40,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -87,7 +87,8 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                             children: [
                               TextFormField(
                                 controller: _imeController,
-                                decoration:const InputDecoration(labelText: 'Ime'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Ime'),
                                 validator: (name) => name!.length < 3
                                     ? 'Ime mora imati bar 3 slova'
                                     : null,
@@ -96,7 +97,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               TextFormField(
                                 controller: _prezimeController,
                                 decoration:
-                                   const InputDecoration(labelText: 'Prezime'),
+                                    const InputDecoration(labelText: 'Prezime'),
                                 validator: (name) => name!.length < 3
                                     ? 'Prezime mora imati bar 3 slova'
                                     : null,
@@ -104,21 +105,22 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               const SizedBox(height: 8.0),
                               TextFormField(
                                 controller: _emailController,
-                                decoration:const InputDecoration(labelText: 'Email'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Email'),
                                 validator: validateEmail,
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
                                 controller: _telefonController,
                                 decoration:
-                                   const InputDecoration(labelText: 'Telefon'),
+                                    const InputDecoration(labelText: 'Telefon'),
                                 validator: validatePhoneNumber,
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
                                 controller: _noviPasswordController,
-                                decoration:
-                                  const InputDecoration(labelText: 'Novi password'),
+                                decoration: const InputDecoration(
+                                    labelText: 'Novi password'),
                                 // validator: (name) => name!.length < 5
                                 //     ? 'Lozinka mora imati bar 5 slova'
                                 //     : null,
@@ -127,7 +129,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               const SizedBox(height: 8.0),
                               TextFormField(
                                 controller: _passwordPotvrdaController,
-                                decoration:const InputDecoration(
+                                decoration: const InputDecoration(
                                     labelText: 'Password potvrda'),
                                 // validator: (name) => name!.length < 5
                                 //     ? 'Lozinka mora imati bar 5 slova'
@@ -214,10 +216,21 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                       );
                                       _korisniciProvider.update(
                                           Authorization.id, request);
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PostavkeScreen(),
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text("Success"),
+                                          content: const Text(
+                                              "Uspješno ste izvršili promjene"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("OK"),
+                                            )
+                                          ],
                                         ),
                                       );
                                     }

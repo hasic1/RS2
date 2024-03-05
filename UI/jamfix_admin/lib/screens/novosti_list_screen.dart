@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
@@ -72,7 +74,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   Widget _buildNovostiList() {
     return result != null
         ? ListView.builder(
-            itemCount: result!.result.length,
+            itemCount: result?.result.length,
             itemBuilder: (context, index) {
               Novosti novost = result!.result[index];
               return _buildNovostItem(novost);
@@ -141,7 +143,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   void _editNovost(Novosti novost) {
     naslovController.text = novost.naslov ?? '';
     sadrzajController.text = novost.sadrzaj ?? '';
-    _base65Image = novost.slika ?? "";
     int? id = novost.novostId;
     showDialog(
       context: context,
@@ -150,12 +151,16 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
           content: SingleChildScrollView(
             child: Column(
               children: [
-                TextField(
+                TextFormField(
                   decoration: const InputDecoration(labelText: 'Naslov'),
                   controller: naslovController,
+                  validator: (name) =>
+                      name?.isEmpty ?? true ? 'Polje je obavezno' : null,
                 ),
-                TextField(
+                TextFormField(
                   decoration: const InputDecoration(labelText: 'Sadržaj'),
+                  validator: (name) =>
+                      name?.isEmpty ?? true ? 'Polje je obavezno' : null,
                   controller: sadrzajController,
                 ),
                 Row(
@@ -186,30 +191,37 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
           actions: [
             ElevatedButton(
               onPressed: () async {
+                ByteData imageData =
+                    await rootBundle.load("assets/images/slika.jpg");
+                Uint8List defaultImageBytes = imageData.buffer.asUint8List();
+
                 Novosti editedNovost = Novosti(
                   naslov: naslovController.text,
                   sadrzaj: sadrzajController.text,
-                  slika: _base65Image,
+                  slika: _base65Image ?? base64Encode(defaultImageBytes),
                 );
-
-                try {
-                  _novostiProvider.update(id, editedNovost);
-                  Navigator.of(context).pop();
-                } on Exception catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("OK"),
-                        )
-                      ],
-                    ),
-                  );
-                }
+                _novostiProvider.update(id, editedNovost);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text("Success"),
+                    content: const Text("Uspješno ste izvrsili promjene"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NovostiListScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text("OK"),
+                      )
+                    ],
+                  ),
+                );
               },
               child: const Text('Spremi'),
             ),
@@ -281,13 +293,37 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
+                  ByteData imageData =
+                      await rootBundle.load("assets/images/slika.jpg");
+                  Uint8List defaultImageBytes = imageData.buffer.asUint8List();
+
                   Novosti request = Novosti(
                     naslov: naslovController.text,
                     sadrzaj: sadrzajController.text,
-                    slika: _base65Image,
+                    slika: _base65Image ?? base64Encode(defaultImageBytes),
                   );
                   _novostiProvider.insert(request);
-                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Success"),
+                      content: const Text("Uspješno ste izvršili promjene"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NovostiListScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text("OK"),
+                        )
+                      ],
+                    ),
+                  );
                 }
               },
               child: const Text('Spremi'),
@@ -315,10 +351,18 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     var result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      _image = result.files.single.path != null
-          ? File(result.files.single.path!)
-          : null;
+      _image = File(result.files.single.path!);
       _base65Image = base64Encode(_image!.readAsBytesSync());
+    } else {
+      setDefaultImage();
     }
+  }
+
+  void setDefaultImage() async {
+    final ByteData data = await rootBundle.load('assets/images/slika.jpg');
+    final List<int> bytes = data.buffer.asUint8List();
+    setState(() {
+      _base65Image = base64Encode(bytes);
+    });
   }
 }

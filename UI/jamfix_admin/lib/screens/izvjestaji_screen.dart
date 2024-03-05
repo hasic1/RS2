@@ -146,9 +146,25 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                     datum: selectedDate ?? DateTime.now(),
                   );
                   _izvjestajProvider.insert(request);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const IzvjestajiScreen(),
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Success"),
+                      content: const Text("Uspješno ste kreirali racun"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const IzvjestajiScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text("OK"),
+                        )
+                      ],
                     ),
                   );
                 }
@@ -303,6 +319,13 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                                 onPressed: () async {
                                   _izvjestajProvider
                                       .delete(result?.result.first.izvjestajId);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const IzvjestajiScreen(),
+                                    ),
+                                  );
                                 },
                                 child: const Text('Obrisi'),
                               ),

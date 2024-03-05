@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jamfix_admin/models/product.dart';
+import 'package:jamfix_admin/models/uslugaStavke.dart';
 import 'package:jamfix_admin/models/usluge.dart';
 import 'package:jamfix_admin/providers/usluge_provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart'
@@ -150,6 +151,7 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
                   if (_formKey.currentState!.validate()) {
                     double? cijenaDouble = widget.product?.cijena;
                     String cijenaString = cijenaDouble.toString();
+
                     Usluge request = Usluge(
                         imePrezime: imePrezimeController.text,
                         datum: DateTime.now(),
@@ -157,13 +159,31 @@ class _PlatiUsluguScreenState extends State<PlatiUsluguScreen> {
                         nazivPaketa: widget.product?.nazivProizvoda,
                         cijena: cijenaString,
                         proizvodId: widget.product?.proizvodId);
-                    await _uslugeProvider.insert(request);
+
                     await sendPaymentDataToServer(request);
+
                     double cijenaDoubleForStripe = cijenaDouble ?? 0.0;
                     await stripeMakePayment(cijenaDoubleForStripe);
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const KorisnikProductListScreen(),
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text("Success"),
+                        content: const Text("Uspješno ste kreirali racun"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      KorisnikProductListScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text("OK"),
+                          )
+                        ],
                       ),
                     );
                   }

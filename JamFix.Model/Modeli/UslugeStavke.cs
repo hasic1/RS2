@@ -8,6 +8,7 @@ namespace JamFix.Model.Modeli
 {
     public class UslugeStavke
     {
+        public int UslugaStavkeId { get; set; }
         public int ProizvodId { get; set; }
         public int UslugeId { get; set; }
     }

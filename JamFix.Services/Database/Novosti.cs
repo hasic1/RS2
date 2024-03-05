@@ -11,7 +11,7 @@ namespace JamFix.Services.Database
     {
         public int NovostId { get; set; }
         public string Naslov { get; set; }
-        [MaxLength(255)]
+        [MaxLength(1000)]
         public string Sadrzaj { get; set; }
         public byte[]? Slika { get; set; }
     }

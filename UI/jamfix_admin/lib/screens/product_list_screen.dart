@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_const
-
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
@@ -48,7 +46,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Container(
-            padding:const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(children: [_buildSearch(), _buildDataListView()])),
       ),
     );
@@ -107,41 +105,39 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Expanded(
         child: SingleChildScrollView(
       child: DataTable(
-          // ignore: prefer_const_literals_to_create_immutables
-          columns: [
-            const DataColumn(
-                label: const Expanded(
-              child: Text('ID',
-                  style: const TextStyle(fontStyle: FontStyle.italic)),
+          columns: const [
+            DataColumn(
+                label: Expanded(
+              child: Text('ID', style: TextStyle(fontStyle: FontStyle.italic)),
             )),
-            const DataColumn(
-                label: const Expanded(
+            DataColumn(
+                label: Expanded(
               child: Text('Naziv proizvoda',
-                  style: const TextStyle(fontStyle: FontStyle.italic)),
+                  style: TextStyle(fontStyle: FontStyle.italic)),
             )),
-            const DataColumn(
-              label: const Expanded(
+            DataColumn(
+              label: Expanded(
                 child: Text('Opis',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontStyle: FontStyle.italic)),
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
-            const DataColumn(
-                label: const Expanded(
-              child: Text('Cijena',
-                  style: const TextStyle(fontStyle: FontStyle.italic)),
+            DataColumn(
+                label: Expanded(
+              child:
+                  Text('Cijena', style: TextStyle(fontStyle: FontStyle.italic)),
             )),
-            const DataColumn(
-              label: const Expanded(
+            DataColumn(
+              label: Expanded(
                 child: Text('Snizen',
-                    style: const TextStyle(fontStyle: FontStyle.italic)),
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
-            const DataColumn(
-              label: const Expanded(
+            DataColumn(
+              label: Expanded(
                 child: Text('Slika',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontStyle: FontStyle.italic)),
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
           ],

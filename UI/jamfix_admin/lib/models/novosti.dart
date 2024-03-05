@@ -9,11 +9,7 @@ class Novosti {
   String? sadrzaj;
   String? slika;
 
-  Novosti({this.novostId, this.naslov,this.sadrzaj,this.slika});
- String? get slicica => slika;
-  set slicica(String? base64String) {
-    slika = base64String;
-  }
+  Novosti({this.novostId, this.naslov, this.sadrzaj, this.slika});
   factory Novosti.fromJson(Map<String, dynamic> json) =>
       _$NovostiFromJson(json);
 

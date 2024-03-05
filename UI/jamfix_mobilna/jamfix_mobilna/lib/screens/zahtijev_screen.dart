@@ -19,6 +19,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
   final TextEditingController opisController = TextEditingController();
 
   ZahtjevProvider _zahtjevProvider = ZahtjevProvider();
+  final _formKey = GlobalKey<FormState>();
 
   String? selectedStatusZahtjevaId;
   Map<String, dynamic> _initialValue = {};
@@ -51,6 +52,15 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
     initForm();
   }
 
+  String? validatePhoneNumber(String? phoneNumber) {
+    RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
+    final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
+    if (!isPhoneValid) {
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
+    }
+    return null;
+  }
+
   Future initForm() async {
     setState(() {
       isLoading = false;
@@ -61,106 +71,119 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Scaffold(
-        appBar: AppBar(
-        ),
+        appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: imePrezimeController,
-                  decoration: const InputDecoration(labelText: 'Ime i Prezime'),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: adresaController,
-                  decoration: const InputDecoration(labelText: 'Adresa'),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: brojTelefonaController,
-                  decoration: const InputDecoration(labelText: 'Broj Telefona'),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: opisController,
-                  decoration: const InputDecoration(labelText: 'Opis problema'),
-                ),
-                const SizedBox(height: 35.0),
-                Row(
-                  children: [
-                    const Text('Datum i Vrijeme:'),
-                    const SizedBox(width: 4.0),
-                    ElevatedButton(
-                      onPressed: () => _selectDate(context),
-                      child: const Text('Odaberi Datum i Vrijeme'),
-                    ),
-                    const SizedBox(width: 4.0),
-                  ],
-                ),
-                Row(children: [
-                  selectedDate != null
-                      ? Text(selectedDate!.toString())
-                      : const Text('Nije odabrano'),
-                ]),
-                const SizedBox(height: 25.0),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: hitnaIntervencija,
-                      onChanged: (value) {
-                        setState(() {
-                          hitnaIntervencija = value!;
-                        });
-                      },
-                    ),
-                    const Text('Hitna Intervencija'),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      var request = Zahtjev(
-                        imePrezime: imePrezimeController.text,
-                        adresa: adresaController.text,
-                        brojTelefona: brojTelefonaController.text,
-                        opis: opisController.text,
-                        datumVrijeme: selectedDate ?? DateTime.now(),
-                        hitnaIntervencija: hitnaIntervencija,
-                        statusZahtjevaId: 1,
-                      );
-                      Navigator.of(context).pop();
-                      try {
-                        if (widget.zahtjev == null) {
-                          await _zahtjevProvider.insert(request);
-                        } else {
-                          await _zahtjevProvider.update(
-                              widget.zahtjev!.zahtjevId, request);
-                        }
-                      } on Exception catch (e) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("OK"),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Potvrdi Unos'),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    controller: imePrezimeController,
+                    decoration:
+                        const InputDecoration(labelText: 'Ime i Prezime'),
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: adresaController,
+                    decoration: const InputDecoration(labelText: 'Adresa'),
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: brojTelefonaController,
+                    decoration:
+                        const InputDecoration(labelText: 'Broj Telefona'),
+                    validator: validatePhoneNumber,
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: opisController,
+                    decoration:
+                        const InputDecoration(labelText: 'Opis problema'),
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                  const SizedBox(height: 35.0),
+                  Row(
+                    children: [
+                      const Text('Datum i Vrijeme:'),
+                      const SizedBox(width: 4.0),
+                      ElevatedButton(
+                        onPressed: () => _selectDate(context),
+                        child: const Text('Odaberi Datum i Vrijeme'),
+                      ),
+                      const SizedBox(width: 4.0),
+                    ],
+                  ),
+                  Row(children: [
+                    selectedDate != null
+                        ? Text(selectedDate!.toString())
+                        : const Text('Nije odabrano'),
+                  ]),
+                  const SizedBox(height: 25.0),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: hitnaIntervencija,
+                        onChanged: (value) {
+                          setState(() {
+                            hitnaIntervencija = value!;
+                          });
+                        },
+                      ),
+                      const Text('Hitna Intervencija'),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          var request = Zahtjev(
+                            imePrezime: imePrezimeController.text,
+                            adresa: adresaController.text,
+                            brojTelefona: brojTelefonaController.text,
+                            opis: opisController.text,
+                            datumVrijeme: selectedDate ?? DateTime.now(),
+                            hitnaIntervencija: hitnaIntervencija,
+                            statusZahtjevaId: 1,
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Success"),
+                              content:
+                                  const Text("Uspješno ste izvrsili promjene"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
+                            ),
+                          );
+                          if (widget.zahtjev == null) {
+                            await _zahtjevProvider.insert(request);
+                          } else {
+                            await _zahtjevProvider.update(
+                                widget.zahtjev!.zahtjevId, request);
+                          }
+                        }
+                      },
+                      child: const Text('Potvrdi Unos'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/ocjena.dart';
 import 'package:jamfix_admin/models/product.dart';
@@ -43,8 +45,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   VrsteProizvodaProvider _vrsteProizvodaProvider = VrsteProizvodaProvider();
   ProductProvider _productProvider = ProductProvider();
-  OcjeneProvider _ocjeneProvider=OcjeneProvider();
-  
+  OcjeneProvider _ocjeneProvider = OcjeneProvider();
+
   bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
   SearchResult<Product>? preporuceniProizvodi;
@@ -87,24 +89,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<void> _ucitajPodatke() async {
     var vrste = await _vrsteProizvodaProvider.get();
+    setState(() {
+      vrsteProizvodaResult = vrste;
+      isLoading = false;
+    });
 
     if (widget.product != null && widget.product!.proizvodId != null) {
       var recommend = await _productProvider
           .fetchRecommendedProducts(widget.product!.proizvodId!);
       if (recommend != null) {
         setState(() {
-          vrsteProizvodaResult = vrste;
           preporuceniProizvodi = recommend;
-          isLoading = false;
         });
       } else {
-        print("Error fetching recommended products.");
+        print("Nema preporučenih proizvoda.");
       }
-    } else {
-      setState(() {
-        vrsteProizvodaResult = vrste;
-        isLoading = false;
-      });
     }
   }
 
@@ -134,8 +133,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    var request= Ocjene(
-                      proizvodId: widget.product!.proizvodId,
+                    var request = Ocjene(
+                      proizvodId: widget.product?.proizvodId,
                       ocjena: _rating.round(),
                       datum: DateTime.now(),
                     );
@@ -166,11 +165,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey1.currentState!.validate()) {
+                      ByteData imageData =
+                          await rootBundle.load("assets/images/slika.jpg");
+                      Uint8List defaultImageBytes =
+                          imageData.buffer.asUint8List();
+
                       Product request = Product(
                         nazivProizvoda: nazivProizvodaController.text,
                         cijena: double.parse(cijenaController.text),
                         opis: opisController.text,
-                        slika: _base65Image ?? '',
+                        slika: _base65Image ?? base64Encode(defaultImageBytes),
                         snizen: snizen,
                         brzinaInterneta: brzinaInternetaController.text,
                         brojMinuta: brojMinutaPotvrdaController.text,
@@ -178,20 +182,55 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         vrstaId: int.parse(selectedVrstaProizvodaId ??
                             _initialValue['vrstaId'].toString()),
                       );
-                      Navigator.of(context).pop();
                       if (widget.product == null) {
                         await _productProvider.insert(request);
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const ProductListScreen(),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Success"),
+                            content:
+                                const Text("Uspješno ste izvršili promjene"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProductListScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text("OK"),
+                              )
+                            ],
                           ),
                         );
                       } else {
                         await _productProvider.update(
-                            widget.product!.proizvodId!, request);
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const ProductListScreen(),
+                            widget.product?.proizvodId, request);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Success"),
+                            content:
+                                const Text("Uspješno ste izvršili promjene"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProductListScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text("OK"),
+                              )
+                            ],
                           ),
                         );
                       }
@@ -236,13 +275,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: preporuceniProizvodi?.result.map((recommendedProduct) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailScreen(
-                          product: recommendedProduct,
+                    if (recommendedProduct != null &&
+                        recommendedProduct.slika != null) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailScreen(
+                            product: recommendedProduct,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(17.0),
@@ -255,10 +297,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
-                        child: Image.memory(
-                          base64Decode(recommendedProduct.slika ?? ''),
-                          fit: BoxFit.cover,
-                        ),
+                        child: recommendedProduct != null &&
+                                recommendedProduct.slika != null
+                            ? Image.memory(
+                                base64Decode(recommendedProduct.slika!),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                "assets/images/slika.jpg",
+                                height: 100,
+                                width: 100,
+                              ),
                       ),
                     ),
                   ),
@@ -285,7 +334,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: cijenaController,
                   validator: (name) =>
-                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
               const SizedBox(
@@ -297,7 +346,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: nazivProizvodaController,
                   validator: (name) =>
-                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
               const SizedBox(
@@ -309,7 +358,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: opisController,
                   validator: (name) =>
-                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
               const SizedBox(
@@ -326,7 +375,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: brzinaInternetaController,
                   validator: (name) =>
-                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
               const SizedBox(
@@ -338,7 +387,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: brojMinutaPotvrdaController,
                   validator: (name) =>
-                      name!.isEmpty ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
               const SizedBox(
@@ -350,7 +399,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   enabled: userRole == Authorization.isAdmin,
                   controller: brojKanalaController,
                   validator: (name) =>
-                      name!.length < 3 ? 'Ime mora imati bar 3 slova' : null,
+                      name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
               ),
             ],
@@ -429,7 +478,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   value: snizen,
                   onChanged: (value) {
                     setState(() {
-                      snizen = value!;
+                      snizen = value ?? true;
                     });
                   },
                 ),
@@ -451,6 +500,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (result != null && result.files.single.path != null) {
       _image = File(result.files.single.path!);
       _base65Image = base64Encode(_image!.readAsBytesSync());
+    } else {
+      setDefaultImage();
     }
+  }
+
+  void setDefaultImage() async {
+    final ByteData data = await rootBundle.load('assets/images/slika.jpg');
+    final List<int> bytes = data.buffer.asUint8List();
+    setState(() {
+      _base65Image = base64Encode(bytes);
+    });
   }
 }

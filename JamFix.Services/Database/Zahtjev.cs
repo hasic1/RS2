@@ -19,6 +19,5 @@ namespace JamFix.Services.Database
         public bool HitnaIntervencija { get; set; }
         public int StatusZahtjevaId { get; set; }
         public virtual StatusZahtjeva StatusZahtjeva{ get; set; }
-
     }
 }

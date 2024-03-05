@@ -16,8 +16,8 @@ class Product {
   String? brojKanala;
   double? prosjecnaOcjena;
 
-  Product({
-      this.proizvodId,
+  Product(
+      {this.proizvodId,
       this.nazivProizvoda,
       this.cijena,
       this.opis,
@@ -26,7 +26,8 @@ class Product {
       this.vrstaId,
       this.brojKanala,
       this.brojMinuta,
-      this.brzinaInterneta,this.prosjecnaOcjena});
+      this.brzinaInterneta,
+      this.prosjecnaOcjena});
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);

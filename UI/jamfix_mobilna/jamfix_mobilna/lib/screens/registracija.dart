@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamfix_mobilna/main.dart';
 import 'package:jamfix_mobilna/models/drzava.dart';
 import 'package:jamfix_mobilna/models/korisnici.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
@@ -48,7 +49,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -119,9 +120,8 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                       decoration:
                           const InputDecoration(labelText: 'Potvrdi lozinku'),
                       obscureText: true,
-                      validator: (name) => name!.length < 5
-                          ? 'Unesite lozinku'
-                          : null,
+                      validator: (name) =>
+                          name!.length < 5 ? 'Unesite lozinku' : null,
                     ),
                     const SizedBox(height: 8.0),
                     FutureBuilder(
@@ -186,7 +186,28 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                                 pozicijaId: 1,
                               );
                               _korisniciProvider.insert(request);
-                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text("Success"),
+                                  content:
+                                      const Text("Uspješno ste kreirali racun"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => LoginPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text("OK"),
+                                    )
+                                  ],
+                                ),
+                              );
                             }
                           },
                           child: const Text('Registruj se'),

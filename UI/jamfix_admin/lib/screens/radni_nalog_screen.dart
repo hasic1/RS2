@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/models/radni_nalog.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
+import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
 
 class RadniNalogScreen extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -210,7 +211,28 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                           naziv: _nazivController.text,
                           kolicina: int.parse(_kolicinaController.text));
                       _radniNalogProvider.insert(request);
-                      Navigator.of(context).pop();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Success"),
+                          content: const Text("Uspješno ste izvršili promjene"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RadniNalogListScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text("OK"),
+                            )
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: const Text('Spremi Radni Nalog'),

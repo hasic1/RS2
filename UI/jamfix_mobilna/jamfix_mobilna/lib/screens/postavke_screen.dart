@@ -188,13 +188,32 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                     noviPassword: _noviPasswordController.text,
                                     passwordPotvrda:
                                         _passwordPotvrdaController.text,
-                                    pozicijaId: Authorization.pozicijaID,
+                                    pozicijaId: Authorization.pozicijaID ?? 1,
                                   );
                                   _korisniciProvider.update(
                                       Authorization.id, request);
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => PostavkeScreen(),
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text("Success"),
+                                      content: const Text(
+                                          "Uspješno ste izvrsili promjene"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PostavkeScreen(),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text("OK"),
+                                        )
+                                      ],
                                     ),
                                   );
                                 }

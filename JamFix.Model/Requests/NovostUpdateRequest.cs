@@ -10,5 +10,7 @@ namespace JamFix.Model.Requests
     {
         public string? Naslov { get; set; }
         public string? Sadrzaj { get; set; }
+        public byte[]? Slika { get; set; }
+
     }
 }

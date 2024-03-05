@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JamFix.Model")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+040be9cfff1792213f7f00a08f5cd6cb7b4a48b3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b087e0c2d2d65f7a9c394089044606d2e6af4b88")]
 [assembly: System.Reflection.AssemblyProductAttribute("JamFix.Model")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JamFix.Model")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

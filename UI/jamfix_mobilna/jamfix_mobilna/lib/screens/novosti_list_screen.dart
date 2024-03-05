@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_mobilna/models/novosti.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
 import 'package:jamfix_mobilna/providers/novosti_provider.dart';
+import 'package:jamfix_mobilna/screens/novosti_detail_screen.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
 import 'package:jamfix_mobilna/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,7 @@ class NovostiListScreen extends StatefulWidget {
 class _NovostiListScreenState extends State<NovostiListScreen> {
   final TextEditingController naslovController = TextEditingController();
   final TextEditingController sadrzajController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   late NovostiProvider _novostiProvider;
   SearchResult<Novosti>? result;
@@ -93,6 +97,13 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               : novost.sadrzaj ?? '',
         ),
         onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NovostiDetailScreen(
+                novosti: novost,
+              ),
+            ),
+          );
         },
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -103,11 +114,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 icon: Icon(Icons.edit),
                 onPressed: () {
                   _editNovost(novost);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => NovostiListScreen(),
-                    ),
-                  );
                 },
               ),
             ),
@@ -156,29 +162,37 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
           actions: [
             ElevatedButton(
               onPressed: () async {
+                ByteData imageData =
+                    await rootBundle.load("assets/images/slika.jpg");
+                Uint8List defaultImageBytes = imageData.buffer.asUint8List();
+
                 Novosti editedNovost = Novosti(
                   naslov: naslovController.text,
                   sadrzaj: sadrzajController.text,
+                  slika: _base65Image ?? base64Encode(defaultImageBytes),
                 );
-
-                try {
-                  _novostiProvider.update(id, editedNovost);
-                  Navigator.of(context).pop();
-                } on Exception catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("OK"),
-                        )
-                      ],
-                    ),
-                  );
-                }
+                _novostiProvider.update(id, editedNovost);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text("Success"),
+                    content: const Text("Uspješno ste izvrsili promjene"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NovostiListScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text("OK"),
+                      )
+                    ],
+                  ),
+                );
               },
               child: const Text('Spremi'),
             ),
@@ -204,43 +218,55 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Naslov'),
-                  controller: naslovController,
-                ),
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Sadržaj'),
-                  controller: sadrzajController,
-                ),
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Naslov'),
+                    controller: naslovController,
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Sadržaj'),
+                    controller: sadrzajController,
+                    validator: (name) =>
+                        name!.isEmpty ? 'Polje je obavezno' : null,
+                  ),
+                ],
+              ),
             ),
           ),
           actions: [
             ElevatedButton(
               onPressed: () async {
-                Novosti request = Novosti(
-                  naslov: naslovController.text,
-                  sadrzaj: sadrzajController.text,
-                );
-
-                try {
-                  _novostiProvider.insert(request);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => NovostiListScreen(),
-                    ),
+                if (_formKey.currentState!.validate()) {
+                  ByteData imageData =
+                      await rootBundle.load("assets/images/slika.jpg");
+                  Uint8List defaultImageBytes = imageData.buffer.asUint8List();
+                  Novosti request = Novosti(
+                    naslov: naslovController.text,
+                    sadrzaj: sadrzajController.text,
+                    slika: _base65Image ?? base64Encode(defaultImageBytes),
                   );
-                } on Exception catch (e) {
+                  _novostiProvider.insert(request);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: Text(e.toString()),
+                      title: const Text("Success"),
+                      content: const Text("Uspješno ste izvrsili promjene"),
                       actions: [
                         TextButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NovostiListScreen(),
+                              ),
+                            );
+                          },
                           child: const Text("OK"),
                         )
                       ],
@@ -265,4 +291,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       },
     );
   }
+
+  String? _base65Image;
 }

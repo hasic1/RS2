@@ -22,6 +22,5 @@ namespace JamFix.Model.Modeli
         public string? BrzinaInterneta { get; set; }
         public string? BrojMinuta { get; set; }
         public string? BrojKanala { get; set; }
-
     }
 }

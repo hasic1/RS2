@@ -16,6 +16,7 @@ namespace JamFix.Services.Database
         public string NazivPaketa { get; set; }
         public bool Placeno { get; set; }
         public int ProizvodId { get; set; }
+
         public virtual ICollection<UslugaStavke> UslugaStavke { get; set; }
     }
 }

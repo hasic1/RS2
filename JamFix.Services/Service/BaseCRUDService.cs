@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JamFix.Model.Modeli;
 using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
@@ -49,26 +50,24 @@ namespace JamFix.Services.Service
         }
         private async Task SetUslugeStavke(Usluge uslugeEntity)
         {
-            var usluga = _context.Usluge.ToList();
-            var postoji = false;
-            foreach (var item in usluga)
+            if (uslugeEntity != null)
             {
-                if (item.ImePrezime == uslugeEntity.ImePrezime && item.BrojRacuna == uslugeEntity.BrojRacuna)
+                int uslugaid = await _context.Usluge
+                    .Where(u => u.BrojRacuna == uslugeEntity.BrojRacuna)
+                    .Select(u => u.UslugaId)
+                    .FirstOrDefaultAsync();
+                if (uslugaid == 0)
                 {
-                    postoji = true;
+                    uslugaid = 1;
                 }
-            }
-                await _context.SaveChangesAsync();
-            if (postoji)
-            {
-
-                uslugeEntity.UslugaStavke.Add(new UslugaStavke
+                await _context.UslugaStavke.AddAsync(new UslugaStavke
                 {
                     ProizvodId = uslugeEntity.ProizvodId,
-                    UslugeId = uslugeEntity.UslugaId
+                    UslugeId = uslugaid
                 });
             }
         }
+
         public virtual async Task<T> Insert(TInsert insert)
         {
             if (insert is KorisniciInsertRequest korisnikInsert && await IsUsernameTaken(korisnikInsert.KorisnickoIme))
@@ -88,17 +87,16 @@ namespace JamFix.Services.Service
             {
                 zahtjevEntity.StatusZahtjevaId = 1;
             }
+
             if (entity is Usluge uslugeEntity)
             {
                 await SetUslugeStavke(uslugeEntity);
             }
-
-            set.Add(entity);
             await BeforeInsert(entity, insert);
 
+            set.Add(entity);
             await _context.SaveChangesAsync();
             return _mapper.Map<T>(entity);
-
         }
 
         public virtual async Task<T> Delete(int id)
@@ -113,6 +111,14 @@ namespace JamFix.Services.Service
                     if (removeKorisniciUloga != null)
                     {
                         _context.Remove(removeKorisniciUloga);
+                    }
+                }
+                if (entity is Usluge uslugaEntity)
+                {
+                    var removeUslugaEntity= await _context.UslugaStavke.FirstOrDefaultAsync(u => u.UslugeId == uslugaEntity.UslugaId);
+                    if (removeUslugaEntity != null)
+                    {
+                        _context.Remove(removeUslugaEntity);
                     }
                 }
                 set.Remove(entity);

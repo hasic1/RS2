@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/models/novosti.dart';
 import 'package:jamfix_admin/models/search_result.dart';
@@ -62,14 +59,11 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Naslov novosti:\n ' +
-                      (widget.novosti != null
-                          ? widget.novosti!.naslov.toString()
-                          : ''),
-                  style:const TextStyle(fontWeight: FontWeight.bold),
+                  'Naslov novosti:\n ${widget.novosti != null ? widget.novosti!.naslov.toString() : ''}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16.0),
-           const     Text(
+                const Text(
                   'Sadržaj novosti:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -77,27 +71,47 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
                   widget.novosti != null
                       ? widget.novosti!.sadrzaj.toString()
                       : '',
-                  style:const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 20),
-                
+                Wrap(
+                  spacing: 15.0,
+                  runSpacing: 15.0,
+                  children: [
+                    if (widget.novosti != null)
+                      GestureDetector(
+                        child: Padding(
+                          padding: const EdgeInsets.all(17.0),
+                          child: Container(
+                            width: 250,
+                            height: 250,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: widget.novosti!.slika != null
+                                  ? Image.memory(
+                                      base64Decode(widget.novosti!.slika!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      "assets/images/goals.jpg",
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                )
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  File? _image;
-  String? _base65Image;
-
-  Future getImage() async {
-    var result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    if (result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
-      _base65Image = base64Encode(_image!.readAsBytesSync());
-    }
   }
 }

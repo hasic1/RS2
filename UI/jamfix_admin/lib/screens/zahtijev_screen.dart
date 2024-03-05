@@ -5,6 +5,8 @@ import 'package:jamfix_admin/models/statusZahtjeva.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
 import 'package:jamfix_admin/providers/statusZahtjevaProvider.dart';
 import 'package:jamfix_admin/providers/zahtjev_provider.dart';
+import 'package:jamfix_admin/screens/pocetna_screen.dart';
+import 'package:jamfix_admin/screens/zahtjevi_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +69,15 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
     });
   }
 
+  String? validatePhoneNumber(String? phoneNumber) {
+    RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
+    final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
+    if (!isPhoneValid) {
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -99,8 +110,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                     controller: brojTelefonaController,
                     decoration:
                         const InputDecoration(labelText: 'Broj Telefona'),
-                    validator: (name) =>
-                        name!.isEmpty ? 'Polje je obavezno' : null,
+                    validator: validatePhoneNumber,
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
@@ -125,7 +135,8 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                                   setState(() {
                                     selectedStatusZahtjevaId =
                                         _initialValue['statusZahtjevaId']
-                                            ?.toString();
+                                                ?.toString() ??
+                                            "1";
                                   });
                                 },
                               ),
@@ -156,10 +167,62 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                                             _initialValue['statusZahtjevaId']
                                                 .toString())
                                 ? _initialValue['statusZahtjevaId'].toString()
-                                : null,
+                                : "1",
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Visibility(
+                    visible:
+                        Authorization.isAdmin || Authorization.isZaposlenik,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            String statusZahtjeva =
+                                selectedStatusZahtjevaId ?? "1";
+                            var request = Zahtjev(
+                              imePrezime: imePrezimeController.text,
+                              adresa: adresaController.text,
+                              brojTelefona: brojTelefonaController.text,
+                              opis: opisController.text,
+                              datumVrijeme: selectedDate ?? DateTime.now(),
+                              hitnaIntervencija: hitnaIntervencija,
+                              statusZahtjevaId: int.tryParse(statusZahtjeva),
+                            );
+                            await _zahtjevProvider.update(
+                                widget.zahtjev!.zahtjevId, request);
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Zatvori dijalog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ZahtjevScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text('Promijeniti status'),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 35.0),
@@ -207,15 +270,61 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                             datumVrijeme: selectedDate ?? DateTime.now(),
                             hitnaIntervencija: hitnaIntervencija,
                             statusZahtjevaId:
-                                int.tryParse(selectedStatusZahtjevaId ?? "") ??
+                                int.tryParse(selectedStatusZahtjevaId ?? "1") ??
                                     0,
                           );
-                          Navigator.of(context).pop();
                           if (widget.zahtjev == null) {
                             await _zahtjevProvider.insert(request);
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Zatvori dijalog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ZahtjevScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
                           } else {
                             await _zahtjevProvider.update(
                                 widget.zahtjev!.zahtjevId, request);
+                              showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ZahtjevScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
                           }
                         }
                       },

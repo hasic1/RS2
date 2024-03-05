@@ -15,7 +15,6 @@ class RadniNalogListScreen extends StatefulWidget {
 
 class _RadniNalogListScreen extends State<RadniNalogListScreen> {
   late RadniNalogProvider _radniNalogProvider;
-  final _formKey = GlobalKey<FormBuilderState>();
   SearchResult<RadniNalog>? result;
 
   @override
@@ -165,9 +164,15 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                           Row(
                             children: [
                               IconButton(
-                                icon:const Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _radniNalogProvider.delete(e.nalogId);
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RadniNalogListScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ],

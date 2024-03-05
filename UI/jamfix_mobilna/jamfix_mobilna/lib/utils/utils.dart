@@ -31,6 +31,7 @@ class Authorization {
     isAdmin = roles.contains('Administrator');
     isZaposlenik = roles.contains('Zaposlenik');
     isKorisnik = roles.contains('Korisnik');
+    isOperater = roles.contains('Operater');
 
     ime = decodedToken['unique_name'] as String?;
     prezime = decodedToken['family_name'] as String?;
@@ -38,6 +39,8 @@ class Authorization {
     email = decodedToken['email'] as String?;
     telefon = decodedToken['certpublickey'] as String?;
     korisnickoIme = decodedToken['actort'] as String?;
+    pozicijaID = int.tryParse(decodedToken['upn']?.toString() ?? "");
+    drzavaID = int.tryParse(decodedToken['certserialnumber']?.toString() ?? "");
 
     if (isAdmin) {
       rola = "Administrator";

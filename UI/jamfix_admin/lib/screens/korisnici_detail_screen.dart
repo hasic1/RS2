@@ -14,6 +14,7 @@ import 'package:jamfix_admin/providers/uloge_provider.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:jamfix_admin/utils/util.dart';
 
 class KorisnciDetailScreen extends StatefulWidget {
   Korisnici? korisnici;
@@ -28,7 +29,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
   final TextEditingController telefonController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
 
-   SearchResult<KorisniciUloge>? korisniciUlogeResult;
+  SearchResult<KorisniciUloge>? korisniciUlogeResult;
   SearchResult<Korisnici>? korisniciResult;
   SearchResult<Pozicija>? pozicijaResult;
   SearchResult<Drzava>? drzavaResult;
@@ -239,9 +240,27 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                           );
                           _korisniciProvider.update(
                               widget.korisnici!.korisnikId!, request);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) =>const KorisniciListScreen(),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Success"),
+                              content:
+                                  const Text("Uspješno ste izvršili promjene"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Zatvori dijalog
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const KorisniciListScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
                             ),
                           );
                         }
@@ -311,36 +330,37 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                             aktivnost: aktivan,
                             pozicijaId: int.parse(pozicijaId),
                           );
-                          Navigator.of(context).pop();
                           _korisniciProvider.update(
                               widget.korisnici!.korisnikId!, request);
-                          try {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>const KorisniciListScreen(),
-                              ),
-                            );
-                          } on Exception catch (e) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("OK"),
-                                  )
-                                ],
-                              ),
-                            );
-                          }
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Success"),
+                              content:
+                                  const Text("Uspješno ste izvršili promjene"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Zatvori dijalog
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const KorisniciListScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
+                            ),
+                          );
                         }
                       },
                       child: const Text('Potvrdi Unos'),
                     ),
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   //----------------------------------------------------------------------
@@ -397,34 +417,36 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                             datumIzmjene: DateTime.now(),
                           );
                           Navigator.of(context).pop();
-                          try {
-                            for (var element in korisniciUlogeResult!.result) {
-                              if (element.korisnikId ==
-                                  widget.korisnici!.korisnikId) {
-                                _korisniciUlogeProvider.update(
-                                    element.korisnikUlogaId, uloge);
-                              }
+                          for (var element in korisniciUlogeResult!.result) {
+                            if (element.korisnikId ==
+                                widget.korisnici!.korisnikId) {
+                              _korisniciUlogeProvider.update(
+                                  element.korisnikUlogaId, uloge);
                             }
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>const KorisniciListScreen(),
-                              ),
-                            );
-                          } on Exception catch (e) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("OK"),
-                                  )
-                                ],
-                              ),
-                            );
                           }
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Success"),
+                              content:
+                                  const Text("Uspješno ste izvršili promjene"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const KorisniciListScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
+                            ),
+                          );
                         }
                       },
                       child: const Text('Potvrdi Unos'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
@@ -41,7 +42,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -92,7 +93,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                       decoration: const InputDecoration(labelText: 'Email'),
                       validator: validateEmail,
                     ),
-                   const SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     TextFormField(
                       controller: telefonController,
                       decoration:
@@ -188,7 +189,28 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                               pozicijaId: Authorization.pozicijaID,
                             );
                             _korisniciProvider.insert(request);
-                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste kreirali racun"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); 
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>  LoginPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
                           }
                         },
                         child: const Text('Registriraj se'),
