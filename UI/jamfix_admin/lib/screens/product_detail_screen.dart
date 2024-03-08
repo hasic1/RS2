@@ -12,6 +12,7 @@ import 'package:jamfix_admin/models/vrste_proizvoda.dart';
 import 'package:jamfix_admin/providers/ocjene_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
+import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
 import 'package:jamfix_admin/screens/plati_uslugu_screen.dart';
 import 'package:jamfix_admin/screens/product_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
@@ -50,6 +51,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool userRole = true;
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
   SearchResult<Product>? preporuceniProizvodi;
+  SearchResult<Product>? proizvod;
+
   String? selectedVrstaProizvodaId;
 
   double _rating = 1;
@@ -89,6 +92,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<void> _ucitajPodatke() async {
     var vrste = await _vrsteProizvodaProvider.get();
+
     setState(() {
       vrsteProizvodaResult = vrste;
       isLoading = false;
@@ -110,9 +114,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: "Prosjecna ocjena: ${widget.product?.prosjecnaOcjena}",
+      title:
+          "Prosjecna ocjena: ${widget.product?.prosjecnaOcjena!.toStringAsFixed(1) ?? '0.0'}",
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16.0),
@@ -139,6 +146,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       datum: DateTime.now(),
                     );
                     _ocjeneProvider.insert(request);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text("Success"),
+                        content:
+                            const Text("Uspješno ste ocjenili ovaj proizvod"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const KorisnikProductListScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text("OK"),
+                          )
+                        ],
+                      ),
+                    );
                   },
                   child: Text('Ocijeni'),
                 ),
@@ -242,21 +272,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             Visibility(
               visible: Authorization.isKorisnik,
-              child: Align(
+              child: const Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PlatiUsluguScreen(product: widget.product),
-                        ),
-                      );
-                    },
-                    child: const Text("Dodaj narudzbu"),
-                  ),
+                  // child: ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             PlatiUsluguScreen(product: widget.product),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: const Text("Dodaj narudzbu"),
+                  // ),
                 ),
               ),
             ),
@@ -298,7 +328,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
                         child: recommendedProduct != null &&
-                                recommendedProduct.slika != null
+                                recommendedProduct.slika != null &&
+                                recommendedProduct.slika != ""
                             ? Image.memory(
                                 base64Decode(recommendedProduct.slika!),
                                 fit: BoxFit.cover,

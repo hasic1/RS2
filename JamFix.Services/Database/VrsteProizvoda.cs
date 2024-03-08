@@ -14,7 +14,7 @@ namespace JamFix.Services.Database
         {
             Proizvod = new HashSet<Proizvod>();
         }
-
+        [Key]
         public int VrstaId { get; set; }
         public string Naziv { get; set; } = null!;
 

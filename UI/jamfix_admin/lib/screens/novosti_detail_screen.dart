@@ -91,13 +91,14 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15.0),
-                              child: widget.novosti!.slika != null
+                              child: widget.novosti!.slika != "" &&
+                                      widget.novosti!.slika != null
                                   ? Image.memory(
                                       base64Decode(widget.novosti!.slika!),
                                       fit: BoxFit.cover,
                                     )
                                   : Image.asset(
-                                      "assets/images/goals.jpg",
+                                      "assets/images/slika.jpg",
                                       height: 100,
                                       width: 100,
                                     ),

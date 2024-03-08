@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:jamfix_mobilna/models/product.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
 import 'package:jamfix_mobilna/providers/product_provider.dart';
+import 'package:jamfix_mobilna/screens/product_detail_screen.dart';
 import 'package:jamfix_mobilna/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -53,25 +54,33 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                       (product) {
                         return GestureDetector(
                           onTap: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         ProductDetailScreen(product: product),
-                            //   ),
-                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailScreen(product: product),
+                              ),
+                            );
                           },
                           child: Builder(
                             builder: (BuildContext context) {
                               return Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Align(
                                   alignment: Alignment.topCenter,
-                                  child: Image.memory(
-                                    base64Decode(product.slika!),
-                                    height: 300,
-                                    width: 300,
-                                  ),
+                                  child: product.slika != null &&
+                                          product.slika != ""
+                                      ? Image.memory(
+                                          base64Decode(product.slika ?? ''),
+                                          height: 300,
+                                          width: 300,
+                                        )
+                                      : Image.asset(
+                                          "assets/images/slika.jpg",
+                                          height: 300,
+                                          width: 300,
+                                        ),
                                 ),
                               );
                             },
@@ -117,20 +126,28 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                             padding: EdgeInsets.all(16.0),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.of(context).pushReplacement(
-                                //     // MaterialPageRoute(
-                                //     //   builder: (context) => ProductDetailScreen(
-                                //     //       product: recommendedProduct),
-                                //     // ),
-                                //     );
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailScreen(
+                                        product: recommendedProduct),
+                                  ),
+                                );
                               },
                               child: Align(
                                 alignment: Alignment.topCenter,
-                                child: Image.memory(
-                                  base64Decode(recommendedProduct?.slika ?? ''),
-                                  height: 150,
-                                  width: 150,
-                                ),
+                                child: recommendedProduct?.slika != null &&
+                                        recommendedProduct?.slika != ""
+                                    ? Image.memory(
+                                        base64Decode(
+                                            recommendedProduct!.slika!),
+                                        height: 150,
+                                        width: 150,
+                                      )
+                                    : Image.asset(
+                                        "assets/images/slika.jpg",
+                                        height: 150,
+                                        width: 150,
+                                      ),
                               ),
                             ),
                           );

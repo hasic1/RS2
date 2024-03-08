@@ -1,6 +1,7 @@
 ﻿using JamFix.Services.Service.Helper;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace JamFix.Services.Database
         {
             KorisniciUloge = new HashSet<KorisniciUloge>();
         }
+        [Key]
         public int KorisnikId { get; set; }
         public int DrzavaId { get; set; }
         public string Ime { get; set; } = null!;

@@ -16,6 +16,7 @@ namespace JamFix.Services.Database
         {
             Ocjene = new HashSet<Ocjene>();
         }
+        [Key]
         public int ProizvodId { get; set; }
         public int VrstaId { get; set; }
         public string? NazivProizvoda { get; set; }

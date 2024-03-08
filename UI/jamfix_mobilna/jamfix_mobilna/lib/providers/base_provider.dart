@@ -28,7 +28,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
   }
-  Future<SearchResult<T>> get([dynamic search]) async {
+  Future<SearchResult<T>> get({dynamic search}) async {
     var url = "$_baseUrl$_endpoint";
 
     if (search != null) {
@@ -86,7 +86,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var jsonRequest = jsonEncode(request);
     var response = await http!.post(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
+    if (isValidInsertUpdate(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
@@ -102,7 +102,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var jsonRequest = jsonEncode(request);
     var response = await http!.put(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
+    if (isValidInsertUpdate(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {

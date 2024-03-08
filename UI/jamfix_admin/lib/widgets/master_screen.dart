@@ -5,6 +5,7 @@ import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/screens/izvjestaji_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
+import 'package:jamfix_admin/screens/log_in_screen.dart';
 import 'package:jamfix_admin/screens/novosti_list_screen.dart';
 import 'package:jamfix_admin/screens/oNama_screen.dart';
 import 'package:jamfix_admin/screens/pocetna_screen.dart';
@@ -40,12 +41,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         leadingWidth: 40,
       ),
       drawer: Drawer(
+        backgroundColor: Colors.blue,
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik||Authorization.isAdmin,
+              visible: Authorization.isKorisnik || Authorization.isAdmin,
               child: ListTile(
-                title: Text('Dodaj zahtjev'),
+                title: Text(
+                  'Dodaj zahtjev',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -56,7 +61,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             ListTile(
-              title: Text('Pocetna'),
+              title: Text(
+                'Pocetna',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -66,7 +74,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Novosti'),
+              title: Text(
+                'Novosti',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -76,7 +87,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('O nama'),
+              title: Text(
+                'O nama',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -88,7 +102,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Visibility(
               visible: Authorization.isAdmin || Authorization.isZaposlenik,
               child: ListTile(
-                title: Text('Placene usluge'),
+                title: Text(
+                  'Placene usluge',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -99,9 +116,12 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isZaposlenik||Authorization.isAdmin,
+              visible: Authorization.isZaposlenik || Authorization.isAdmin,
               child: ListTile(
-                title: Text('Radni nalog'),
+                title: Text(
+                  'Radni nalog',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -114,7 +134,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Visibility(
               visible: Authorization.isAdmin,
               child: ListTile(
-                title: Text('Proizvodi admin'),
+                title: Text(
+                  'Proizvodi admin',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -125,9 +148,14 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isKorisnik || Authorization.isZaposlenik||Authorization.isAdmin,
+              visible: Authorization.isKorisnik ||
+                  Authorization.isZaposlenik ||
+                  Authorization.isAdmin,
               child: ListTile(
-                title: Text('Proizvodi'),
+                title: Text(
+                  'Proizvodi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -140,7 +168,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Visibility(
               visible: Authorization.isAdmin,
               child: ListTile(
-                title: Text('Korisnici'),
+                title: Text(
+                  'Korisnici',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -153,7 +184,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Visibility(
               visible: Authorization.isAdmin || Authorization.isZaposlenik,
               child: ListTile(
-                title: Text('Zahtjevi'),
+                title: Text(
+                  'Zahtjevi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -166,7 +200,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Visibility(
               visible: Authorization.isAdmin || Authorization.isZaposlenik,
               child: ListTile(
-                title: Text('Izvjestaj'),
+                title: Text(
+                  'Izvjestaj',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -177,7 +214,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             ListTile(
-              title: Text('Postavke'),
+              title: Text(
+                'Postavke',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -187,7 +227,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Odjava'),
+              title: Text(
+                'Odjava',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -202,7 +245,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       body: Column(
         children: [
           Expanded(
-            child: widget.child!, 
+            child: widget.child!,
           ),
           Container(
             height: 60,

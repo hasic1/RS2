@@ -13,6 +13,7 @@ namespace JamFix.Services.Database
         {
             Zahtjevi = new HashSet<Zahtjev>();
         }
+        [Key]
         public int StatusZahtjevaId { get; set; }
         public string Opis { get; set; }
 

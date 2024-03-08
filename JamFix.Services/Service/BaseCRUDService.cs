@@ -52,13 +52,23 @@ namespace JamFix.Services.Service
         {
             if (uslugeEntity != null)
             {
-                int uslugaid = await _context.Usluge
-                    .Where(u => u.BrojRacuna == uslugeEntity.BrojRacuna)
-                    .Select(u => u.UslugaId)
-                    .FirstOrDefaultAsync();
-                if (uslugaid == 0)
+                int uslugaid;
+                bool exists = await _context.Usluge.AnyAsync(u => u.BrojRacuna == uslugeEntity.BrojRacuna);
+
+                if (exists)
                 {
-                    uslugaid = 1;
+                    uslugaid = await _context.Usluge
+                        .Where(u => u.BrojRacuna == uslugeEntity.BrojRacuna)
+                        .Select(u => u.UslugaId)
+                        .FirstOrDefaultAsync();
+                }
+                else
+                {
+                    uslugaid = await _context.Usluge
+                        .Select(u => u.UslugaId)
+                        .DefaultIfEmpty()
+                        .MaxAsync();
+                    uslugaid++;
                 }
                 await _context.UslugaStavke.AddAsync(new UslugaStavke
                 {
@@ -74,28 +84,29 @@ namespace JamFix.Services.Service
             {
                 throw new Exception("Korisničko ime već zauzeto.");
             }
-            
+
             var set = _context.Set<TDb>();
-            
+
             TDb entity = _mapper.Map<TDb>(insert);
             if (entity is Korisnik korisnikEntity)
             {
                 await SetDefaultUserRole(korisnikEntity);
                 korisnikEntity.PozicijaId = 1;
             }
-            if(entity is Zahtjev zahtjevEntity)
+            if (entity is Zahtjev zahtjevEntity)
             {
                 zahtjevEntity.StatusZahtjevaId = 1;
             }
 
-            if (entity is Usluge uslugeEntity)
-            {
-                await SetUslugeStavke(uslugeEntity);
-            }
             await BeforeInsert(entity, insert);
 
             set.Add(entity);
             await _context.SaveChangesAsync();
+            if (entity is Usluge uslugeEntity)
+            {
+                await SetUslugeStavke(uslugeEntity);
+                await _context.SaveChangesAsync();
+            }
             return _mapper.Map<T>(entity);
         }
 
@@ -115,7 +126,7 @@ namespace JamFix.Services.Service
                 }
                 if (entity is Usluge uslugaEntity)
                 {
-                    var removeUslugaEntity= await _context.UslugaStavke.FirstOrDefaultAsync(u => u.UslugeId == uslugaEntity.UslugaId);
+                    var removeUslugaEntity = await _context.UslugaStavke.FirstOrDefaultAsync(u => u.UslugeId == uslugaEntity.UslugaId);
                     if (removeUslugaEntity != null)
                     {
                         _context.Remove(removeUslugaEntity);
@@ -132,7 +143,7 @@ namespace JamFix.Services.Service
             var entity = await set.FindAsync(id);
             _mapper.Map(update, entity);
 
-            if (update is KorisniciUpdateRequest korisniciUpdateRequest&& korisniciUpdateRequest.NoviPassword!=null)
+            if (update is KorisniciUpdateRequest korisniciUpdateRequest && korisniciUpdateRequest.NoviPassword != null)
             {
                 await BeforeUpdate(entity, update);
             }

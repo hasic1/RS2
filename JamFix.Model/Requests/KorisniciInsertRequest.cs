@@ -17,5 +17,7 @@ namespace JamFix.Model.Requests
         public List<int>? UlogeIdList { get; set; } = new List<int> { };
         public int? PozicijaId { get; set; }
         public bool? Aktivnost { get; set; }
+        public DateTime DatumRodjenja { get; set; }
+
     }
 }

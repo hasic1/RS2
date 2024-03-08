@@ -17,7 +17,6 @@ namespace JamFix.Services.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("Latin1_General_CI_AI")
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -27,19 +26,49 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("DrzavaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("DrzavaId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DrzavaId"));
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DrzavaId");
 
-                    b.ToTable("Drzava", (string)null);
+                    b.ToTable("Drzava");
+
+                    b.HasData(
+                        new
+                        {
+                            DrzavaId = 1,
+                            Naziv = "Bosnia and Herzegovina"
+                        },
+                        new
+                        {
+                            DrzavaId = 2,
+                            Naziv = "Croatia"
+                        },
+                        new
+                        {
+                            DrzavaId = 3,
+                            Naziv = "Serbia"
+                        },
+                        new
+                        {
+                            DrzavaId = 4,
+                            Naziv = "Montenegro"
+                        },
+                        new
+                        {
+                            DrzavaId = 5,
+                            Naziv = "Slovenia"
+                        },
+                        new
+                        {
+                            DrzavaId = 6,
+                            Naziv = "Austria"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Izvjestaj", b =>
@@ -70,27 +99,53 @@ namespace JamFix.Services.Migrations
                     b.HasKey("IzvjestajId");
 
                     b.ToTable("Izvjestaj");
+
+                    b.HasData(
+                        new
+                        {
+                            IzvjestajId = 1,
+                            BrojIntervencija = 32,
+                            CijenaUtrosAlata = 800,
+                            Datum = new DateTime(2024, 1, 31, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            NajOprema = "Ruter",
+                            NajPosMjesto = "Mostar"
+                        },
+                        new
+                        {
+                            IzvjestajId = 2,
+                            BrojIntervencija = 29,
+                            CijenaUtrosAlata = 870,
+                            Datum = new DateTime(2024, 2, 29, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            NajOprema = "Modem",
+                            NajPosMjesto = "Mostar"
+                        },
+                        new
+                        {
+                            IzvjestajId = 3,
+                            BrojIntervencija = 26,
+                            CijenaUtrosAlata = 780,
+                            Datum = new DateTime(2024, 3, 31, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            NajOprema = "Modem",
+                            NajPosMjesto = "Mostar"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.KorisniciUloge", b =>
                 {
                     b.Property<int>("KorisnikUlogaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("KorisnikUlogaID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikUlogaId"));
 
                     b.Property<DateTime>("DatumIzmjene")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("KorisnikId")
-                        .HasColumnType("int")
-                        .HasColumnName("KorisnikID");
+                        .HasColumnType("int");
 
                     b.Property<int>("UlogaId")
-                        .HasColumnType("int")
-                        .HasColumnName("UlogaID");
+                        .HasColumnType("int");
 
                     b.HasKey("KorisnikUlogaId");
 
@@ -98,15 +153,44 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("UlogaId");
 
-                    b.ToTable("KorisniciUloge", (string)null);
+                    b.ToTable("KorisniciUloge");
+
+                    b.HasData(
+                        new
+                        {
+                            KorisnikUlogaId = 1,
+                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4052),
+                            KorisnikId = 1,
+                            UlogaId = 1
+                        },
+                        new
+                        {
+                            KorisnikUlogaId = 2,
+                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4117),
+                            KorisnikId = 2,
+                            UlogaId = 2
+                        },
+                        new
+                        {
+                            KorisnikUlogaId = 3,
+                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4123),
+                            KorisnikId = 3,
+                            UlogaId = 3
+                        },
+                        new
+                        {
+                            KorisnikUlogaId = 4,
+                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4128),
+                            KorisnikId = 4,
+                            UlogaId = 4
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>
                 {
                     b.Property<int>("KorisnikId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("KorisnikID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikId"));
 
@@ -120,50 +204,39 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DrzavaId")
-                        .HasColumnType("int")
-                        .HasColumnName("DrzavaId");
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ime")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KorisnickoIme")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LozinkaHash")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LozinkaSalt")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PozicijaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Prezime")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((1))");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Telefon")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KorisnikId");
 
@@ -171,22 +244,84 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("PozicijaId");
 
-                    b.HasIndex(new[] { "Email" }, "CS_Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                    b.ToTable("Korisnik");
 
-                    b.HasIndex(new[] { "KorisnickoIme" }, "CS_KorisnickoIme")
-                        .IsUnique();
-
-                    b.ToTable("Korisnik", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            KorisnikId = 1,
+                            Aktivnost = true,
+                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DrzavaId = 1,
+                            Email = "admin@gmail.com",
+                            Ime = "Admin",
+                            KorisnickoIme = "admin",
+                            LozinkaHash = "PEPuXC0FRTDz8Ep3LtkrCzwN0Kw=",
+                            LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
+                            PozicijaId = 1,
+                            Prezime = "Admin",
+                            Status = true,
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            KorisnikId = 2,
+                            Aktivnost = true,
+                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DrzavaId = 1,
+                            Email = "korisnik@gmail.com",
+                            Ime = "Korisnik",
+                            KorisnickoIme = "korisnik",
+                            LozinkaHash = "PEPuXC0FRTDz8Ep3LtkrCzwN0Kw=",
+                            LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
+                            PozicijaId = 2,
+                            Prezime = "Korisnik",
+                            Status = true,
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            KorisnikId = 3,
+                            Aktivnost = true,
+                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DrzavaId = 1,
+                            Email = "zaposlenik@gmail.com",
+                            Ime = "Zaposlenik",
+                            KorisnickoIme = "zaposlenik",
+                            LozinkaHash = "PEPuXC0FRTDz8Ep3LtkrCzwN0Kw=",
+                            LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
+                            PozicijaId = 5,
+                            Prezime = "Zaposlenik",
+                            Status = true,
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            KorisnikId = 4,
+                            Aktivnost = true,
+                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DrzavaId = 1,
+                            Email = "operater@gmail.com",
+                            Ime = "Operater",
+                            KorisnickoIme = "operater",
+                            LozinkaHash = "PEPuXC0FRTDz8Ep3LtkrCzwN0Kw=",
+                            LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
+                            PozicijaId = 6,
+                            Prezime = "Operater",
+                            Status = true,
+                            Telefon = "061-336-026"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Novosti", b =>
                 {
                     b.Property<int>("NovostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("NovostId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NovostId"));
 
@@ -196,44 +331,129 @@ namespace JamFix.Services.Migrations
 
                     b.Property<string>("Sadrzaj")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Slika")
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("NovostId");
 
-                    b.ToTable("Novosti", (string)null);
+                    b.ToTable("Novosti");
+
+                    b.HasData(
+                        new
+                        {
+                            NovostId = 1,
+                            Naslov = "Reakcije na pad Fejsa: \"Zuckerberg nas sve izbacio\"",
+                            Sadrzaj = "MNOŠTVO korisnika Facebooka javlja da su \"izbačeni\" sa svog računa. Točnije, ako pokušate ući na svoj Facebook profil, vrlo vjerojatno ćete vidjeti da ste s njega izlogirani i da se ne možete ulogirati natrag. Nedugo zatim sličan problem pojavio se i na Instagramu.\r\n\r\nReakcije na pad društvene mreže preplavile su X (bivši Twitter), mrežu Elona Muska.\r\n\r\n\"Jesu li svi ostali upravo izbačeni iz svojih Facebook računa i ne mogu nazad?\", \"Znači, sad smo svi na X-u da javimo da je pao Fejs?\", \"Ok, što se mene tiče, ne moraju me ni vraćati\", \"Zapravo bi bilo super da me nikad ne ulogira natrag\", \"Zuckerberg nas sve izbacio\", šale se korisnici X-a"
+                        },
+                        new
+                        {
+                            NovostId = 2,
+                            Naslov = "Nova konkurencija ChatGPT-ju: Anthropic predstavio svoj najbrži i najmoćniji chatbot",
+                            Sadrzaj = "U ponedjeljak su službeno predstavili svoju 'obitelj' modela Claude 3, koja uključuje tri najsuvremenija modela (prema uzlaznom redoslijedu mogućnosti): Claude 3 Haiku, Claude 3 Sonnet i Claude 3 Opus.\nAnthropic je tvrdio da je najsposobniji model, Opus, nadmašio OpenAI-jev GPT-4 i Googleov Gemini Ultra na testovima kao što su rasuđivanje, osnovna matematika te znanje na dodiplomskoj i diplomskoj razini. Opus i Sonnet su sada dostupni za korištenje u claude.ai, dok je Claude API dostupan u 159 zemalja.\r\n\r\nTvrtka je rekla da će kompaktniji modeli, Sonnet i Haiku, uskoro biti pušteni u prodaju. Novi chatbot može sažeti približno 200.000 riječi, dok ChatGPT može sažeti samo oko 3.000. Novi modeli također omogućuju učitavanje slika i dokumenata."
+                        },
+                        new
+                        {
+                            NovostId = 3,
+                            Naslov = "Amazonov oporavak poslovanja poguran otkazima",
+                            Sadrzaj = "Nakon teške 2022. koja je rezultirala otpuštanjem tisuća zaposlenika u Amazonu i rezanjem troškova gdje je to bilo moguće, najveći svjetski online trgovac snažno se oporavio u 2023. U četvrtak je tvrtka izvijestila o najvišoj operativnoj dobiti u povijesti za proteklo blagdansko tromjesečje, kao prodaja značajno porastao u svakom od svojih operativnih segmenata. Ipak, što je još važnije, čini se da su prošlogodišnje agresivne mjere rezanja troškova urodile plodom jer je Amazonova operativna marža porasla s 1,8 posto u četvrtom tromjesečju 2022. na 7,8 posto u prošlom tromjesečju.\r\n\r\n\"Ovo četvrto tromjesečje bilo je rekordna sezona blagdanske kupnje i zatvorila je snažnu 2023. za Amazon\", rekao je izvršni direktor Amazona Andy Jassy u izjavi. \"Iako smo ostvarili značajne prihode, prihode od poslovanja i napredak u slobodnom novčanom tijeku, ono čime smo najviše zadovoljni je nastavak poboljšanja izuma i korisničkog iskustva u našim tvrtkama.\" Za cijelu godinu, neto prodaja porasla je 12 posto na 574,8 milijardi dolara, dok je neto prihod skočio natrag na 30,4 milijarde dolara s gubitka od 2,7 milijardi dolara u 2022.\r\n\r\nJedna stvar koja nas je izdvojila iz rezultata je rast Amazonovog oglašivačkog poslovanja. U prošlom tromjesečju, prodaja oglasa tvrtke iznosila je 14,7 milijardi dolara, čime je ukupni iznos za godinu blizu 50 milijardi dolara. S obzirom na to da je tvrtka upravo pokrenula oglase na svojoj usluzi streaminga Prime Video, možemo očekivati da će ta često zanemarena strana Amazonovog poslovanja dodatno rasti 2024. i kasnije."
+                        },
+                        new
+                        {
+                            NovostId = 4,
+                            Naslov = "Bivši direktori Twittera podnijeli milijunsku tužbu protiv Elona Muska",
+                            Sadrzaj = "Tužbu su pokrenuli bivši izvršni direktor Parag Agrawal, Ned Segal, Twitterov bivši financijski direktor, Vijaya Gadde, bivša glavna pravna službenica i Sean Edgett, bivši glavni savjetnik\r\n\r\nČetiri bivša glavna rukovoditelja Twittera, uključujući bivšeg izvršnog direktora Paraga Agrawala, tuže Elona Muska za više od 128 milijuna dolara zbog neplaćenih otpremnina, navodi se u tužbi podnesenoj u ponedjeljak.\nTužba podnesena saveznom sudu u San Franciscu posljednja je u nizu pravnih izazova s ​​kojima se Musk suočava nakon što je u listopadu 2022. kupio društvenu mrežu za 44 milijarde dolara i kasnije je preimenovao u X."
+                        },
+                        new
+                        {
+                            NovostId = 5,
+                            Naslov = "Apple odustaje od projekta EV",
+                            Sadrzaj = "Apple je odustao od višegodišnjeg napora da napravi svoje električno vozilo. Prema medijskim izvješćima, barem neki zaposlenici iz tog odjela bit će premješteni u timove za umjetnu inteligenciju.\r\n\r\nApple je interno objavio da zatvara projekt električnih vozila koji ima gotovo 2000 zaposlenika. Objava je pripisana potpredsjedniku Kevinu Lynchu i COO-u Jeffu Williamsu. Lynch je nadgledao projekt električnih vozila, koji je poznat kao Grupa za posebne projekte.\r\n\r\nOdluka o zatvaranju projekta vrijednog više milijardi dolara donesena je tijekom proteklih nekoliko tjedana. Apple je zamislio da će cijena vozila biti oko 100.000 dolara. Pričalo se da je Apple zainteresiran za izradu električnog vozila još 2015. nakon što je tadašnji viši potpredsjednik operacija Williams na konferenciji izjavio da je automobil ultimativni mobilni uređaj."
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Ocjene", b =>
                 {
                     b.Property<int>("OcjenaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("OcjenaID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OcjenaId"));
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("KupacId")
-                        .HasColumnType("int");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Ocjena")
                         .HasColumnType("int");
 
                     b.Property<int>("ProizvodId")
-                        .HasColumnType("int")
-                        .HasColumnName("ProizvodID");
+                        .HasColumnType("int");
 
                     b.HasKey("OcjenaId");
 
                     b.HasIndex("ProizvodId");
 
-                    b.ToTable("Ocjene", (string)null);
+                    b.ToTable("Ocjene");
+
+                    b.HasData(
+                        new
+                        {
+                            OcjenaId = 1,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5192),
+                            Ocjena = 3,
+                            ProizvodId = 1
+                        },
+                        new
+                        {
+                            OcjenaId = 2,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5208),
+                            Ocjena = 5,
+                            ProizvodId = 1
+                        },
+                        new
+                        {
+                            OcjenaId = 3,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5213),
+                            Ocjena = 3,
+                            ProizvodId = 2
+                        },
+                        new
+                        {
+                            OcjenaId = 4,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5218),
+                            Ocjena = 4,
+                            ProizvodId = 2
+                        },
+                        new
+                        {
+                            OcjenaId = 5,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5222),
+                            Ocjena = 5,
+                            ProizvodId = 3
+                        },
+                        new
+                        {
+                            OcjenaId = 6,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5227),
+                            Ocjena = 4,
+                            ProizvodId = 3
+                        },
+                        new
+                        {
+                            OcjenaId = 7,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5232),
+                            Ocjena = 4,
+                            ProizvodId = 4
+                        },
+                        new
+                        {
+                            OcjenaId = 8,
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5237),
+                            Ocjena = 4,
+                            ProizvodId = 5
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Pozicija", b =>
@@ -251,14 +471,45 @@ namespace JamFix.Services.Migrations
                     b.HasKey("PozicijaId");
 
                     b.ToTable("Pozicija");
+
+                    b.HasData(
+                        new
+                        {
+                            PozicijaId = 1,
+                            Naziv = "Direktor"
+                        },
+                        new
+                        {
+                            PozicijaId = 2,
+                            Naziv = "Predsjednik"
+                        },
+                        new
+                        {
+                            PozicijaId = 3,
+                            Naziv = "Direktor odjela"
+                        },
+                        new
+                        {
+                            PozicijaId = 4,
+                            Naziv = "Menadzer"
+                        },
+                        new
+                        {
+                            PozicijaId = 5,
+                            Naziv = "Supervizor"
+                        },
+                        new
+                        {
+                            PozicijaId = 6,
+                            Naziv = "User"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Proizvod", b =>
                 {
                     b.Property<int>("ProizvodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ProizvodID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProizvodId"));
 
@@ -274,16 +525,14 @@ namespace JamFix.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Cijena")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Cijena")
+                        .HasColumnType("float");
 
                     b.Property<string>("NazivProizvoda")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Slika")
                         .HasColumnType("varbinary(max)");
@@ -292,58 +541,124 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("Snizen")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((1))");
+                        .HasColumnType("bit");
 
                     b.Property<string>("StateMachine")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VrstaId")
-                        .HasColumnType("int")
-                        .HasColumnName("VrstaID");
+                        .HasColumnType("int");
 
                     b.HasKey("ProizvodId");
 
                     b.HasIndex("VrstaId");
 
-                    b.ToTable("Proizvod", (string)null);
+                    b.ToTable("Proizvod");
+
+                    b.HasData(
+                        new
+                        {
+                            ProizvodId = 1,
+                            BrojKanala = "500",
+                            BrojMinuta = "1000",
+                            BrzinaInterneta = "55",
+                            Cijena = 65.0,
+                            NazivProizvoda = "Trio start paket",
+                            Opis = "Za mala kucanstva",
+                            Snizen = true,
+                            VrstaId = 1
+                        },
+                        new
+                        {
+                            ProizvodId = 2,
+                            BrojKanala = "750",
+                            BrojMinuta = "1500",
+                            BrzinaInterneta = "75",
+                            Cijena = 75.0,
+                            NazivProizvoda = "Trio paket",
+                            Opis = "Za kucanstva",
+                            Snizen = true,
+                            VrstaId = 1
+                        },
+                        new
+                        {
+                            ProizvodId = 3,
+                            BrojKanala = "1000",
+                            BrojMinuta = "2000",
+                            BrzinaInterneta = "100",
+                            Cijena = 90.0,
+                            NazivProizvoda = "Trio super paket",
+                            Opis = "Najbolje u ponudi",
+                            Snizen = true,
+                            VrstaId = 1
+                        },
+                        new
+                        {
+                            ProizvodId = 4,
+                            BrojKanala = "500",
+                            BrojMinuta = "0",
+                            BrzinaInterneta = "25",
+                            Cijena = 40.0,
+                            NazivProizvoda = "Duo start paket",
+                            Opis = "Najbolje za mala kucanstva",
+                            Snizen = true,
+                            VrstaId = 1
+                        },
+                        new
+                        {
+                            ProizvodId = 5,
+                            BrojKanala = "600",
+                            BrojMinuta = "0",
+                            BrzinaInterneta = "50",
+                            Cijena = 50.0,
+                            NazivProizvoda = "Duo paket",
+                            Opis = "Novo u ponudi",
+                            Snizen = true,
+                            VrstaId = 1
+                        },
+                        new
+                        {
+                            ProizvodId = 6,
+                            BrojKanala = "1000",
+                            BrojMinuta = "0",
+                            BrzinaInterneta = "75",
+                            Cijena = 65.0,
+                            NazivProizvoda = "Duo super paket",
+                            Opis = "Najbolje u ponudi",
+                            Snizen = true,
+                            VrstaId = 1
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.RadniNalog", b =>
                 {
                     b.Property<int>("NalogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("NalogId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NalogId"));
 
                     b.Property<string>("Adresa")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImePrezime")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Kolicina")
                         .HasColumnType("int");
 
                     b.Property<string>("Mjesto")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NosilacPosla")
                         .IsRequired()
@@ -351,22 +666,63 @@ namespace JamFix.Services.Migrations
 
                     b.Property<string>("OpisPrijavljenog")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OpisUradjenog")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefon")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("NalogId");
 
-                    b.ToTable("RadniNalog", (string)null);
+                    b.ToTable("RadniNalog");
+
+                    b.HasData(
+                        new
+                        {
+                            NalogId = 1,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5417),
+                            ImePrezime = "Bakir Hasic",
+                            Kolicina = 1,
+                            Mjesto = "Mostar",
+                            Naziv = "Neki naziv",
+                            NosilacPosla = "Bakir Hasic",
+                            OpisPrijavljenog = "Modem u kvaru",
+                            OpisUradjenog = "Zamjena modema",
+                            Telefon = "061-330-326"
+                        },
+                        new
+                        {
+                            NalogId = 2,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5433),
+                            ImePrezime = "Arman Hasic",
+                            Kolicina = 1,
+                            Mjesto = "Mostar",
+                            Naziv = "Ruter",
+                            NosilacPosla = "Amar Hasic",
+                            OpisPrijavljenog = "Ruter u kvaru",
+                            OpisUradjenog = "Zamijena rutera",
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            NalogId = 3,
+                            Adresa = "Mostar",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5439),
+                            ImePrezime = "Dzemal Causevic",
+                            Kolicina = 2,
+                            Mjesto = "Mostar",
+                            Naziv = "Kablovi",
+                            NosilacPosla = "Ramiz Dizdar",
+                            OpisPrijavljenog = "Problemi sa konekcijom",
+                            OpisUradjenog = "Zamijena kablova",
+                            Telefon = "061-202-330"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.StatusZahtjeva", b =>
@@ -384,6 +740,23 @@ namespace JamFix.Services.Migrations
                     b.HasKey("StatusZahtjevaId");
 
                     b.ToTable("StatusZahtjeva");
+
+                    b.HasData(
+                        new
+                        {
+                            StatusZahtjevaId = 1,
+                            Opis = "Zaprimljen "
+                        },
+                        new
+                        {
+                            StatusZahtjevaId = 2,
+                            Opis = "U obradi"
+                        },
+                        new
+                        {
+                            StatusZahtjevaId = 3,
+                            Opis = "Rijesen"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Uloga", b =>
@@ -404,24 +777,47 @@ namespace JamFix.Services.Migrations
                     b.HasKey("UlogaId");
 
                     b.ToTable("Uloga");
+
+                    b.HasData(
+                        new
+                        {
+                            UlogaId = 1,
+                            Naziv = "Administrator",
+                            Opis = "Administrator"
+                        },
+                        new
+                        {
+                            UlogaId = 2,
+                            Naziv = "Korisnik",
+                            Opis = "Korisnik"
+                        },
+                        new
+                        {
+                            UlogaId = 3,
+                            Naziv = "Zaposlenik",
+                            Opis = "Zaposlenik"
+                        },
+                        new
+                        {
+                            UlogaId = 4,
+                            Naziv = "Operater",
+                            Opis = "Operater"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.UslugaStavke", b =>
                 {
                     b.Property<int>("UslugaStavkeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UslugaStavkeID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UslugaStavkeId"));
 
                     b.Property<int>("ProizvodId")
-                        .HasColumnType("int")
-                        .HasColumnName("ProizvodID");
+                        .HasColumnType("int");
 
                     b.Property<int>("UslugeId")
-                        .HasColumnType("int")
-                        .HasColumnName("UslugeID");
+                        .HasColumnType("int");
 
                     b.HasKey("UslugaStavkeId");
 
@@ -429,15 +825,58 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("UslugeId");
 
-                    b.ToTable("UslugaStavke", (string)null);
+                    b.ToTable("UslugaStavke");
+
+                    b.HasData(
+                        new
+                        {
+                            UslugaStavkeId = 1,
+                            ProizvodId = 1,
+                            UslugeId = 1
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 2,
+                            ProizvodId = 3,
+                            UslugeId = 1
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 3,
+                            ProizvodId = 6,
+                            UslugeId = 1
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 4,
+                            ProizvodId = 2,
+                            UslugeId = 2
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 5,
+                            ProizvodId = 4,
+                            UslugeId = 2
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 6,
+                            ProizvodId = 3,
+                            UslugeId = 3
+                        },
+                        new
+                        {
+                            UslugaStavkeId = 7,
+                            ProizvodId = 5,
+                            UslugeId = 3
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Usluge", b =>
                 {
                     b.Property<int>("UslugaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UslugaId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UslugaId"));
 
@@ -450,11 +889,10 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImePrezime")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NazivPaketa")
                         .IsRequired()
@@ -468,26 +906,71 @@ namespace JamFix.Services.Migrations
 
                     b.HasKey("UslugaId");
 
-                    b.ToTable("Usluge", (string)null);
+                    b.ToTable("Usluge");
+
+                    b.HasData(
+                        new
+                        {
+                            UslugaId = 1,
+                            BrojRacuna = "1234-1234-1234-1234",
+                            Cijena = "123",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5719),
+                            ImePrezime = "Bakir Hasic",
+                            NazivPaketa = "Trio paket",
+                            Placeno = true,
+                            ProizvodId = 1
+                        },
+                        new
+                        {
+                            UslugaId = 2,
+                            BrojRacuna = "1235-1235-1235-1235",
+                            Cijena = "123",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5733),
+                            ImePrezime = "Anel Hodzic",
+                            NazivPaketa = "Trio paket",
+                            Placeno = true,
+                            ProizvodId = 1
+                        },
+                        new
+                        {
+                            UslugaId = 3,
+                            BrojRacuna = "1236-1236-1236-1236",
+                            Cijena = "123",
+                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5739),
+                            ImePrezime = "Hamza Dzeko",
+                            NazivPaketa = "Trio paket",
+                            Placeno = true,
+                            ProizvodId = 1
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.VrsteProizvoda", b =>
                 {
                     b.Property<int>("VrstaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("VrstaID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VrstaId"));
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VrstaId");
 
-                    b.ToTable("VrsteProizvoda", (string)null);
+                    b.ToTable("VrsteProizvoda");
+
+                    b.HasData(
+                        new
+                        {
+                            VrstaId = 1,
+                            Naziv = "Paket preplate"
+                        },
+                        new
+                        {
+                            VrstaId = 2,
+                            Naziv = "Tarifa"
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Zahtjev", b =>
@@ -521,14 +1004,37 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusZahtjevaId")
-                        .HasColumnType("int")
-                        .HasColumnName("StatusZahtjevaId");
+                        .HasColumnType("int");
 
                     b.HasKey("ZahtjevId");
 
                     b.HasIndex("StatusZahtjevaId");
 
                     b.ToTable("Zahtjev");
+
+                    b.HasData(
+                        new
+                        {
+                            ZahtjevId = 1,
+                            Adresa = "Domanovici",
+                            BrojTelefona = "061-336-026",
+                            DatumVrijeme = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5826),
+                            HitnaIntervencija = true,
+                            ImePrezime = "Bakir Hasic",
+                            Opis = "Moj ruter je u kvaru",
+                            StatusZahtjevaId = 1
+                        },
+                        new
+                        {
+                            ZahtjevId = 2,
+                            Adresa = "Mostar",
+                            BrojTelefona = "062-223-322",
+                            DatumVrijeme = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5838),
+                            HitnaIntervencija = false,
+                            ImePrezime = "Arman Hodzic",
+                            Opis = "Moj modem je u kvaru",
+                            StatusZahtjevaId = 1
+                        });
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.KorisniciUloge", b =>
@@ -536,14 +1042,14 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Korisnik", "Korisnik")
                         .WithMany("KorisniciUloge")
                         .HasForeignKey("KorisnikId")
-                        .IsRequired()
-                        .HasConstraintName("FK_KorisniciUloge_Korisnici");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("JamFix.Services.Database.Uloga", "Uloga")
                         .WithMany("KorisniciUloges")
                         .HasForeignKey("UlogaId")
-                        .IsRequired()
-                        .HasConstraintName("FK_KorisniciUloge_Uloge");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Korisnik");
 
@@ -556,8 +1062,7 @@ namespace JamFix.Services.Migrations
                         .WithMany("Korisnik")
                         .HasForeignKey("DrzavaId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Korisnik_Drzava");
+                        .IsRequired();
 
                     b.HasOne("JamFix.Services.Database.Pozicija", "Pozicija")
                         .WithMany("Korisnik")
@@ -575,8 +1080,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Proizvod", "Proizvod")
                         .WithMany("Ocjene")
                         .HasForeignKey("ProizvodId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Ocjene_Proizvodi");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Proizvod");
                 });
@@ -586,8 +1091,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.VrsteProizvoda", "Vrsta")
                         .WithMany("Proizvod")
                         .HasForeignKey("VrstaId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Proizvodi_VrsteProizvoda");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Vrsta");
                 });
@@ -597,14 +1102,14 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Proizvod", "Proizvod")
                         .WithMany("UslugaStavke")
                         .HasForeignKey("ProizvodId")
-                        .IsRequired()
-                        .HasConstraintName("FK_UslugaStavke_Proizvod");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("JamFix.Services.Database.Usluge", "Usluge")
                         .WithMany("UslugaStavke")
                         .HasForeignKey("UslugeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_UslugaStavke_Usluge");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Proizvod");
 
@@ -616,8 +1121,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.StatusZahtjeva", "StatusZahtjeva")
                         .WithMany("Zahtjevi")
                         .HasForeignKey("StatusZahtjevaId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Zahtjev_StatusZahtjeva");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("StatusZahtjeva");
                 });

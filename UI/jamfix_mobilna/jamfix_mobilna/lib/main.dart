@@ -5,8 +5,11 @@ import 'package:jamfix_mobilna/providers/base_provider.dart';
 import 'package:jamfix_mobilna/providers/drzava_provider.dart';
 import 'package:jamfix_mobilna/providers/korisnici_provider.dart';
 import 'package:jamfix_mobilna/providers/novosti_provider.dart';
+import 'package:jamfix_mobilna/providers/ocjene_provider.dart';
 import 'package:jamfix_mobilna/providers/product_provider.dart';
 import 'package:jamfix_mobilna/providers/radni_nalog_provider.dart';
+import 'package:jamfix_mobilna/providers/usluge_provider.dart';
+import 'package:jamfix_mobilna/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/registracija.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
@@ -28,11 +31,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
+        ChangeNotifierProvider(create: (_) => RadniNalogProvider()),
         ChangeNotifierProvider(create: (_) => KorisniciProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
-        ChangeNotifierProvider(create: (_) => DrzavaProvider()),
-        ChangeNotifierProvider(create: (_) => RadniNalogProvider()),
         ChangeNotifierProvider(create: (_) => NovostiProvider()),
+        ChangeNotifierProvider(create: (_) => DrzavaProvider()),
+        ChangeNotifierProvider(create: (_) => OcjeneProvider()),
+        ChangeNotifierProvider(create: (_) => UslugeProvider()),
+
       ],
       child: const MyApp(),
     ),

@@ -86,19 +86,28 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   }
 
   Widget _buildNovostItem(Novosti novost) {
+    final int maxChars = 200;
+
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: ListTile(
-        leading:
-            novost.slika != null && imageFromBase64String(novost.slika!) != ""
-                ? SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: imageFromBase64String(novost.slika!),
-                  )
-                : const SizedBox.shrink(),
+        leading: novost.slika != null && novost.slika! != ""
+            ? SizedBox(
+                width: 100,
+                height: 100,
+                child: imageFromBase64String(novost.slika!),
+              )
+            : Image.asset(
+                "assets/images/slika.jpg",
+                height: 100,
+                width: 100,
+              ),
         title: Text(novost.naslov ?? ''),
-        subtitle: Text(novost.sadrzaj ?? ''),
+        subtitle: Text(
+          novost.sadrzaj != null && novost.sadrzaj!.length > maxChars
+              ? "${novost.sadrzaj!.substring(0, maxChars)}..."
+              : novost.sadrzaj ?? '',
+        ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(

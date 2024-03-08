@@ -9,9 +9,10 @@ namespace JamFix.Services.Database
 {
     public class Novosti
     {
+        [Key]
         public int NovostId { get; set; }
         public string Naslov { get; set; }
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string Sadrzaj { get; set; }
         public byte[]? Slika { get; set; }
     }

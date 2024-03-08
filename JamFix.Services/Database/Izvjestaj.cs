@@ -9,6 +9,7 @@ namespace JamFix.Services.Database
 {
     public class Izvjestaj
     {
+        [Key]
         public int IzvjestajId { get; set; }
         public int BrojIntervencija { get; set; }
         public string NajPosMjesto { get; set; }

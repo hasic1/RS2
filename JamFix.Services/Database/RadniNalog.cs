@@ -10,6 +10,7 @@ namespace JamFix.Services.Database
 {
     public class RadniNalog
     {
+        [Key]
         public int NalogId { get; set; }
         public string NosilacPosla { get; set; }
         public string OpisPrijavljenog { get; set; }

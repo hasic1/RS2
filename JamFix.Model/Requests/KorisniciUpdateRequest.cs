@@ -11,5 +11,6 @@
         public string? Email { get; set; }
         public int? PozicijaId { get; set; }
         public bool? Aktivnost { get; set; }
+
     }
 }

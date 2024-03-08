@@ -93,7 +93,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         title: Text(novost.naslov ?? ''),
         subtitle: Text(
           novost.sadrzaj != null && novost.sadrzaj!.length > maxChars
-              ? novost.sadrzaj!.substring(0, maxChars) + "..."
+              ? "${novost.sadrzaj!.substring(0, maxChars)}..."
               : novost.sadrzaj ?? '',
         ),
         onTap: () {

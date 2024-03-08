@@ -9,7 +9,6 @@ namespace JamFix.Model.Requests
     public class OcjenaUpdateRequest
     {
         public int ProizvodId { get; set; }
-        public int KupacId { get; set; }
         public DateTime Datum { get; set; }
         public int ocjena { get; set; }
     }

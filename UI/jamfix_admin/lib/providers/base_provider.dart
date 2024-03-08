@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/models/search_result.dart';
+import 'package:jamfix_admin/screens/log_in_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {

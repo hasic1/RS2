@@ -10,7 +10,6 @@ namespace JamFix.Model.Modeli
     {
         public int OcjenaId { get; set; }
         public int ProizvodId { get; set; }
-        public int KupacId { get; set; }
         public DateTime Datum { get; set; }
         public int ocjena { get; set; }
     }

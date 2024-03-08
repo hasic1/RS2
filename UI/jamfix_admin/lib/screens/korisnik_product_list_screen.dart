@@ -39,56 +39,62 @@ class _KorisnikProductListScreen extends State<KorisnikProductListScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Scaffold(
-        appBar: AppBar(
-        ),
+        appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               const Text(
+                const Text(
                   'Naši proizvodi',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-               const SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 Wrap(
                   spacing: 15.0,
                   runSpacing: 15.0,
-                  children: result?.result.map((recommendedProduct) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen(
-                              product: recommendedProduct,
+                  children: result?.result.map((products) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailScreen(
+                                  product: products,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(17.0),
+                            child: Container(
+                              width: 250,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: products.slika != null &&
+                                        products.slika != ""
+                                    ? Image.memory(
+                                        base64Decode(products.slika!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        "assets/images/slika.jpg",
+                                        height: 100,
+                                        width: 100,
+                                      ),
+                              ),
                             ),
                           ),
                         );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(17.0), 
-                        child: Container(
-                          width: 250,
-                          height: 250,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.memory(
-                              base64Decode(recommendedProduct.slika ?? ''),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList() ??
+                      }).toList() ??
                       [],
                 ),
               ],

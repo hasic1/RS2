@@ -285,12 +285,12 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context); // Zatvori dijalog
+                                      Navigator.pop(context); 
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const ZahtjevScreen(),
+                                              const PocetnaScreen(),
                                         ),
                                       );
                                     },

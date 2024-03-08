@@ -121,9 +121,9 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                 controller: _noviPasswordController,
                                 decoration: const InputDecoration(
                                     labelText: 'Novi password'),
-                                // validator: (name) => name!.length < 5
-                                //     ? 'Lozinka mora imati bar 5 slova'
-                                //     : null,
+                                validator: (name) => name!.length < 5
+                                    ? 'Lozinka mora imati bar 5 slova'
+                                    : null,
                                 obscureText: true,
                               ),
                               const SizedBox(height: 8.0),
@@ -131,9 +131,9 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                 controller: _passwordPotvrdaController,
                                 decoration: const InputDecoration(
                                     labelText: 'Password potvrda'),
-                                // validator: (name) => name!.length < 5
-                                //     ? 'Lozinka mora imati bar 5 slova'
-                                //     : null,
+                                validator: (name) => name!.length < 5
+                                    ? 'Lozinka mora imati bar 5 slova'
+                                    : null,
                                 obscureText: true,
                               ),
                               const SizedBox(height: 8.0),

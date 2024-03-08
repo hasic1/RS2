@@ -14,7 +14,6 @@ import 'package:jamfix_admin/providers/uloge_provider.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:jamfix_admin/utils/util.dart';
 
 class KorisnciDetailScreen extends StatefulWidget {
   Korisnici? korisnici;

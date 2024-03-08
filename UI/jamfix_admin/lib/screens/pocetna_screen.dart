@@ -69,11 +69,18 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Align(
                                   alignment: Alignment.topCenter,
-                                  child: Image.memory(
-                                    base64Decode(product.slika!),
-                                    height: 300,
-                                    width: 300,
-                                  ),
+                                  child: product.slika != null &&
+                                          product.slika != ""
+                                      ? Image.memory(
+                                          base64Decode(product.slika ?? ''),
+                                          height: 300,
+                                          width: 300,
+                                        )
+                                      : Image.asset(
+                                          "assets/images/slika.jpg",
+                                          height: 375,
+                                          width: 375,
+                                        ),
                                 ),
                               );
                             },
@@ -124,7 +131,7 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                               recommendedProducts?.result[index];
 
                           return Padding(
-                            padding:const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).pushReplacement(
@@ -136,11 +143,19 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                               },
                               child: Align(
                                 alignment: Alignment.topCenter,
-                                child: Image.memory(
-                                  base64Decode(recommendedProduct?.slika ?? ''),
-                                  height: 375,
-                                  width: 375,
-                                ),
+                                child: recommendedProduct?.slika != null &&
+                                        recommendedProduct?.slika != ""
+                                    ? Image.memory(
+                                        base64Decode(
+                                            recommendedProduct!.slika!),
+                                        height: 375,
+                                        width: 375,
+                                      )
+                                    : Image.asset(
+                                        "assets/images/slika.jpg",
+                                        height: 375,
+                                        width: 375,
+                                      ),
                               ),
                             ),
                           );

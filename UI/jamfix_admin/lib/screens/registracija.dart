@@ -5,6 +5,7 @@ import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
+import 'package:jamfix_admin/screens/log_in_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
 
@@ -193,16 +194,16 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text("Success"),
-                                content: const Text(
-                                    "Uspješno ste kreirali racun"),
+                                content:
+                                    const Text("Uspješno ste kreirali racun"),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context); 
+                                      Navigator.pop(context);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>  LoginPage(),
+                                          builder: (context) => LoginPage(),
                                         ),
                                       );
                                     },

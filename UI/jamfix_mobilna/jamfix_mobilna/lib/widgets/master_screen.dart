@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:jamfix_mobilna/main.dart';
+import 'package:jamfix_mobilna/screens/korisnici_product_list_screen.dart';
 import 'package:jamfix_mobilna/screens/novosti_list_screen.dart';
 import 'package:jamfix_mobilna/screens/oNama_screen.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/postavke_screen.dart';
+import 'package:jamfix_mobilna/screens/product_list_screen.dart';
 import 'package:jamfix_mobilna/screens/radni_nalog_screen.dart';
 import 'package:jamfix_mobilna/screens/zahtijev_screen.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
@@ -33,12 +35,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         leadingWidth: 40,
       ),
       drawer: Drawer(
+        backgroundColor: Colors.blue,
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik||Authorization.isAdmin,
+              visible: Authorization.isKorisnik || Authorization.isAdmin,
               child: ListTile(
-                title: Text('Dodaj zahtjev'),
+                title: Text(
+                  'Dodaj zahtjev',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -49,7 +55,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             ListTile(
-              title: Text('Pocetna'),
+              title: Text(
+                'Pocetna',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -59,7 +68,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Novosti'),
+              title: Text(
+                'Novosti',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -69,7 +81,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('O nama'),
+              title: Text(
+                'O nama',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -79,9 +94,46 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             Visibility(
-              visible: Authorization.isAdmin||Authorization.isOperater,
+              visible: Authorization.isAdmin,
               child: ListTile(
-                title: Text('Radni nalog'),
+                title: Text(
+                  'Proizvodi admin',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isKorisnik ||
+                  Authorization.isZaposlenik ||
+                  Authorization.isAdmin,
+              child: ListTile(
+                title: Text(
+                  'Proizvodi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KorisnikProductListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isOperater,
+              child: ListTile(
+                title: Text(
+                  'Radni nalog',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -92,7 +144,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             ListTile(
-              title: Text('Postavke'),
+              title: Text(
+                'Postavke',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -102,7 +157,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Odjava'),
+              title: Text(
+                'Odjava',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -117,7 +175,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       body: Column(
         children: [
           Expanded(
-            child: widget.child!, 
+            child: widget.child!,
           ),
           Container(
             height: 60,

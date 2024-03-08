@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:intl/intl.dart';
 
 class Authorization {
   static String? username;
@@ -67,7 +68,7 @@ bool isValidResponse(Response response) {
   } else if (response.statusCode == 204) {
     return true;
   } else if (response.statusCode == 400) {
-    throw Exception("Bad request");
+    throw Exception("Pogresno korisnicko ime ili lozinka");
   } else if (response.statusCode == 401) {
     throw Exception("Unauthorized");
   } else if (response.statusCode == 403) {
@@ -81,6 +82,39 @@ bool isValidResponse(Response response) {
   }
 }
 
+bool isValidInsertUpdate(Response response) {
+  if (response.statusCode == 200) {
+    if (response.body != "") {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (response.statusCode == 204) {
+    return true;
+  } else if (response.statusCode == 400) {
+    throw Exception("Bad request");
+  } else if (response.statusCode == 401) {
+    throw Exception("Unauthorized");
+  } else if (response.statusCode == 403) {
+    throw Exception("Forbidden");
+  } else if (response.statusCode == 404) {
+    throw Exception("Not found");
+  } else if (response.statusCode == 500) {
+    throw Exception("Niste unijeli pravilno podatke");
+  } else {
+    throw Exception("Exception... handle this gracefully");
+  }
+}
+
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
+}
+
+String formatNumber(dynamic) {
+  var f = NumberFormat('###,00');
+
+  if (dynamic == null) {
+    return "";
+  }
+  return f.format(dynamic);
 }
