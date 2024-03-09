@@ -204,7 +204,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.check_sharp),
+                                      icon: const Icon(Icons.delete),
                                       onPressed: () {
                                         _zahtjevProvider.delete(e.zahtjevId);
                                         Navigator.pushReplacement(

@@ -94,7 +94,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             Visibility(
-              visible: Authorization.isAdmin,
+              visible: Authorization.isAdmin||Authorization.isZaposlenik,
               child: ListTile(
                 title: Text(
                   'Proizvodi admin',

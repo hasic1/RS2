@@ -23,6 +23,7 @@ class Authorization {
   static int? id;
   static int? drzavaID;
   static int? pozicijaID;
+  static String? brojRacuna;
 
   static void setJwtToken(String token) {
     jwtToken = token;
@@ -42,6 +43,7 @@ class Authorization {
     korisnickoIme = decodedToken['actort'] as String?;
     pozicijaID = int.tryParse(decodedToken['upn']?.toString() ?? "");
     drzavaID = int.tryParse(decodedToken['certserialnumber']?.toString() ?? "");
+    brojRacuna = decodedToken['gender'] as String?;
 
     if (isAdmin) {
       rola = "Administrator";
@@ -108,13 +110,4 @@ bool isValidInsertUpdate(Response response) {
 
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
-}
-
-String formatNumber(dynamic) {
-  var f = NumberFormat('###,00');
-
-  if (dynamic == null) {
-    return "";
-  }
-  return f.format(dynamic);
 }

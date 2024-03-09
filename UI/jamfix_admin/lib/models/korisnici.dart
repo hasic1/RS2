@@ -18,9 +18,24 @@ class Korisnici {
   Drzava? drzava;
   bool? aktivnost;
   int? pozicijaId;
-
+  DateTime? datumVrijeme;
+  String? transakcijskiRacun;
   Korisnici(
-      {this.korisnikId, this.ime, this.prezime, this.telefon, this.email,this.korisnickoIme,this.password,this.noviPassword,this.passwordPotvrda,this.drzavaId,this.drzava,this.aktivnost,this.pozicijaId});
+      {this.korisnikId,
+      this.ime,
+      this.prezime,
+      this.telefon,
+      this.email,
+      this.korisnickoIme,
+      this.password,
+      this.noviPassword,
+      this.passwordPotvrda,
+      this.drzavaId,
+      this.drzava,
+      this.aktivnost,
+      this.pozicijaId,
+      this.datumVrijeme,
+      this.transakcijskiRacun});
 
   factory Korisnici.fromJson(Map<String, dynamic> json) =>
       _$KorisniciFromJson(json);

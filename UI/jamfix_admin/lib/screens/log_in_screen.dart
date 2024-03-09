@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     var username = _usernameController.text;
                     var password = _passwordController.text;
-
+                    Authorization.psw=_passwordController.text;
                     try {
                       await loginUser(username, password);
                       Navigator.of(context).push(

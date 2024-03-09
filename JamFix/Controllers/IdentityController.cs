@@ -53,9 +53,9 @@ namespace JamFix.Controllers
                    new(ClaimTypes.Actor, user.KorisnickoIme),
                    new(ClaimTypes.Upn, user.PozicijaId.ToString()),
                    new(ClaimTypes.SerialNumber, user.DrzavaId.ToString()),
+                   new(ClaimTypes.Gender, user.TransakcijskiRacun.ToString()),
 
                    new(ClaimTypes.Role, string.Join(",", user.Uloge.Select(role => role.ToString()))),
-
                 };
 
                 claims.AddRange(roleClaims);

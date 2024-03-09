@@ -199,17 +199,19 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      var kolicinaInt = int.tryParse(_kolicinaController.text);
                       var request = RadniNalog(
-                          nosilacPosla: _nosilacPoslaController.text,
-                          opisPrijavljenog: _opisPrijavljenogController.text,
-                          opisUradjenog: _opisUradjenogController.text,
-                          imePrezime: _imePrezimeController.text,
-                          telefon: _telefonController.text,
-                          adresa: _adresaController.text,
-                          mjesto: _mjestoController.text,
-                          datum: selectedDate,
-                          naziv: _nazivController.text,
-                          kolicina: int.parse(_kolicinaController.text));
+                        nosilacPosla: _nosilacPoslaController.text,
+                        opisPrijavljenog: _opisPrijavljenogController.text,
+                        opisUradjenog: _opisUradjenogController.text,
+                        imePrezime: _imePrezimeController.text,
+                        telefon: _telefonController.text,
+                        adresa: _adresaController.text,
+                        mjesto: _mjestoController.text,
+                        datum: selectedDate ?? DateTime.now(),
+                        naziv: _nazivController.text,
+                        kolicina: kolicinaInt,
+                      );
                       _radniNalogProvider.insert(request);
                       showDialog(
                         context: context,
@@ -220,7 +222,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>

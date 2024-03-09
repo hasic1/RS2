@@ -19,7 +19,8 @@ class Korisnici {
   bool? aktivnost;
   Drzava? drzava;
   int? pozicijaId;
-
+  DateTime? datumVrijeme;
+  String? transakcijskiRacun;
   Korisnici(
       {this.korisnikId,
       this.ime,
@@ -34,7 +35,7 @@ class Korisnici {
       this.drzava,
       this.aktivnost,
       this.pozicijaId,
-      this.status});
+      this.status,this.datumVrijeme,this.transakcijskiRacun});
 
   factory Korisnici.fromJson(Map<String, dynamic> json) =>
       _$KorisniciFromJson(json);

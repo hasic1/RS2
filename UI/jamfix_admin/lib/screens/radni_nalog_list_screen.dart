@@ -167,7 +167,8 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                                 icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _radniNalogProvider.delete(e.nalogId);
-                                  Navigator.of(context).pushReplacement(
+                                  Navigator.pushReplacement(
+                                    context,
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           const RadniNalogListScreen(),

@@ -120,6 +120,113 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                     validator: (name) =>
                         name!.isEmpty ? 'Polje je obavezno' : null,
                   ),
+                  const SizedBox(height: 35.0),
+                  Row(
+                    children: [
+                      const Text('Datum i Vrijeme:'),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _selectDate(context),
+                          child: const Text('Odaberi Datum i Vrijeme'),
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                    ],
+                  ),
+                  Row(children: [
+                    selectedDate != null
+                        ? Text(selectedDate!.toString())
+                        : const Text('Nije odabrano'),
+                  ]),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: hitnaIntervencija,
+                        onChanged: (value) {
+                          setState(() {
+                            hitnaIntervencija = value!;
+                          });
+                        },
+                      ),
+                      const Text('Hitna Intervencija'),
+                    ],
+                  ),
+                  const SizedBox(height: 25.0),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          var request = Zahtjev(
+                            imePrezime: imePrezimeController.text,
+                            adresa: adresaController.text,
+                            brojTelefona: brojTelefonaController.text,
+                            opis: opisController.text,
+                            datumVrijeme: selectedDate ?? DateTime.now(),
+                            hitnaIntervencija: hitnaIntervencija,
+                            statusZahtjevaId:
+                                int.tryParse(selectedStatusZahtjevaId ?? "1") ??
+                                    0,
+                          );
+                          if (widget.zahtjev == null) {
+                            await _zahtjevProvider.insert(request);
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PocetnaScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
+                          } else {
+                            await _zahtjevProvider.update(
+                                widget.zahtjev!.zahtjevId, request);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ZahtjevScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Potvrdi Unos'),
+                    ),
+                  ),
                   Visibility(
                     visible: Authorization.isAdmin,
                     child: Row(
@@ -173,7 +280,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 20.0),
                   Visibility(
                     visible:
                         Authorization.isAdmin || Authorization.isZaposlenik,
@@ -223,112 +330,6 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                         },
                         child: const Text('Promijeniti status'),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 35.0),
-                  Row(
-                    children: [
-                      const Text('Datum i Vrijeme:'),
-                      const SizedBox(width: 8.0),
-                      ElevatedButton(
-                        onPressed: () => _selectDate(context),
-                        child: const Text('Odaberi Datum i Vrijeme'),
-                      ),
-                      const SizedBox(width: 8.0),
-                    ],
-                  ),
-                  Row(children: [
-                    selectedDate != null
-                        ? Text(selectedDate!.toString())
-                        : const Text('Nije odabrano'),
-                  ]),
-                  const SizedBox(height: 25.0),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: hitnaIntervencija,
-                        onChanged: (value) {
-                          setState(() {
-                            hitnaIntervencija = value!;
-                          });
-                        },
-                      ),
-                      const Text('Hitna Intervencija'),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          var request = Zahtjev(
-                            imePrezime: imePrezimeController.text,
-                            adresa: adresaController.text,
-                            brojTelefona: brojTelefonaController.text,
-                            opis: opisController.text,
-                            datumVrijeme: selectedDate ?? DateTime.now(),
-                            hitnaIntervencija: hitnaIntervencija,
-                            statusZahtjevaId:
-                                int.tryParse(selectedStatusZahtjevaId ?? "1") ??
-                                    0,
-                          );
-                          if (widget.zahtjev == null) {
-                            await _zahtjevProvider.insert(request);
-                            // ignore: use_build_context_synchronously
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Success"),
-                                content: const Text(
-                                    "Uspješno ste izvršili promjene"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); 
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PocetnaScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text("OK"),
-                                  )
-                                ],
-                              ),
-                            );
-                          } else {
-                            await _zahtjevProvider.update(
-                                widget.zahtjev!.zahtjevId, request);
-                              showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Success"),
-                                content: const Text(
-                                    "Uspješno ste izvršili promjene"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ZahtjevScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text("OK"),
-                                  )
-                                ],
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      child: const Text('Potvrdi Unos'),
                     ),
                   ),
                 ],

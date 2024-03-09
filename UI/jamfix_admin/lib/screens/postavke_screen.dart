@@ -4,6 +4,7 @@ import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
+import 'package:jamfix_admin/screens/pocetna_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +22,15 @@ class _PostavkeScreen extends State<PostavkeScreen> {
   final TextEditingController _telefonController = TextEditingController();
   final TextEditingController _passwordPotvrdaController =
       TextEditingController();
+  final TextEditingController _transakcijskiRacunController =
+      TextEditingController();
   KorisniciProvider _korisniciProvider = KorisniciProvider();
   DrzavaProvider _drzavaProvider = DrzavaProvider();
   SearchResult<Drzava>? drzavaResult;
   Map<String, dynamic> _initialValue = {};
-  String? selectedDrzavaId;
+  String? selectedDrzavaId = '1';
+  DateTime? selectedDate;
+
   final _formKey = GlobalKey<FormState>();
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
@@ -45,6 +50,15 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     return null;
   }
 
+  String? validateCreditCardNumber(String? creditCardNumber) {
+    RegExp cardRegex = RegExp(r'^\d{4} \d{4} \d{4} \d{4}$');
+    final isCardValid = cardRegex.hasMatch(creditCardNumber ?? '');
+    if (!isCardValid) {
+      return 'Molimo unesite validan broj transakcijskog racuna u formatu XXXX XXXX XXXX XXXX';
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,11 +68,14 @@ class _PostavkeScreen extends State<PostavkeScreen> {
         'prezime': Authorization.prezime,
         'telefon': Authorization.telefon,
         'email': Authorization.email,
+        'transakcijskiRacun': Authorization.brojRacuna
       };
       _imeController.text = _initialValue['ime'] ?? '';
       _prezimeController.text = _initialValue['prezime'] ?? '';
       _telefonController.text = _initialValue['telefon'] ?? '';
       _emailController.text = _initialValue['email'] ?? '';
+      _transakcijskiRacunController.text =
+          _initialValue['transakcijskiRacun'] ?? '';
     });
     _drzavaProvider = context.read<DrzavaProvider>();
   }
@@ -118,6 +135,30 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                  controller: _transakcijskiRacunController,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Transakcijski racun'),
+                                  validator: validateCreditCardNumber),
+                              const SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  const Text('Datum i Vrijeme:'),
+                                  const SizedBox(width: 4.0),
+                                  ElevatedButton(
+                                    onPressed: () => _selectDate(context),
+                                    child:
+                                        const Text('Odaberi Datum i Vrijeme'),
+                                  ),
+                                  const SizedBox(width: 4.0),
+                                ],
+                              ),
+                              Row(children: [
+                                selectedDate != null
+                                    ? Text(selectedDate!.toString())
+                                    : const Text('Nije odabrano'),
+                              ]),
+                              const SizedBox(height: 8.0),
+                              TextFormField(
                                 controller: _noviPasswordController,
                                 decoration: const InputDecoration(
                                     labelText: 'Novi password'),
@@ -148,45 +189,30 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                           return const CircularProgressIndicator();
                                         } else if (snapshot.hasError) {
                                           return Text(
-                                              'Error: ${snapshot.error}');
+                                              'Greška: ${snapshot.error}');
                                         } else {
                                           drzavaResult = snapshot.data
                                               as SearchResult<Drzava>?;
-                                          selectedDrzavaId = (drzavaResult
-                                              ?.result.first.drzavaId
-                                              .toString());
-                                          return Row(
-                                            children: [
-                                              Expanded(
-                                                child: DropdownButton<String>(
-                                                  value: selectedDrzavaId,
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      selectedDrzavaId =
-                                                          newValue;
-                                                    });
-                                                  },
-                                                  items: (drzavaResult?.result
-                                                          .map<
-                                                              DropdownMenuItem<
-                                                                  String>>(
-                                                            (item) =>
-                                                                DropdownMenuItem<
-                                                                    String>(
-                                                              value: item
-                                                                  .drzavaId
-                                                                  .toString(),
-                                                              child: Text(
-                                                                  item.naziv ??
-                                                                      ""),
-                                                            ),
-                                                          )
-                                                          .toList()) ??
-                                                      [],
-                                                ),
-                                              ),
-                                            ],
+                                          return DropdownButton<String>(
+                                            value: selectedDrzavaId,
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedDrzavaId = newValue;
+                                              });
+                                            },
+                                            items: (drzavaResult?.result
+                                                    .map(
+                                                      (item) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                        value: item.drzavaId
+                                                            .toString(),
+                                                        child: Text(
+                                                            item.naziv ?? ""),
+                                                      ),
+                                                    )
+                                                    .toList()) ??
+                                                [],
                                           );
                                         }
                                       },
@@ -203,17 +229,22 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                       String drzavaId = selectedDrzavaId ??
                                           Authorization.drzavaID.toString();
                                       var request = Korisnici(
-                                        ime: _imeController.text,
-                                        prezime: _prezimeController.text,
-                                        telefon: _telefonController.text,
-                                        email: _emailController.text,
-                                        drzavaId: int.parse(drzavaId),
-                                        noviPassword:
-                                            _noviPasswordController.text,
-                                        passwordPotvrda:
-                                            _passwordPotvrdaController.text,
-                                        pozicijaId: Authorization.pozicijaID,
-                                      );
+                                          ime: _imeController.text,
+                                          prezime: _prezimeController.text,
+                                          telefon: _telefonController.text,
+                                          email: _emailController.text,
+                                          drzavaId: int.parse(drzavaId),
+                                          noviPassword:
+                                              _noviPasswordController.text,
+                                          passwordPotvrda:
+                                              _passwordPotvrdaController.text,
+                                          pozicijaId: Authorization.pozicijaID,
+                                          datumVrijeme:
+                                              selectedDate ?? DateTime.now(),
+                                          transakcijskiRacun:
+                                              _transakcijskiRacunController
+                                                      .text ??
+                                                  Authorization.brojRacuna);
                                       _korisniciProvider.update(
                                           Authorization.id, request);
                                       showDialog(
@@ -227,6 +258,13 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                             TextButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const PocetnaScreen(),
+                                                  ),
+                                                );
                                               },
                                               child: const Text("OK"),
                                             )
@@ -251,5 +289,33 @@ class _PostavkeScreen extends State<PostavkeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2025),
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
   }
 }

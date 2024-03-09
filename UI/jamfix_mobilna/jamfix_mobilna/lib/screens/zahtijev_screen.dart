@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_mobilna/models/zahtjev.dart';
 import 'package:jamfix_mobilna/providers/zahtjev_provider.dart';
+import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -165,6 +166,13 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PocetnaScreen(),
+                                      ),
+                                    );
                                   },
                                   child: const Text("OK"),
                                 )

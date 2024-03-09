@@ -11,6 +11,8 @@
         public string? Email { get; set; }
         public int? PozicijaId { get; set; }
         public bool? Aktivnost { get; set; }
+        public string? TransakcijskiRacun { get; set; }
+        public DateTime DatumRodjenja { get; set; }
 
     }
 }

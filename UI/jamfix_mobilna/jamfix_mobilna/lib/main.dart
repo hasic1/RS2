@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:jamfix_mobilna/providers/base_provider.dart';
 import 'package:jamfix_mobilna/providers/drzava_provider.dart';
 import 'package:jamfix_mobilna/providers/korisnici_provider.dart';
@@ -26,6 +27,9 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      'pk_test_51OYqyiFJavMmN9lElH6dxkRe7BKrKlwBzmhGEVkFCq3LS7x5MkgNxyNmLC48OjVArXLlGT8Ko6On76ysfWVTsUtT00bNVNGrpV';
   HttpOverrides.global = MyHttpOverrides();
 
   runApp(
@@ -39,7 +43,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DrzavaProvider()),
         ChangeNotifierProvider(create: (_) => OcjeneProvider()),
         ChangeNotifierProvider(create: (_) => UslugeProvider()),
-
       ],
       child: const MyApp(),
     ),

@@ -20,7 +20,7 @@ namespace JamFix.Services.Database
         public int ProizvodId { get; set; }
         public int VrstaId { get; set; }
         public string? NazivProizvoda { get; set; }
-        public double Cijena { get; set; }
+        public int Cijena { get; set; }
         public string? Opis { get; set; }
         public byte[]? Slika { get; set; }
         public byte[]? SlikaThumb { get; set; }

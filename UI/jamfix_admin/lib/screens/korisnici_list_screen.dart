@@ -251,6 +251,13 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
                                 icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _korisniciProvider.delete(e.korisnikId);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const KorisniciListScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ],

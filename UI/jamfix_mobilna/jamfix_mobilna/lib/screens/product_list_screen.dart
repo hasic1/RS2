@@ -106,9 +106,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
       child: DataTable(
           columns: const [
             DataColumn(
-                label: Expanded(
-              child: Text('ID', style: TextStyle(fontStyle: FontStyle.italic)),
-            )),
+              label: Expanded(
+                child: Text('Akcija',
+                    style: TextStyle(fontStyle: FontStyle.italic)),
+              ),
+            ),
             DataColumn(
                 label: Expanded(
               child: Text('Naziv proizvoda',
@@ -154,7 +156,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   }
                               },
                           cells: [
-                            DataCell(Text(e.proizvodId?.toString() ?? "")),
+                            DataCell(
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      _productProvider.delete(e.proizvodId);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProductListScreen(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                             DataCell(
                               Align(
                                   alignment: Alignment.center,
@@ -164,7 +184,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             DataCell(
                               Align(
                                   alignment: Alignment.center,
-                                  child: Text(formatNumber(e.cijena))),
+                                  child: Text(e.cijena.toString())),
                             ),
                             DataCell(Align(
                                 alignment: Alignment.center,

@@ -116,7 +116,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isZaposlenik || Authorization.isAdmin,
+              visible: Authorization.isZaposlenik || Authorization.isAdmin||Authorization.isOperater,
               child: ListTile(
                 title: Text(
                   'Radni nalog',

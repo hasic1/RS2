@@ -5,6 +5,7 @@ import 'package:jamfix_mobilna/models/korisnici.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
 import 'package:jamfix_mobilna/providers/drzava_provider.dart';
 import 'package:jamfix_mobilna/providers/korisnici_provider.dart';
+import 'package:jamfix_mobilna/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class RegistracijaScreen extends StatefulWidget {
@@ -23,12 +24,16 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordPotvrdaController =
       TextEditingController();
+  final TextEditingController transakcijskiRacunController =
+      TextEditingController();
+
   DrzavaProvider _drzavaProvider = DrzavaProvider();
   SearchResult<Drzava>? drzavaResult;
   final _formKey = GlobalKey<FormState>();
+  DateTime? selectedDate;
 
   KorisniciProvider _korisniciProvider = KorisniciProvider();
-  String? selectedDrzavaId;
+  String? selectedDrzavaId = '1';
 
   @override
   void initState() {
@@ -50,6 +55,15 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
       return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
+    }
+    return null;
+  }
+
+  String? validateCreditCardNumber(String? creditCardNumber) {
+    RegExp cardRegex = RegExp(r'^\d{4} \d{4} \d{4} \d{4}$');
+    final isCardValid = cardRegex.hasMatch(creditCardNumber ?? '');
+    if (!isCardValid) {
+      return 'Molimo unesite validan broj transakcijskog racuna u formatu XXXX XXXX XXXX XXXX';
     }
     return null;
   }
@@ -107,6 +121,31 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                     ),
                     const SizedBox(height: 8.0),
                     TextFormField(
+                        controller: transakcijskiRacunController,
+                        decoration: const InputDecoration(
+                            labelText: 'Transakcijski racun'),
+                        validator: validateCreditCardNumber),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      children: [
+                        const Text('Datum i Vrijeme:'),
+                        const SizedBox(width: 4.0),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => _selectDate(context),
+                            child: const Text('Odaberi Datum i Vrijeme'),
+                          ),
+                        ),
+                        const SizedBox(width: 4.0),
+                      ],
+                    ),
+                    Row(children: [
+                      selectedDate != null
+                          ? Text(selectedDate!.toString())
+                          : const Text('Nije odabrano'),
+                    ]),
+                    const SizedBox(height: 8.0),
+                    TextFormField(
                       controller: passwordController,
                       decoration: const InputDecoration(labelText: 'Lozinka'),
                       obscureText: true,
@@ -124,48 +163,42 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                           name!.length < 5 ? 'Unesite lozinku' : null,
                     ),
                     const SizedBox(height: 8.0),
-                    FutureBuilder(
-                      future: _drzavaProvider.get(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          drzavaResult = snapshot.data as SearchResult<Drzava>?;
-                          if (drzavaResult?.result.isNotEmpty ?? false) {
-                            selectedDrzavaId =
-                                drzavaResult!.result.first.drzavaId.toString();
-                          }
-                          return Row(
-                            children: [
-                              Expanded(
-                                child: DropdownButton<String>(
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FutureBuilder(
+                            future: _drzavaProvider.get(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Greška: ${snapshot.error}');
+                              } else {
+                                drzavaResult =
+                                    snapshot.data as SearchResult<Drzava>?;
+                                return DropdownButton<String>(
                                   value: selectedDrzavaId,
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       selectedDrzavaId = newValue;
                                     });
                                   },
-                                  alignment: Alignment.center,
                                   items: (drzavaResult?.result
-                                          .map<DropdownMenuItem<String>>(
+                                          .map(
                                             (item) => DropdownMenuItem<String>(
-                                              alignment:
-                                                  AlignmentDirectional.center,
                                               value: item.drzavaId.toString(),
                                               child: Text(item.naziv ?? ""),
                                             ),
                                           )
                                           .toList()) ??
                                       [],
-                                ),
-                              )
-                            ],
-                          );
-                        }
-                      },
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8.0),
                     Align(
@@ -173,18 +206,23 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
+                              String drzavaId = selectedDrzavaId ??
+                                  Authorization.drzavaID.toString();
                               var request = Korisnici(
-                                ime: imeController.text,
-                                prezime: prezimeController.text,
-                                email: emailController.text,
-                                telefon: telefonController.text,
-                                korisnickoIme: korisnickoImeController.text,
-                                password: passwordController.text,
-                                passwordPotvrda: passwordPotvrdaController.text,
-                                drzavaId: int.parse(selectedDrzavaId ?? '1'),
-                                aktivnost: true,
-                                pozicijaId: 1,
-                              );
+                                  ime: imeController.text,
+                                  prezime: prezimeController.text,
+                                  email: emailController.text,
+                                  telefon: telefonController.text,
+                                  korisnickoIme: korisnickoImeController.text,
+                                  password: passwordController.text,
+                                  passwordPotvrda:
+                                      passwordPotvrdaController.text,
+                                  drzavaId: int.parse(drzavaId),
+                                  aktivnost: true,
+                                  pozicijaId: 1,
+                                  datumVrijeme: selectedDate ?? DateTime.now(),
+                                  transakcijskiRacun:
+                                      transakcijskiRacunController.text);
                               _korisniciProvider.insert(request);
                               showDialog(
                                 context: context,
@@ -220,5 +258,33 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2025),
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
   }
 }

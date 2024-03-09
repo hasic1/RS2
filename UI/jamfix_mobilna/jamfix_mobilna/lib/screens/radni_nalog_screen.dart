@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamfix_mobilna/models/radni_nalog.dart';
 import 'package:jamfix_mobilna/providers/radni_nalog_provider.dart';
+import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/widgets/master_screen.dart';
 
 class RadniNalogScreen extends StatefulWidget {
@@ -64,7 +65,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                       child: TextFormField(
                         controller: _mjestoController,
                         decoration: const InputDecoration(
-                          labelText: 'Mijesto',
+                          labelText: 'Mjesto',
                         ),
                         validator: (name) =>
                             name!.isEmpty ? 'Polje je obavezno' : null,
@@ -174,6 +175,9 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Kolicina',
                         ),
+                        keyboardType: TextInputType
+                            .number, 
+
                         validator: (name) =>
                             name!.isEmpty ? 'Polje je obavezno' : null,
                       ),
@@ -184,6 +188,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      var kolicinaInt = int.tryParse(_kolicinaController.text);
                       var request = RadniNalog(
                         nosilacPosla: _nosilacPoslaController.text,
                         opisPrijavljenog: _opisPrijavljenogController.text,
@@ -192,20 +197,26 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                         telefon: _telefonController.text,
                         adresa: _adresaController.text,
                         mjesto: _mjestoController.text,
-                        datum: selectedDate,
+                        datum: selectedDate ?? DateTime.now(),
                         naziv: _nazivController.text,
-                        kolicina: int.parse(_kolicinaController.text),
+                        kolicina: kolicinaInt,
                       );
                       _radniNalogProvider.insert(request);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text("Success"),
-                          content: const Text("Uspješno ste izvrsili promjene"),
+                          content: const Text("Uspješno ste napraviili radni nalog"),
                           actions: [
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
+                                Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const PocetnaScreen(),
+                                          ),
+                                        );
                               },
                               child: const Text("OK"),
                             )

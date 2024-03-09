@@ -12,6 +12,7 @@ import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
 import 'package:jamfix_admin/providers/uloge_provider.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +48,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
   String? selectedPozicijaId;
   String? selectedDrzavaId;
   String? selectedUloga;
+  DateTime? selectedDate;
 
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
@@ -228,15 +230,18 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                           String drzavaId = selectedDrzavaId ?? "1";
 
                           Korisnici request = Korisnici(
-                            ime: imeController.text,
-                            prezime: prezimeController.text,
-                            telefon: telefonController.text,
-                            email: emailController.text,
-                            drzavaId: int.parse(drzavaId),
-                            aktivnost: aktivan,
-                            pozicijaId: int.parse(
-                                widget.korisnici!.pozicijaId.toString()),
-                          );
+                              ime: imeController.text,
+                              prezime: prezimeController.text,
+                              telefon: telefonController.text,
+                              email: emailController.text,
+                              drzavaId: int.parse(drzavaId),
+                              aktivnost: aktivan,
+                              pozicijaId: int.parse(
+                                  widget.korisnici!.pozicijaId.toString()),
+                              noviPassword: Authorization.psw,
+                              passwordPotvrda: Authorization.psw,
+                              datumVrijeme: selectedDate ?? DateTime.now(),
+                              transakcijskiRacun: Authorization.brojRacuna);
                           _korisniciProvider.update(
                               widget.korisnici!.korisnikId!, request);
                           showDialog(
@@ -248,7 +253,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // Zatvori dijalog
+                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -267,6 +272,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                       child: const Text('Potvrdi Unos'),
                     ),
                   ), //------------------------------------------------------------
+                  const Text("Promjeni poziciju"),
                   Row(
                     children: [
                       Expanded(
@@ -320,15 +326,18 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                         if (widget.korisnici != null) {
                           String pozicijaId = selectedPozicijaId ?? "1";
                           Korisnici request = Korisnici(
-                            ime: imeController.text,
-                            prezime: prezimeController.text,
-                            telefon: telefonController.text,
-                            email: emailController.text,
-                            drzavaId: int.parse(
-                                widget.korisnici!.drzavaId.toString()),
-                            aktivnost: aktivan,
-                            pozicijaId: int.parse(pozicijaId),
-                          );
+                              ime: imeController.text,
+                              prezime: prezimeController.text,
+                              telefon: telefonController.text,
+                              email: emailController.text,
+                              drzavaId: int.parse(
+                                  widget.korisnici!.drzavaId.toString()),
+                              aktivnost: aktivan,
+                              pozicijaId: int.parse(pozicijaId),
+                              noviPassword: Authorization.psw,
+                              passwordPotvrda: Authorization.psw,
+                              datumVrijeme: selectedDate ?? DateTime.now(),
+                              transakcijskiRacun: Authorization.brojRacuna);
                           _korisniciProvider.update(
                               widget.korisnici!.korisnikId!, request);
                           showDialog(
@@ -340,7 +349,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // Zatvori dijalog
+                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -363,6 +372,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                     height: 5,
                   ),
                   //----------------------------------------------------------------------
+                  const Text("Promjeni ulogu"),
                   Row(
                     children: [
                       Expanded(
@@ -458,5 +468,33 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2025),
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
   }
 }

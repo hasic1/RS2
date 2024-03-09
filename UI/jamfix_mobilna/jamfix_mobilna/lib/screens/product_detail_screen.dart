@@ -127,51 +127,57 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Slider(
-                  value: _rating,
-                  min: 1,
-                  max: 5,
-                  divisions: 4,
-                  label: _rating.toString(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _rating = newValue;
-                    });
-                  },
+                Visibility(
+                  visible: Authorization.isKorisnik,
+                  child: Slider(
+                    value: _rating,
+                    min: 1,
+                    max: 5,
+                    divisions: 4,
+                    label: _rating.toString(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _rating = newValue;
+                      });
+                    },
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    var request = Ocjene(
-                      proizvodId: widget.product?.proizvodId,
-                      ocjena: _rating.round(),
-                      datum: DateTime.now(),
-                    );
-                    _ocjeneProvider.insert(request);
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Success"),
-                        content:
-                            const Text("Uspješno ste ocjenili ovaj proizvod"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const KorisnikProductListScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text("OK"),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  child: Text('Ocijeni'),
+                Visibility(
+                  visible: Authorization.isKorisnik,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      var request = Ocjene(
+                        proizvodId: widget.product?.proizvodId,
+                        ocjena: _rating.round(),
+                        datum: DateTime.now(),
+                      );
+                      _ocjeneProvider.insert(request);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Success"),
+                          content:
+                              const Text("Uspješno ste ocjenili ovaj proizvod"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const KorisnikProductListScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text("OK"),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    child: const Text('Ocijeni'),
+                  ),
                 ),
                 newMethod(context),
               ],
@@ -200,18 +206,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           await rootBundle.load("assets/images/slika.jpg");
                       Uint8List defaultImageBytes =
                           imageData.buffer.asUint8List();
-
+                      var cijenaInt = int.tryParse(cijenaController.text);
+                      var odabranaVrsta;
+                      if (widget.product == null) {
+                        odabranaVrsta = selectedVrstaProizvodaId ?? '1';
+                      } else {
+                        odabranaVrsta = selectedVrstaProizvodaId ??
+                            _initialValue['vrstaId'].toString();
+                      }
                       Product request = Product(
                         nazivProizvoda: nazivProizvodaController.text,
-                        cijena: double.parse(cijenaController.text),
+                        cijena: cijenaInt,
                         opis: opisController.text,
                         slika: _base65Image ?? base64Encode(defaultImageBytes),
                         snizen: snizen,
                         brzinaInterneta: brzinaInternetaController.text,
                         brojMinuta: brojMinutaPotvrdaController.text,
                         brojKanala: brojKanalaController.text,
-                        vrstaId: int.parse(selectedVrstaProizvodaId ??
-                            _initialValue['vrstaId'].toString()),
+                        vrstaId: int.tryParse(odabranaVrsta),
                       );
                       if (widget.product == null) {
                         await _productProvider.insert(request);
@@ -279,12 +291,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PlatiUsluguScreen(product: widget.product),
-                            ),
-                            );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PlatiUsluguScreen(product: widget.product),
+                        ),
+                      );
                     },
                     child: const Text("Dodaj narudzbu"),
                   ),

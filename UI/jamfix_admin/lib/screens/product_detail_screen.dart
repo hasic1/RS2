@@ -199,18 +199,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           await rootBundle.load("assets/images/slika.jpg");
                       Uint8List defaultImageBytes =
                           imageData.buffer.asUint8List();
-
+                      var cijenaInt = int.tryParse(cijenaController.text);
+                      var odabranaVrsta;
+                      if (widget.product == null) {
+                        odabranaVrsta = selectedVrstaProizvodaId ?? '1';
+                      } else {
+                        odabranaVrsta = selectedVrstaProizvodaId ??
+                            _initialValue['vrstaId'].toString();
+                      }
                       Product request = Product(
                         nazivProizvoda: nazivProizvodaController.text,
-                        cijena: double.parse(cijenaController.text),
+                        cijena: cijenaInt,
                         opis: opisController.text,
                         slika: _base65Image ?? base64Encode(defaultImageBytes),
                         snizen: snizen,
                         brzinaInterneta: brzinaInternetaController.text,
                         brojMinuta: brojMinutaPotvrdaController.text,
                         brojKanala: brojKanalaController.text,
-                        vrstaId: int.parse(selectedVrstaProizvodaId ??
-                            _initialValue['vrstaId'].toString()),
+                        vrstaId: int.tryParse(odabranaVrsta),
                       );
                       if (widget.product == null) {
                         await _productProvider.insert(request);
@@ -267,26 +273,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     }
                   },
                   child: const Text("Sacuvaj"),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: Authorization.isKorisnik,
-              child: const Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  // child: ElevatedButton(
-                  //   onPressed: () {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             PlatiUsluguScreen(product: widget.product),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: const Text("Dodaj narudzbu"),
-                  // ),
                 ),
               ),
             ),

@@ -6,7 +6,7 @@ part 'product.g.dart';
 class Product {
   int? proizvodId;
   String? nazivProizvoda;
-  double? cijena;
+  int? cijena;
   String? opis;
   String? slika;
   bool? snizen;

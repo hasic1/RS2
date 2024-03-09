@@ -22,6 +22,10 @@ Korisnici _$KorisniciFromJson(Map<String, dynamic> json) => Korisnici(
           : Drzava.fromJson(json['drzava'] as Map<String, dynamic>),
       aktivnost: json['aktivnost'] as bool?,
       pozicijaId: json['pozicijaId'] as int?,
+      datumVrijeme: json['datumVrijeme'] == null
+          ? null
+          : DateTime.parse(json['datumVrijeme'] as String),
+      transakcijskiRacun: json['transakcijskiRacun'] as String?,
     );
 
 Map<String, dynamic> _$KorisniciToJson(Korisnici instance) => <String, dynamic>{
@@ -38,4 +42,6 @@ Map<String, dynamic> _$KorisniciToJson(Korisnici instance) => <String, dynamic>{
       'drzava': instance.drzava,
       'aktivnost': instance.aktivnost,
       'pozicijaId': instance.pozicijaId,
+      'datumVrijeme': instance.datumVrijeme?.toIso8601String(),
+      'transakcijskiRacun': instance.transakcijskiRacun,
     };

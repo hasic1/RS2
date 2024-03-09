@@ -159,28 +159,28 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             KorisnikUlogaId = 1,
-                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4052),
+                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1807),
                             KorisnikId = 1,
                             UlogaId = 1
                         },
                         new
                         {
                             KorisnikUlogaId = 2,
-                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4117),
+                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1878),
                             KorisnikId = 2,
                             UlogaId = 2
                         },
                         new
                         {
                             KorisnikUlogaId = 3,
-                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4123),
+                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1889),
                             KorisnikId = 3,
                             UlogaId = 3
                         },
                         new
                         {
                             KorisnikUlogaId = 4,
-                            DatumIzmjene = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(4128),
+                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1897),
                             KorisnikId = 4,
                             UlogaId = 4
                         });
@@ -238,6 +238,10 @@ namespace JamFix.Services.Migrations
                     b.Property<string>("Telefon")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TransakcijskiRacun")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("KorisnikId");
 
                     b.HasIndex("DrzavaId");
@@ -262,7 +266,8 @@ namespace JamFix.Services.Migrations
                             PozicijaId = 1,
                             Prezime = "Admin",
                             Status = true,
-                            Telefon = "061-336-026"
+                            Telefon = "061-336-026",
+                            TransakcijskiRacun = "4000 0000 0000 0002"
                         },
                         new
                         {
@@ -279,7 +284,8 @@ namespace JamFix.Services.Migrations
                             PozicijaId = 2,
                             Prezime = "Korisnik",
                             Status = true,
-                            Telefon = "061-336-026"
+                            Telefon = "061-336-026",
+                            TransakcijskiRacun = "5555 5555 5555 4444"
                         },
                         new
                         {
@@ -296,7 +302,8 @@ namespace JamFix.Services.Migrations
                             PozicijaId = 5,
                             Prezime = "Zaposlenik",
                             Status = true,
-                            Telefon = "061-336-026"
+                            Telefon = "061-336-026",
+                            TransakcijskiRacun = "4242 4242 4242 4242"
                         },
                         new
                         {
@@ -313,7 +320,8 @@ namespace JamFix.Services.Migrations
                             PozicijaId = 6,
                             Prezime = "Operater",
                             Status = true,
-                            Telefon = "061-336-026"
+                            Telefon = "061-336-026",
+                            TransakcijskiRacun = "6011 0000 0000 0004"
                         });
                 });
 
@@ -401,56 +409,56 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             OcjenaId = 1,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5192),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(8810),
                             Ocjena = 3,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 2,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5208),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9121),
                             Ocjena = 5,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 3,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5213),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9299),
                             Ocjena = 3,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 4,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5218),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9610),
                             Ocjena = 4,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 5,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5222),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9642),
                             Ocjena = 5,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 6,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5227),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9654),
                             Ocjena = 4,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 7,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5232),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9669),
                             Ocjena = 4,
                             ProizvodId = 4
                         },
                         new
                         {
                             OcjenaId = 8,
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5237),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9679),
                             Ocjena = 4,
                             ProizvodId = 5
                         });
@@ -525,8 +533,8 @@ namespace JamFix.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Cijena")
-                        .HasColumnType("float");
+                    b.Property<int>("Cijena")
+                        .HasColumnType("int");
 
                     b.Property<string>("NazivProizvoda")
                         .HasColumnType("nvarchar(max)");
@@ -562,7 +570,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "500",
                             BrojMinuta = "1000",
                             BrzinaInterneta = "55",
-                            Cijena = 65.0,
+                            Cijena = 65,
                             NazivProizvoda = "Trio start paket",
                             Opis = "Za mala kucanstva",
                             Snizen = true,
@@ -574,7 +582,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "750",
                             BrojMinuta = "1500",
                             BrzinaInterneta = "75",
-                            Cijena = 75.0,
+                            Cijena = 75,
                             NazivProizvoda = "Trio paket",
                             Opis = "Za kucanstva",
                             Snizen = true,
@@ -586,7 +594,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "1000",
                             BrojMinuta = "2000",
                             BrzinaInterneta = "100",
-                            Cijena = 90.0,
+                            Cijena = 90,
                             NazivProizvoda = "Trio super paket",
                             Opis = "Najbolje u ponudi",
                             Snizen = true,
@@ -598,7 +606,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "500",
                             BrojMinuta = "0",
                             BrzinaInterneta = "25",
-                            Cijena = 40.0,
+                            Cijena = 40,
                             NazivProizvoda = "Duo start paket",
                             Opis = "Najbolje za mala kucanstva",
                             Snizen = true,
@@ -610,7 +618,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "600",
                             BrojMinuta = "0",
                             BrzinaInterneta = "50",
-                            Cijena = 50.0,
+                            Cijena = 50,
                             NazivProizvoda = "Duo paket",
                             Opis = "Novo u ponudi",
                             Snizen = true,
@@ -622,7 +630,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "1000",
                             BrojMinuta = "0",
                             BrzinaInterneta = "75",
-                            Cijena = 65.0,
+                            Cijena = 65,
                             NazivProizvoda = "Duo super paket",
                             Opis = "Najbolje u ponudi",
                             Snizen = true,
@@ -685,7 +693,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 1,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5417),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1281),
                             ImePrezime = "Bakir Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -699,7 +707,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 2,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5433),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1311),
                             ImePrezime = "Arman Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -713,7 +721,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 3,
                             Adresa = "Mostar",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5439),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1325),
                             ImePrezime = "Dzemal Causevic",
                             Kolicina = 2,
                             Mjesto = "Mostar",
@@ -914,7 +922,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 1,
                             BrojRacuna = "1234-1234-1234-1234",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5719),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2259),
                             ImePrezime = "Bakir Hasic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -925,7 +933,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 2,
                             BrojRacuna = "1235-1235-1235-1235",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5733),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2284),
                             ImePrezime = "Anel Hodzic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -936,7 +944,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 3,
                             BrojRacuna = "1236-1236-1236-1236",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5739),
+                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2292),
                             ImePrezime = "Hamza Dzeko",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -1018,7 +1026,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 1,
                             Adresa = "Domanovici",
                             BrojTelefona = "061-336-026",
-                            DatumVrijeme = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5826),
+                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2683),
                             HitnaIntervencija = true,
                             ImePrezime = "Bakir Hasic",
                             Opis = "Moj ruter je u kvaru",
@@ -1029,9 +1037,20 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 2,
                             Adresa = "Mostar",
                             BrojTelefona = "062-223-322",
-                            DatumVrijeme = new DateTime(2024, 3, 6, 16, 13, 34, 381, DateTimeKind.Local).AddTicks(5838),
+                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2712),
                             HitnaIntervencija = false,
                             ImePrezime = "Arman Hodzic",
+                            Opis = "Moj modem je u kvaru",
+                            StatusZahtjevaId = 1
+                        },
+                        new
+                        {
+                            ZahtjevId = 3,
+                            Adresa = "Mostar",
+                            BrojTelefona = "062-123-321",
+                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2722),
+                            HitnaIntervencija = false,
+                            ImePrezime = "Amar Hodzic",
                             Opis = "Moj modem je u kvaru",
                             StatusZahtjevaId = 1
                         });

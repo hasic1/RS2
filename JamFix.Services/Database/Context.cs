@@ -221,6 +221,17 @@ namespace JamFix.Services.Database
                    DatumVrijeme = DateTime.Now,
                    HitnaIntervencija = false,
                    StatusZahtjevaId = 1,
+               }, 
+               new()
+               {
+                   ZahtjevId = 3,
+                   ImePrezime = "Amar Hodzic",
+                   Adresa = "Mostar",
+                   BrojTelefona = "062-123-321",
+                   Opis = "Moj modem je u kvaru",
+                   DatumVrijeme = DateTime.Now,
+                   HitnaIntervencija = false,
+                   StatusZahtjevaId = 1,
                });
         }
         private void SeedStatusZahtjeva(ModelBuilder modelBuilder)
@@ -527,7 +538,8 @@ namespace JamFix.Services.Database
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
                    DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
-                   Aktivnost = true
+                   Aktivnost = true,
+                   TransakcijskiRacun= "4000 0000 0000 0002"
                },
                new()
                {
@@ -543,7 +555,9 @@ namespace JamFix.Services.Database
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
                    DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
-                   Aktivnost = true
+                   Aktivnost = true,
+                   TransakcijskiRacun = "5555 5555 5555 4444"
+
                },
                new()
                {
@@ -559,7 +573,9 @@ namespace JamFix.Services.Database
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
                    DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
-                   Aktivnost = true
+                   Aktivnost = true,
+                   TransakcijskiRacun= "4242 4242 4242 4242"
+
                },
                new()
                {
@@ -575,7 +591,8 @@ namespace JamFix.Services.Database
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
                    DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
-                   Aktivnost = true
+                   Aktivnost = true,
+                   TransakcijskiRacun= "6011 0000 0000 0004"
                }); 
         }
         private void SeedIzvjestaj(ModelBuilder modelBuilder)

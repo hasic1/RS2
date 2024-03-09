@@ -9,7 +9,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 class Authorization {
   static String? username;
   static String? password;
-  static String? jwtToken; // Dodajte polje za JWT token
+  static String? jwtToken; 
   static bool isAdmin = false;
   static bool isZaposlenik = false;
   static bool isKorisnik = false;
@@ -23,6 +23,8 @@ class Authorization {
   static int? id;
   static int? pozicijaID;
   static int? drzavaID;
+  static String? brojRacuna;
+  static String? psw;
 
   static void setJwtToken(String token) {
     jwtToken = token;
@@ -32,6 +34,7 @@ class Authorization {
     isAdmin = roles.contains('Administrator');
     isZaposlenik = roles.contains('Zaposlenik');
     isKorisnik = roles.contains('Korisnik');
+    isOperater=roles.contains('Operater');
 
     ime = decodedToken['unique_name'] as String?;
     prezime = decodedToken['family_name'] as String?;
@@ -41,6 +44,7 @@ class Authorization {
     korisnickoIme = decodedToken['actort'] as String?;
     pozicijaID = int.tryParse(decodedToken['upn']?.toString() ?? "");
     drzavaID = int.tryParse(decodedToken['certserialnumber']?.toString() ?? "");
+    brojRacuna = decodedToken['gender'] as String?;
 
     if (isAdmin) {
       rola = "Administrator";
@@ -109,11 +113,4 @@ Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
 }
 
-String formatNumber(dynamic) {
-  var f = NumberFormat('###,00');
 
-  if (dynamic == null) {
-    return "";
-  }
-  return f.format(dynamic);
-}

@@ -16,6 +16,10 @@ using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Stripe;
+using RabbitMQ.Client.Events;
+using RabbitMQ.Client;
+using System.Text.Json;
+using JamFix.Model.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -110,15 +114,66 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<Context>();
-    dataContext.Database.Migrate();
+    var conn = dataContext.Database.GetConnectionString();
+    await dataContext.Database.MigrateAsync();
+    dataContext.Database.EnsureCreated();
 }
+
+string hostname = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "";
+string username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
+string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
+string virtualHost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
+
+var factory = new ConnectionFactory
+{
+    HostName = hostname,
+    UserName = username,
+    Password = password,
+    VirtualHost = virtualHost,
+};
+
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
+
+channel.QueueDeclare(queue: "drzava",
+                     durable: false,
+                     exclusive: false,
+                     autoDelete: true,
+                     arguments: null);
+Console.WriteLine(" [*] Waiting for messages.");
+var consumer = new EventingBasicConsumer(channel);
+
+consumer.Received += async (model, ea) =>
+{
+    var body = ea.Body.ToArray();
+    var message = Encoding.UTF8.GetString(body);
+    Console.WriteLine(message.ToString());
+    var notification = JsonSerializer.Deserialize<DrzavaInsertRequest>(message);
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var notificationsService = scope.ServiceProvider.GetRequiredService<IDrzaveService>();
+        if (notification != null)
+        {
+            try
+            {
+                await notificationsService.Insert(notification);
+            }
+            catch (Exception e)
+            {
+            }
+        }
+    }
+    Console.WriteLine(Environment.GetEnvironmentVariable("Some"));
+};
+channel.BasicConsume(queue: "drzava",
+                     autoAck: true,
+                     consumer: consumer);
 app.Run();

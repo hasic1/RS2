@@ -135,6 +135,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
             DataColumn(
               label: Expanded(
+                child: Text('Akcija',
+                    style: TextStyle(fontStyle: FontStyle.italic)),
+              ),
+            ),
+            DataColumn(
+              label: Expanded(
                 child: Text('Slika',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontStyle: FontStyle.italic)),
@@ -165,13 +171,32 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             DataCell(
                               Align(
                                   alignment: Alignment.center,
-                                  child: Text(formatNumber(e.cijena))),
+                                  child: Text(e.cijena.toString())),
                             ),
                             DataCell(Align(
                                 alignment: Alignment.center,
                                 child: Text(
                                   e.snizen == true ? "DA" : "NE",
                                 ))),
+                            DataCell(
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      _productProvider.delete(e.proizvodId);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProductListScreen(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                             DataCell(e.slika != ""
                                 ? SizedBox(
                                     width: 100,
