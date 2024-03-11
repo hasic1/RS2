@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/providers/base_provider.dart';
+import 'package:jamfix_admin/utils/util.dart';
 
 class KorisniciProvider extends BaseProvider<Korisnici> {
   KorisniciProvider() : super("Korisnici");
@@ -12,7 +13,7 @@ class KorisniciProvider extends BaseProvider<Korisnici> {
 }
 
 Future<String> fetchUlogeZaKorisnika(int? korisnikId) async {
-  var url = "https://localhost:7097/Korisnici/uloga/$korisnikId";
+  var url = "${Authorization.putanja}Korisnici/uloga/$korisnikId";
   var uri = Uri.parse(url);
 
   try {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:jamfix_admin/models/product.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/base_provider.dart';
@@ -16,7 +15,7 @@ class ProductProvider extends BaseProvider<Product> {
 
   Future<SearchResult<Product>> fetchBestProducts() async {
     var i = 3;
-    var url = "https://localhost:7097/Proizvodi/topRatedProducts/$i";
+    var url = "${Authorization.putanja}Proizvodi/topRatedProducts/$i";
     var uri = Uri.parse(url);
 
     var response = await http.get(uri);
@@ -43,7 +42,7 @@ class ProductProvider extends BaseProvider<Product> {
   }
 
   Future<SearchResult<Product>> fetchRecommendedProducts(int? id) async {
-    var url = "https://localhost:7097/Proizvodi/recommend/$id";
+    var url = "${Authorization.putanja}Proizvodi/recommend/$id";
 
     var uri = Uri.parse(url);
 

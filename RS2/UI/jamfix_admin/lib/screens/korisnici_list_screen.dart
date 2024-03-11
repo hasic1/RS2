@@ -17,9 +17,11 @@ class KorisniciListScreen extends StatefulWidget {
 }
 
 class _KorisniciListScreen extends State<KorisniciListScreen> {
+  final TextEditingController _nazivDrzaveController = TextEditingController();
   KorisniciProvider _korisniciProvider = KorisniciProvider();
   PozicijaProvider _pozicijaProvider = PozicijaProvider();
   DrzavaProvider _drzavaProvider = DrzavaProvider();
+  final _formKey = GlobalKey<FormState>();
 
   SearchResult<Korisnici>? korisniciResult;
   SearchResult<Pozicija>? pozicijaResult;
@@ -50,10 +52,6 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
       korisniciResult = podaci;
       drzavaResult = drzava;
     });
-
-    for (var korisnik in podaci.result) {
-      String uloga = await fetchUlogeZaKorisnika(korisnik.korisnikId);
-    }
   }
 
   @override
@@ -69,6 +67,61 @@ class _KorisniciListScreen extends State<KorisniciListScreen> {
               _buildSearch(),
               const SizedBox(height: 16.0),
               _buildDataListView(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _nazivDrzaveController,
+                        decoration: const InputDecoration(
+                          labelText: "Dodaj drzavu",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (name) =>
+                            name?.isEmpty ?? true ? 'Polje je obavezno' : null,
+                      ),
+                      const SizedBox(height: 8.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            var request = Drzava(
+                              naziv: _nazivDrzaveController.text,
+                            );
+                            _drzavaProvider.dodajDrzavu(request);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Uspješno ste izvršili promjene"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const KorisniciListScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text('Dodaj'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -13,7 +13,6 @@ import 'package:jamfix_admin/providers/ocjene_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
-import 'package:jamfix_admin/screens/plati_uslugu_screen.dart';
 import 'package:jamfix_admin/screens/product_list_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';

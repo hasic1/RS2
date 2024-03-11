@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:jamfix_admin/models/pozicija.dart';
 import 'package:jamfix_admin/providers/base_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:jamfix_admin/utils/util.dart';
 
 class PozicijaProvider extends BaseProvider<Pozicija> {
   PozicijaProvider() : super("Pozicija");
@@ -14,7 +15,7 @@ class PozicijaProvider extends BaseProvider<Pozicija> {
 }
 
 Future<String> fetchPozicijaZaKorisnika(int? korisnikId) async {
-  var url = "https://localhost:7097/Pozicija/$korisnikId";
+  var url = "${Authorization.putanja}Pozicija/$korisnikId";
   var uri = Uri.parse(url);
 
   try {

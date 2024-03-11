@@ -9,7 +9,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 class Authorization {
   static String? username;
   static String? password;
-  static String? jwtToken; 
+  static String? jwtToken;
   static bool isAdmin = false;
   static bool isZaposlenik = false;
   static bool isKorisnik = false;
@@ -25,6 +25,8 @@ class Authorization {
   static int? drzavaID;
   static String? brojRacuna;
   static String? psw;
+  static const String putanja = "https://localhost:7097/";
+  static const String putanjaTestni = "https://localhost:7108/";
 
   static void setJwtToken(String token) {
     jwtToken = token;
@@ -34,7 +36,7 @@ class Authorization {
     isAdmin = roles.contains('Administrator');
     isZaposlenik = roles.contains('Zaposlenik');
     isKorisnik = roles.contains('Korisnik');
-    isOperater=roles.contains('Operater');
+    isOperater = roles.contains('Operater');
 
     ime = decodedToken['unique_name'] as String?;
     prezime = decodedToken['family_name'] as String?;
@@ -112,5 +114,3 @@ bool isValidInsertUpdate(Response response) {
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
 }
-
-

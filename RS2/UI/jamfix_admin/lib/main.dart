@@ -1,5 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
 import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
@@ -22,9 +20,6 @@ import './screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  Stripe.publishableKey =
-      "pk_test_51OYqyiFJavMmN9lElH6dxkRe7BKrKlwBzmhGEVkFCq3LS7x5MkgNxyNmLC48OjVArXLlGT8Ko6On76ysfWVTsUtT00bNVNGrpV";
-  await dotenv.load(fileName: "assets/.env");
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
