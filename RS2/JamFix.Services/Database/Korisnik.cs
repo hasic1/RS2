@@ -15,7 +15,6 @@ namespace JamFix.Services.Database
         {
             KorisniciUloge = new HashSet<KorisniciUloge>();
         }
-        [Key]
         public int KorisnikId { get; set; }
         public int DrzavaId { get; set; }
         public string Ime { get; set; } = null!;

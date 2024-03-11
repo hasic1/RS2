@@ -9,7 +9,6 @@ namespace JamFix.Services.Database
 {
     public class UslugaStavke
     {
-        [Key]
         public int UslugaStavkeId { get; set; }
         public int ProizvodId { get; set; }
         public int UslugeId { get; set; }

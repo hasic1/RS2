@@ -4,7 +4,6 @@ namespace JamFix.Services.Database
 {
     public class Ocjene
     {
-        [Key]
         public int OcjenaId { get; set; }
         public int ProizvodId { get; set; }
         public DateTime Datum { get; set; }

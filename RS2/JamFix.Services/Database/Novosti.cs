@@ -9,7 +9,6 @@ namespace JamFix.Services.Database
 {
     public class Novosti
     {
-        [Key]
         public int NovostId { get; set; }
         public string Naslov { get; set; }
         [MaxLength(5000)]

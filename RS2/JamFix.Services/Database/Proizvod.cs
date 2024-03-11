@@ -16,7 +16,6 @@ namespace JamFix.Services.Database
         {
             Ocjene = new HashSet<Ocjene>();
         }
-        [Key]
         public int ProizvodId { get; set; }
         public int VrstaId { get; set; }
         public string? NazivProizvoda { get; set; }
@@ -24,7 +23,7 @@ namespace JamFix.Services.Database
         public string? Opis { get; set; }
         public byte[]? Slika { get; set; }
         public byte[]? SlikaThumb { get; set; }
-        public bool Snizen { get; set; } = false;
+        public bool? Snizen { get; set; }
         public string? StateMachine { get; set; }
         public virtual ICollection<Ocjene> Ocjene { get; set; }
         public string BrzinaInterneta { get; set; }

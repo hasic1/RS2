@@ -13,7 +13,6 @@ namespace JamFix.Services.Database
         {
             Korisnik = new HashSet<Korisnik>();
         }
-        [Key]
         public int PozicijaId { get; set; }
         public string Naziv { get; set; }
         public virtual ICollection<Korisnik> Korisnik { get; set; }

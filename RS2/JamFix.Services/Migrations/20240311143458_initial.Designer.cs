@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JamFix.Services.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240309151233_migracija")]
-    partial class migracija
+    [Migration("20240311143458_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,17 +29,19 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("DrzavaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DrzavaId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DrzavaId"));
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("DrzavaId");
 
-                    b.ToTable("Drzava");
+                    b.ToTable("Drzava", (string)null);
 
                     b.HasData(
                         new
@@ -137,18 +139,21 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("KorisnikUlogaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikUlogaID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikUlogaId"));
 
                     b.Property<DateTime>("DatumIzmjene")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("KorisnikId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikID");
 
                     b.Property<int>("UlogaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UlogaID");
 
                     b.HasKey("KorisnikUlogaId");
 
@@ -156,34 +161,34 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("UlogaId");
 
-                    b.ToTable("KorisniciUloge");
+                    b.ToTable("KorisniciUloge", (string)null);
 
                     b.HasData(
                         new
                         {
                             KorisnikUlogaId = 1,
-                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1807),
+                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(592),
                             KorisnikId = 1,
                             UlogaId = 1
                         },
                         new
                         {
                             KorisnikUlogaId = 2,
-                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1878),
+                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(623),
                             KorisnikId = 2,
                             UlogaId = 2
                         },
                         new
                         {
                             KorisnikUlogaId = 3,
-                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1889),
+                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(626),
                             KorisnikId = 3,
                             UlogaId = 3
                         },
                         new
                         {
                             KorisnikUlogaId = 4,
-                            DatumIzmjene = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(1897),
+                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(627),
                             KorisnikId = 4,
                             UlogaId = 4
                         });
@@ -193,7 +198,8 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("KorisnikId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KorisnikID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KorisnikId"));
 
@@ -207,39 +213,50 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DrzavaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DrzavaId");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Ime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("KorisnickoIme")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LozinkaHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LozinkaSalt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("PozicijaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Prezime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool?>("Status")
-                        .HasColumnType("bit");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<string>("Telefon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TransakcijskiRacun")
                         .IsRequired()
@@ -251,7 +268,14 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("PozicijaId");
 
-                    b.ToTable("Korisnik");
+                    b.HasIndex(new[] { "Email" }, "CS_Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex(new[] { "KorisnickoIme" }, "CS_KorisnickoIme")
+                        .IsUnique();
+
+                    b.ToTable("Korisnik", (string)null);
 
                     b.HasData(
                         new
@@ -332,7 +356,8 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("NovostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NovostId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NovostId"));
 
@@ -350,7 +375,7 @@ namespace JamFix.Services.Migrations
 
                     b.HasKey("NovostId");
 
-                    b.ToTable("Novosti");
+                    b.ToTable("Novosti", (string)null);
 
                     b.HasData(
                         new
@@ -389,79 +414,81 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("OcjenaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OcjenaID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OcjenaId"));
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("Ocjena")
                         .HasColumnType("int");
 
                     b.Property<int>("ProizvodId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProizvodID");
 
                     b.HasKey("OcjenaId");
 
                     b.HasIndex("ProizvodId");
 
-                    b.ToTable("Ocjene");
+                    b.ToTable("Ocjene", (string)null);
 
                     b.HasData(
                         new
                         {
                             OcjenaId = 1,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(8810),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(942),
                             Ocjena = 3,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 2,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9121),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(945),
                             Ocjena = 5,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 3,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9299),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(946),
                             Ocjena = 3,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 4,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9610),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(948),
                             Ocjena = 4,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 5,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9642),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(949),
                             Ocjena = 5,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 6,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9654),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(951),
                             Ocjena = 4,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 7,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9669),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(952),
                             Ocjena = 4,
                             ProizvodId = 4
                         },
                         new
                         {
                             OcjenaId = 8,
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 155, DateTimeKind.Local).AddTicks(9679),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(954),
                             Ocjena = 4,
                             ProizvodId = 5
                         });
@@ -520,7 +547,8 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("ProizvodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProizvodID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProizvodId"));
 
@@ -536,14 +564,16 @@ namespace JamFix.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Cijena")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Cijena")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("NazivProizvoda")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Opis")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Slika")
                         .HasColumnType("varbinary(max)");
@@ -551,20 +581,24 @@ namespace JamFix.Services.Migrations
                     b.Property<byte[]>("SlikaThumb")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<bool>("Snizen")
-                        .HasColumnType("bit");
+                    b.Property<bool?>("Snizen")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<string>("StateMachine")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VrstaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VrstaID");
 
                     b.HasKey("ProizvodId");
 
                     b.HasIndex("VrstaId");
 
-                    b.ToTable("Proizvod");
+                    b.ToTable("Proizvod", (string)null);
 
                     b.HasData(
                         new
@@ -573,7 +607,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "500",
                             BrojMinuta = "1000",
                             BrzinaInterneta = "55",
-                            Cijena = 65,
+                            Cijena = 65m,
                             NazivProizvoda = "Trio start paket",
                             Opis = "Za mala kucanstva",
                             Snizen = true,
@@ -585,7 +619,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "750",
                             BrojMinuta = "1500",
                             BrzinaInterneta = "75",
-                            Cijena = 75,
+                            Cijena = 75m,
                             NazivProizvoda = "Trio paket",
                             Opis = "Za kucanstva",
                             Snizen = true,
@@ -597,7 +631,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "1000",
                             BrojMinuta = "2000",
                             BrzinaInterneta = "100",
-                            Cijena = 90,
+                            Cijena = 90m,
                             NazivProizvoda = "Trio super paket",
                             Opis = "Najbolje u ponudi",
                             Snizen = true,
@@ -609,7 +643,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "500",
                             BrojMinuta = "0",
                             BrzinaInterneta = "25",
-                            Cijena = 40,
+                            Cijena = 40m,
                             NazivProizvoda = "Duo start paket",
                             Opis = "Najbolje za mala kucanstva",
                             Snizen = true,
@@ -621,7 +655,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "600",
                             BrojMinuta = "0",
                             BrzinaInterneta = "50",
-                            Cijena = 50,
+                            Cijena = 50m,
                             NazivProizvoda = "Duo paket",
                             Opis = "Novo u ponudi",
                             Snizen = true,
@@ -633,7 +667,7 @@ namespace JamFix.Services.Migrations
                             BrojKanala = "1000",
                             BrojMinuta = "0",
                             BrzinaInterneta = "75",
-                            Cijena = 65,
+                            Cijena = 65m,
                             NazivProizvoda = "Duo super paket",
                             Opis = "Najbolje u ponudi",
                             Snizen = true,
@@ -645,31 +679,36 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("NalogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NalogId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NalogId"));
 
                     b.Property<string>("Adresa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("ImePrezime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Kolicina")
                         .HasColumnType("int");
 
                     b.Property<string>("Mjesto")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NosilacPosla")
                         .IsRequired()
@@ -677,26 +716,29 @@ namespace JamFix.Services.Migrations
 
                     b.Property<string>("OpisPrijavljenog")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("OpisUradjenog")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Telefon")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("NalogId");
 
-                    b.ToTable("RadniNalog");
+                    b.ToTable("RadniNalog", (string)null);
 
                     b.HasData(
                         new
                         {
                             NalogId = 1,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1281),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1000),
                             ImePrezime = "Bakir Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -710,7 +752,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 2,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1311),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1004),
                             ImePrezime = "Arman Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -724,7 +766,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 3,
                             Adresa = "Mostar",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(1325),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1006),
                             ImePrezime = "Dzemal Causevic",
                             Kolicina = 2,
                             Mjesto = "Mostar",
@@ -820,15 +862,18 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("UslugaStavkeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UslugaStavkeID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UslugaStavkeId"));
 
                     b.Property<int>("ProizvodId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProizvodID");
 
                     b.Property<int>("UslugeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UslugeID");
 
                     b.HasKey("UslugaStavkeId");
 
@@ -836,7 +881,7 @@ namespace JamFix.Services.Migrations
 
                     b.HasIndex("UslugeId");
 
-                    b.ToTable("UslugaStavke");
+                    b.ToTable("UslugaStavke", (string)null);
 
                     b.HasData(
                         new
@@ -887,7 +932,8 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("UslugaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UslugaId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UslugaId"));
 
@@ -900,10 +946,11 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("ImePrezime")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NazivPaketa")
                         .IsRequired()
@@ -917,7 +964,7 @@ namespace JamFix.Services.Migrations
 
                     b.HasKey("UslugaId");
 
-                    b.ToTable("Usluge");
+                    b.ToTable("Usluge", (string)null);
 
                     b.HasData(
                         new
@@ -925,7 +972,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 1,
                             BrojRacuna = "1234-1234-1234-1234",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2259),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1058),
                             ImePrezime = "Bakir Hasic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -936,7 +983,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 2,
                             BrojRacuna = "1235-1235-1235-1235",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2284),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1061),
                             ImePrezime = "Anel Hodzic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -947,7 +994,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 3,
                             BrojRacuna = "1236-1236-1236-1236",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2292),
+                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1063),
                             ImePrezime = "Hamza Dzeko",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -959,17 +1006,19 @@ namespace JamFix.Services.Migrations
                 {
                     b.Property<int>("VrstaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VrstaID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VrstaId"));
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("VrstaId");
 
-                    b.ToTable("VrsteProizvoda");
+                    b.ToTable("VrsteProizvoda", (string)null);
 
                     b.HasData(
                         new
@@ -1015,7 +1064,8 @@ namespace JamFix.Services.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusZahtjevaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusZahtjevaId");
 
                     b.HasKey("ZahtjevId");
 
@@ -1029,7 +1079,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 1,
                             Adresa = "Domanovici",
                             BrojTelefona = "061-336-026",
-                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2683),
+                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1104),
                             HitnaIntervencija = true,
                             ImePrezime = "Bakir Hasic",
                             Opis = "Moj ruter je u kvaru",
@@ -1040,7 +1090,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 2,
                             Adresa = "Mostar",
                             BrojTelefona = "062-223-322",
-                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2712),
+                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1106),
                             HitnaIntervencija = false,
                             ImePrezime = "Arman Hodzic",
                             Opis = "Moj modem je u kvaru",
@@ -1051,7 +1101,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 3,
                             Adresa = "Mostar",
                             BrojTelefona = "062-123-321",
-                            DatumVrijeme = new DateTime(2024, 3, 9, 16, 12, 33, 156, DateTimeKind.Local).AddTicks(2722),
+                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1108),
                             HitnaIntervencija = false,
                             ImePrezime = "Amar Hodzic",
                             Opis = "Moj modem je u kvaru",
@@ -1064,14 +1114,14 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Korisnik", "Korisnik")
                         .WithMany("KorisniciUloge")
                         .HasForeignKey("KorisnikId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_KorisniciUloge_Korisnici");
 
                     b.HasOne("JamFix.Services.Database.Uloga", "Uloga")
                         .WithMany("KorisniciUloges")
                         .HasForeignKey("UlogaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_KorisniciUloge_Uloge");
 
                     b.Navigation("Korisnik");
 
@@ -1084,7 +1134,8 @@ namespace JamFix.Services.Migrations
                         .WithMany("Korisnik")
                         .HasForeignKey("DrzavaId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Korisnik_Drzava");
 
                     b.HasOne("JamFix.Services.Database.Pozicija", "Pozicija")
                         .WithMany("Korisnik")
@@ -1102,8 +1153,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Proizvod", "Proizvod")
                         .WithMany("Ocjene")
                         .HasForeignKey("ProizvodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Ocjene_Proizvodi");
 
                     b.Navigation("Proizvod");
                 });
@@ -1113,8 +1164,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.VrsteProizvoda", "Vrsta")
                         .WithMany("Proizvod")
                         .HasForeignKey("VrstaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Proizvodi_VrsteProizvoda");
 
                     b.Navigation("Vrsta");
                 });
@@ -1124,14 +1175,14 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.Proizvod", "Proizvod")
                         .WithMany("UslugaStavke")
                         .HasForeignKey("ProizvodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_UslugaStavke_Proizvod");
 
                     b.HasOne("JamFix.Services.Database.Usluge", "Usluge")
                         .WithMany("UslugaStavke")
                         .HasForeignKey("UslugeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_UslugaStavke_Usluge");
 
                     b.Navigation("Proizvod");
 
@@ -1143,8 +1194,8 @@ namespace JamFix.Services.Migrations
                     b.HasOne("JamFix.Services.Database.StatusZahtjeva", "StatusZahtjeva")
                         .WithMany("Zahtjevi")
                         .HasForeignKey("StatusZahtjevaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Zahtjev_StatusZahtjeva");
 
                     b.Navigation("StatusZahtjeva");
                 });

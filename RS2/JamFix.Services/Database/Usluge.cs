@@ -9,7 +9,6 @@ namespace JamFix.Services.Database
 {
     public class Usluge
     {
-        [Key]
         public int UslugaId { get; set; }
         public string? ImePrezime { get; set; }
         public DateTime Datum { get; set; }

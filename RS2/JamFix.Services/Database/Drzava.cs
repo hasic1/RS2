@@ -9,7 +9,6 @@ namespace JamFix.Services.Database
 {
     public class Drzava
     {
-        [Key]
         public int DrzavaId { get; set; }
         public string Naziv { get; set; }
         public virtual ICollection<Korisnik> Korisnik { get; set; }

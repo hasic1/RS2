@@ -10,7 +10,6 @@ namespace JamFix.Services.Database
 {
     public class Zahtjev
     {
-        [Key]
         public int ZahtjevId { get; set; }
         public string ImePrezime { get; set; }
         public string Adresa { get; set; }

@@ -2,7 +2,7 @@ version: '3'
 services:
   rabbitMQ:
     image: rabbitmq:3-management
-    container_name: 'rabbitmqGymFit'
+    container_name: 'jamFixRabbitMQ'
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -12,50 +12,45 @@ services:
     expose:
       - 5672
     networks: 
-    - gymfitnetwork
+    - jamfixnetwork
   # SQL Server Docker Container
   sql:
-    container_name: appDb
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=GymFit123!
+      - SA_PASSWORD=jamfix123!
       - MSSQL_PID=Developer
     ports:
       - 1435:1433
-    expose:
-      - 1433
     networks:
-      - gymfitnetwork
+      - jamfixnetwork
 
   # ASP.NET Core Application Docker Container
   api:
     restart: unless-stopped
     build:
-      context: ./GymFit
+      context: ./RS2
     environment:
-      - ConnectionStrings:Main=Server=sql,1433;Database=GymFitdocker;User=sa;Password=GymFit123!;TrustServerCertificate=True;ConnectRetryCount=0
+      - ConnectionStrings:DefaultConnection=Server=sql,1433;Database=IB190065;User=sa;Password=jamfix123!;ConnectRetryCount=0; TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
       - RABBITMQ_HOST=rabbitMQ
       - RABBITMQ_USERNAME=guest
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_VIRTUALHOST=/
     ports:
-      - 7260:7260
+      - 7097:7097
     networks:
-      - gymfitnetwork
+      - jamfixnetwork
     links:
       - sql
     depends_on:
       - sql
-      - rabbitMQ
 
-
-  auxiliary:
+  jamfixauxiliary:
     restart: unless-stopped
     build:
-      context: ./GymFitAuxiliary
+      context: ./JamFixTestAPI2
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RABBITMQ_HOST=rabbitMQ
@@ -63,12 +58,11 @@ services:
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_VIRTUALHOST=/
     ports:
-      - 7280:7280
+      - 7108:7108
     networks:
-      - gymfitnetwork
+      - jamfixnetwork
     depends_on:
       - rabbitMQ
-    
 networks:
-  gymfitnetwork:
+  jamfixnetwork:
     driver: bridge
