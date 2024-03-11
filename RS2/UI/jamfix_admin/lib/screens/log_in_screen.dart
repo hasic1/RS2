@@ -93,7 +93,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> loginUser(String username, String password) async {
-    const String apiUrl = 'https://localhost:7097/token';
+    const String apiUrl = '${Authorization.putanja}token';
 
     final Map<String, String> data = {
       'username': username,

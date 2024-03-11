@@ -24,6 +24,7 @@ class Authorization {
   static int? drzavaID;
   static int? pozicijaID;
   static String? brojRacuna;
+  static const String putanja = "https://10.0.2.2:7097/";
 
   static void setJwtToken(String token) {
     jwtToken = token;
