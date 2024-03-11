@@ -4,6 +4,7 @@ using JamFix.Model.Requests;
 using JamFix.Model.SearchObjects;
 using JamFix.Services.Database;
 using JamFix.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,20 @@ namespace JamFix.Services.Service
             _context.Entry(entity).Property(x => x.Datum).IsModified = true;
             _context.SaveChanges();
             return true;
+        }
+
+        public async override Task<Usluga> Delete(int id)
+        {
+            var uslugaStavkeList = await _context.UslugaStavke.Where(u => u.UslugeId == id).ToListAsync();
+            _context.UslugaStavke.RemoveRange(uslugaStavkeList);
+
+            var usluga = await _context.Usluge.FirstOrDefaultAsync(k => k.UslugaId == id);
+            if (usluga != null)
+            {
+                _context.Usluge.Remove(usluga);
+                await _context.SaveChangesAsync();
+            }
+            return _mapper.Map<Usluga>(usluga);
         }
     }
 }

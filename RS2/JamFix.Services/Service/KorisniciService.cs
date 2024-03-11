@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using JamFix.Services.Service.Helper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Services.Service
 {
@@ -47,6 +48,20 @@ namespace JamFix.Services.Service
             }
             return fillteredQuery;
         }
+
+        public async override Task<Korisnici> Delete(int id)
+        {
+
+            var removeKorisniciUloga = await _context.KorisniciUloge.FirstOrDefaultAsync(u => u.KorisnikId == id);
+            _context.Remove(removeKorisniciUloga);
+
+            var korsisnik = await _context.Korisnik.FirstOrDefaultAsync(k => k.KorisnikId == id);
+            _context.Korisnik.Remove(korsisnik);
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Korisnici>(korsisnik);
+        }
         public static string GenerateSalt()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
@@ -81,6 +96,7 @@ namespace JamFix.Services.Service
             }
             return _mapper.Map<Korisnici>(entity);
         }
+
         public static string GenerateHash(string salt, string password)
         {
             byte[] src = Convert.FromBase64String(salt);

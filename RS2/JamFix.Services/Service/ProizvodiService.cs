@@ -148,5 +148,19 @@ namespace JamFix.Services.Service
 
             return response;
         }
+
+        public async override Task<Proizvodi> Delete(int id)
+        {
+            var proizvodOcjenaList = await _context.Ocjene.Where(u => u.ProizvodId == id).ToListAsync();
+            _context.Ocjene.RemoveRange(proizvodOcjenaList);
+
+            var proizvod = await _context.Proizvod.FirstOrDefaultAsync(k => k.ProizvodId   == id);
+            if (proizvod != null)
+            {
+                _context.Proizvod.Remove(proizvod);
+                await _context.SaveChangesAsync();
+            }
+            return _mapper.Map<Proizvodi>(proizvod);
+        }
     }
 }

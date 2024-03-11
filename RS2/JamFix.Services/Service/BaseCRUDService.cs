@@ -116,22 +116,22 @@ namespace JamFix.Services.Service
             var entity = await set.FindAsync(id);
             if (entity != null)
             {
-                if (entity is Korisnik korisnikEntity)
-                {
-                    var removeKorisniciUloga = await _context.KorisniciUloge.FirstOrDefaultAsync(u => u.KorisnikId == korisnikEntity.KorisnikId);
-                    if (removeKorisniciUloga != null)
-                    {
-                        _context.Remove(removeKorisniciUloga);
-                    }
-                }
-                if (entity is Usluge uslugaEntity)
-                {
-                    var removeUslugaEntity = await _context.UslugaStavke.FirstOrDefaultAsync(u => u.UslugeId == uslugaEntity.UslugaId);
-                    if (removeUslugaEntity != null)
-                    {
-                        _context.Remove(removeUslugaEntity);
-                    }
-                }
+                //if (entity is Korisnik korisnikEntity)
+                //{
+                //    var removeKorisniciUloga = await _context.KorisniciUloge.FirstOrDefaultAsync(u => u.KorisnikId == korisnikEntity.KorisnikId);
+                //    if (removeKorisniciUloga != null)
+                //    {
+                //        _context.Remove(removeKorisniciUloga);
+                //    }
+                //}
+                //if (entity is Usluge uslugaEntity)
+                //{
+                //    var removeUslugaEntity = await _context.UslugaStavke.FirstOrDefaultAsync(u => u.UslugeId == uslugaEntity.UslugaId);
+                //    if (removeUslugaEntity != null)
+                //    {
+                //        _context.Remove(removeUslugaEntity);
+                //    }
+                //}
                 set.Remove(entity);
                 await _context.SaveChangesAsync();
             }
