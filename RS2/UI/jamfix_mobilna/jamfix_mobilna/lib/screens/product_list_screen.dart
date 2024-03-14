@@ -106,12 +106,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       child: DataTable(
           columns: const [
             DataColumn(
-              label: Expanded(
-                child: Text('Akcija',
-                    style: TextStyle(fontStyle: FontStyle.italic)),
-              ),
-            ),
-            DataColumn(
                 label: Expanded(
               child: Text('Naziv proizvoda',
                   style: TextStyle(fontStyle: FontStyle.italic)),
@@ -156,25 +150,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   }
                               },
                           cells: [
-                            DataCell(
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      _productProvider.delete(e.proizvodId);
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ProductListScreen(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
                             DataCell(
                               Align(
                                   alignment: Alignment.center,
