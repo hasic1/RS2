@@ -93,15 +93,6 @@ class _UslugeScreen extends State<UslugeScreen> {
             DataColumn(
               label: Expanded(
                 child: Text(
-                  'ID',
-                  style: TextStyle(
-                      fontStyle: FontStyle.italic, color: Colors.blue),
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
                   'Ime i prezime',
                   style: TextStyle(
                       fontStyle: FontStyle.italic, color: Colors.blue),
@@ -155,7 +146,6 @@ class _UslugeScreen extends State<UslugeScreen> {
                   .map(
                     (Usluge e) => DataRow(
                       cells: [
-                        DataCell(Text(e.uslugaId.toString())),
                         DataCell(Text(e.imePrezime.toString())),
                         DataCell(Text(e.datum.toString())),
                         DataCell(Text(e.nazivPaketa.toString())),

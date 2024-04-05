@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_mobilna/models/drzava.dart';
 import 'package:jamfix_mobilna/models/korisnici.dart';
@@ -74,7 +75,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu XXX-XXX-XXX';
+      return 'Molimo unesite validan broj telefona\nu formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -83,7 +84,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     RegExp cardRegex = RegExp(r'^\d{4} \d{4} \d{4} \d{4}$');
     final isCardValid = cardRegex.hasMatch(creditCardNumber ?? '');
     if (!isCardValid) {
-      return 'Molimo unesite validan broj transakcijskog racuna u formatu XXXX XXXX XXXX XXXX';
+      return 'Molimo unesite validan broj transakcijskog racuna\nu formatu XXXX XXXX XXXX XXXX';
     }
     return null;
   }
@@ -137,14 +138,27 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                             controller: _telefonController,
                             decoration:
                                 const InputDecoration(labelText: 'Telefon'),
+                            keyboardType: TextInputType.phone,
                             validator: validatePhoneNumber,
+                            inputFormatters: <TextInputFormatter>[
+                              LengthLimitingTextInputFormatter(11),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^[0-9-]*$')),
+                            ],
                           ),
                           const SizedBox(height: 8.0),
                           TextFormField(
-                              controller: _transakcijskiRacunController,
-                              decoration: const InputDecoration(
-                                  labelText: 'Transakcijski racun'),
-                              validator: validateCreditCardNumber),
+                            controller: _transakcijskiRacunController,
+                            decoration: const InputDecoration(
+                                labelText: 'Transakcijski racun'),
+                            validator: validateCreditCardNumber,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: <TextInputFormatter>[
+                              LengthLimitingTextInputFormatter(19),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^[0-9 ]*$')),
+                            ],
+                          ),
                           const SizedBox(height: 8.0),
                           Row(
                             children: [

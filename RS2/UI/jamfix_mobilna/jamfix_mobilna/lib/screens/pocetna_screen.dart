@@ -133,21 +133,36 @@ class _PocetnaScreen extends State<PocetnaScreen> {
                                   ),
                                 );
                               },
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: recommendedProduct?.slika != null &&
-                                        recommendedProduct?.slika != ""
-                                    ? Image.memory(
-                                        base64Decode(
-                                            recommendedProduct!.slika!),
-                                        height: 150,
-                                        width: 150,
-                                      )
-                                    : Image.asset(
-                                        "assets/images/slika.jpg",
-                                        height: 150,
-                                        width: 150,
-                                      ),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.topCenter,
+                                      child: recommendedProduct?.slika !=
+                                                  null &&
+                                              recommendedProduct?.slika != ""
+                                          ? Image.memory(
+                                              base64Decode(
+                                                  recommendedProduct!.slika!),
+                                              height: 150,
+                                              width: 150,
+                                            )
+                                          : Image.asset(
+                                              "assets/images/slika.jpg",
+                                              height: 150,
+                                              width: 150,
+                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    recommendedProduct?.nazivProizvoda ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );

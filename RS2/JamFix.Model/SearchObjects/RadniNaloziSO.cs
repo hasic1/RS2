@@ -9,5 +9,6 @@ namespace JamFix.Model.SearchObjects
     public class RadniNaloziSO : BaseSO
     {
         public string? FTS { get; set; }
+
     }
 }

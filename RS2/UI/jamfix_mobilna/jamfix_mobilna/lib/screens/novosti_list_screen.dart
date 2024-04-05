@@ -86,10 +86,20 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
 
   Widget _buildNovostItem(Novosti novost) {
     final int maxChars = 25;
-
     return Card(
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(5.0),
       child: ListTile(
+        leading: novost.slika != null && novost.slika! != ""
+            ? SizedBox(
+                width: 50,
+                height: 25,
+                child: imageFromBase64String(novost.slika!),
+              )
+            : Image.asset(
+                "assets/images/slika.jpg",
+                height: 50,
+                width: 25,
+              ),
         title: Text(novost.naslov ?? ''),
         subtitle: Text(
           novost.sadrzaj != null && novost.sadrzaj!.length > maxChars
@@ -156,6 +166,28 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                   decoration: const InputDecoration(labelText: 'Sadržaj'),
                   controller: sadrzajController,
                 ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FormBuilderField(
+                        name: 'imageId',
+                        builder: ((field) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                                label: const Text('Odaberite sliku'),
+                                errorText: field.errorText),
+                            child: ListTile(
+                              leading: const Icon(Icons.photo),
+                              title: const Text("Select image"),
+                              trailing: const Icon(Icons.file_upload),
+                              onTap: getImage,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -184,7 +216,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => NovostiListScreen(),
+                              builder: (context) => const NovostiListScreen(),
                             ),
                           );
                         },
@@ -200,7 +232,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => NovostiListScreen(),
+                    builder: (context) => const NovostiListScreen(),
                   ),
                 );
               },
@@ -234,6 +266,28 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                     validator: (name) =>
                         name!.isEmpty ? 'Polje je obavezno' : null,
                   ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FormBuilderField(
+                          name: 'imageId',
+                          builder: ((field) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                  label: const Text('Odaberite sliku'),
+                                  errorText: field.errorText),
+                              child: ListTile(
+                                leading: const Icon(Icons.photo),
+                                title: const Text("Select image"),
+                                trailing: const Icon(Icons.file_upload),
+                                onTap: getImage,
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -263,7 +317,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NovostiListScreen(),
+                                builder: (context) => const NovostiListScreen(),
                               ),
                             );
                           },
@@ -280,7 +334,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => NovostiListScreen(),
+                    builder: (context) => const NovostiListScreen(),
                   ),
                 );
               },
@@ -292,5 +346,25 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     );
   }
 
+  File? _image;
   String? _base65Image;
+
+  Future getImage() async {
+    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null && result.files.single.path != null) {
+      _image = File(result.files.single.path!);
+      _base65Image = base64Encode(_image!.readAsBytesSync());
+    } else {
+      setDefaultImage();
+    }
+  }
+
+  void setDefaultImage() async {
+    final ByteData data = await rootBundle.load('assets/images/slika.jpg');
+    final List<int> bytes = data.buffer.asUint8List();
+    setState(() {
+      _base65Image = base64Encode(bytes);
+    });
+  }
 }

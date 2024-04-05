@@ -349,6 +349,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   decoration: const InputDecoration(labelText: "Cijena"),
                   enabled: userRole == Authorization.isAdmin,
                   controller: cijenaController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   validator: (name) =>
                       name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
@@ -387,9 +390,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Expanded(
                 child: TextFormField(
                   decoration:
-                      const InputDecoration(labelText: "Brzina interneta"),
+                      const InputDecoration(labelText: "Brzina interneta Mbps"),
                   enabled: userRole == Authorization.isAdmin,
                   controller: brzinaInternetaController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   validator: (name) =>
                       name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
@@ -402,6 +408,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   decoration: const InputDecoration(labelText: "Broj minuta"),
                   enabled: userRole == Authorization.isAdmin,
                   controller: brojMinutaPotvrdaController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   validator: (name) =>
                       name!.isEmpty ? 'Polje je obavezno' : null,
                 ),
@@ -413,6 +422,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: TextFormField(
                   decoration: const InputDecoration(labelText: "Broj kanala"),
                   enabled: userRole == Authorization.isAdmin,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   controller: brojKanalaController,
                   validator: (name) =>
                       name!.isEmpty ? 'Polje je obavezno' : null,

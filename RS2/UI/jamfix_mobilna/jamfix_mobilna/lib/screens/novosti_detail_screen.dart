@@ -73,6 +73,41 @@ class _NovostiDetailScreen extends State<NovostiDetailScreen> {
                       : '',
                   style: const TextStyle(fontSize: 16),
                 ),
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 15.0,
+                  runSpacing: 15.0,
+                  children: [
+                    if (widget.novosti != null)
+                      GestureDetector(
+                        child: Padding(
+                          padding: const EdgeInsets.all(17.0),
+                          child: Container(
+                            width: 250,
+                            height: 250,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: widget.novosti!.slika != "" &&
+                                      widget.novosti!.slika != null
+                                  ? Image.memory(
+                                      base64Decode(widget.novosti!.slika!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      "assets/images/slika.jpg",
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                )
               ],
             ),
           ),

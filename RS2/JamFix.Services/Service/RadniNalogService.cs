@@ -23,7 +23,7 @@ namespace JamFix.Services.Service
 
             if (!string.IsNullOrWhiteSpace(search?.FTS))
             {
-                fillteredQuery = fillteredQuery.Where(x => x.NosilacPosla.Contains(search.FTS));
+                fillteredQuery = fillteredQuery.Where(x=>x.Datum.Month.ToString() == search.FTS||x.ImePrezime.Contains(search.FTS));
             }
             return fillteredQuery;
         }

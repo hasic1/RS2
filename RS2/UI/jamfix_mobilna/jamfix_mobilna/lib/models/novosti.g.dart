@@ -11,12 +11,11 @@ Novosti _$NovostiFromJson(Map<String, dynamic> json) => Novosti(
       naslov: json['naslov'] as String?,
       sadrzaj: json['sadrzaj'] as String?,
       slika: json['slika'] as String?,
-    )..slicica = json['slicica'] as String?;
+    );
 
 Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{
       'novostId': instance.novostId,
       'naslov': instance.naslov,
       'sadrzaj': instance.sadrzaj,
       'slika': instance.slika,
-      'slicica': instance.slicica,
     };

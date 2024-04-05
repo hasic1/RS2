@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
@@ -45,7 +46,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
+      return 'Molimo unesite validan broj telefona\nu formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -54,7 +55,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     RegExp cardRegex = RegExp(r'^\d{4} \d{4} \d{4} \d{4}$');
     final isCardValid = cardRegex.hasMatch(creditCardNumber ?? '');
     if (!isCardValid) {
-      return 'Molimo unesite validan broj transakcijskog racuna u formatu XXXX XXXX XXXX XXXX';
+      return 'Molimo unesite validan broj transakcijskog racuna\nu formatu XXXX XXXX XXXX XXXX';
     }
     return null;
   }
@@ -111,6 +112,11 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                       decoration:
                           const InputDecoration(labelText: '06X-XXX-XXX'),
                       validator: validatePhoneNumber,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: <TextInputFormatter>[
+                        LengthLimitingTextInputFormatter(11),
+                        FilteringTextInputFormatter.allow(RegExp(r'^[0-9-]*$')),
+                      ],
                     ),
                     const SizedBox(height: 8.0),
                     TextFormField(
@@ -123,10 +129,15 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                     ),
                     const SizedBox(height: 8.0),
                     TextFormField(
-                        controller: transakcijskiRacunController,
-                        decoration: const InputDecoration(
-                            labelText: 'Transakcijski racun'),
-                        validator: validateCreditCardNumber),
+                      controller: transakcijskiRacunController,
+                      decoration: const InputDecoration(
+                          labelText: 'XXXX XXXX XXXX XXXX'),
+                      validator: validateCreditCardNumber,
+                      inputFormatters: <TextInputFormatter>[
+                        LengthLimitingTextInputFormatter(19),
+                        FilteringTextInputFormatter.allow(RegExp(r'^[0-9 ]*$')),
+                      ],
+                    ),
                     const SizedBox(height: 8.0),
                     Row(
                       children: [

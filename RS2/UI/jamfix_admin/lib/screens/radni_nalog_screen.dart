@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jamfix_admin/models/radni_nalog.dart';
+import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
+import 'package:provider/provider.dart';
 
 class RadniNalogScreen extends StatefulWidget {
+  RadniNalog? radniNalog;
+  RadniNalogScreen({this.radniNalog, Key? key}) : super(key: key);
   @override
   _RadniNalogScreenState createState() => _RadniNalogScreenState();
 }
@@ -15,13 +20,58 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
   final TextEditingController _opisUradjenogController =
       TextEditingController();
   final TextEditingController _imePrezimeController = TextEditingController();
-  final TextEditingController _telefonController = TextEditingController();
-  final TextEditingController _adresaController = TextEditingController();
-  final TextEditingController _mjestoController = TextEditingController();
-  final TextEditingController _nazivController = TextEditingController();
-  final TextEditingController _kolicinaController = TextEditingController();
-  final RadniNalogProvider _radniNalogProvider = RadniNalogProvider();
+  TextEditingController _telefonController = TextEditingController();
+  TextEditingController _adresaController = TextEditingController();
+  TextEditingController _mjestoController = TextEditingController();
+  TextEditingController _nazivController = TextEditingController();
+  TextEditingController _kolicinaController = TextEditingController();
+  SearchResult<RadniNalog>? korisniciResult;
+  RadniNalogProvider _radniNalogProvider = RadniNalogProvider();
+
   final _formKey = GlobalKey<FormState>();
+  Map<String, dynamic> _initialValue = {};
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.radniNalog != null) {
+      setState(() {
+        _initialValue = {
+          'nosilacPosla': widget.radniNalog?.nosilacPosla,
+          'opisPrijavljenog': widget.radniNalog?.opisPrijavljenog,
+          'opisUradjenog': widget.radniNalog?.opisUradjenog,
+          'imePrezime': widget.radniNalog?.imePrezime,
+          'telefon': widget.radniNalog?.telefon,
+          'adresa': widget.radniNalog?.adresa,
+          'mjesto': widget.radniNalog?.mjesto,
+          'naziv': widget.radniNalog?.naziv,
+          'kolicina': widget.radniNalog?.kolicina,
+          'datum': widget.radniNalog?.datum,
+        };
+        _nosilacPoslaController.text = _initialValue['nosilacPosla'] ?? '';
+        _opisPrijavljenogController.text =
+            _initialValue['opisPrijavljenog'] ?? '';
+        _opisUradjenogController.text = _initialValue['opisUradjenog'] ?? '';
+        _imePrezimeController.text = _initialValue['imePrezime'] ?? '';
+        _telefonController.text = _initialValue['telefon'] ?? '';
+        _adresaController.text = _initialValue['adresa'] ?? '';
+        _mjestoController.text = _initialValue['mjesto'] ?? '';
+        _nazivController.text = _initialValue['naziv'] ?? '';
+        _kolicinaController.text = _initialValue['kolicina'].toString() ?? '';
+        selectedDate = _initialValue['datum'] ?? '';
+      });
+    }
+    _radniNalogProvider = context.read<RadniNalogProvider>();
+    _ucitajPodatke();
+  }
+
+  Future<void> _ucitajPodatke() async {
+    var podaci = await _radniNalogProvider.get();
+    setState(() {
+      korisniciResult = podaci;
+    });
+  }
+
   String? validatePhoneNumber(String? phoneNumber) {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
@@ -106,6 +156,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        controller: _imePrezimeController,
                         decoration: const InputDecoration(
                           labelText: 'Ime i prezime',
                         ),
@@ -135,8 +186,13 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Telefon',
                         ),
-                        validator: (name) =>
-                            name!.isEmpty ? 'Polje je obavezno' : null,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(11),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^[0-9-]*$')),
+                        ],
+                        validator: validatePhoneNumber,
                       ),
                     ),
                   ],
@@ -189,6 +245,10 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Kolicina',
                         ),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         validator: (name) =>
                             name!.isEmpty ? 'Polje je obavezno' : null,
                       ),
@@ -212,29 +272,58 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                         naziv: _nazivController.text,
                         kolicina: kolicinaInt,
                       );
-                      _radniNalogProvider.insert(request);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text("Success"),
-                          content: const Text("Uspješno ste izvršili promjene"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RadniNalogListScreen(),
-                                  ),
-                                );
-                              },
-                              child: const Text("OK"),
-                            )
-                          ],
-                        ),
-                      );
+                      if (widget.radniNalog == null) {
+                        _radniNalogProvider.insert(request);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Success"),
+                            content:
+                                const Text("Uspješno ste napraviili radni nalog"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RadniNalogListScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text("OK"),
+                              )
+                            ],
+                          ),
+                        );
+                      } else {
+                        _radniNalogProvider.update(
+                            widget.radniNalog?.nalogId, request);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Success"),
+                            content:
+                                const Text("Uspješno ste izvršili promjene"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RadniNalogListScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text("OK"),
+                              )
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text('Spremi Radni Nalog'),

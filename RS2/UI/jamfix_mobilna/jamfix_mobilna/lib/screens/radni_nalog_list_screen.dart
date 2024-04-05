@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jamfix_admin/models/radni_nalog.dart';
-import 'package:jamfix_admin/models/search_result.dart';
-import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
-import 'package:jamfix_admin/screens/radni_nalog_screen.dart';
-import 'package:jamfix_admin/widgets/master_screen.dart';
+import 'package:jamfix_mobilna/models/radni_nalog.dart';
+import 'package:jamfix_mobilna/models/search_result.dart';
+import 'package:jamfix_mobilna/providers/radni_nalog_provider.dart';
+import 'package:jamfix_mobilna/screens/radni_nalog_screen.dart';
+import 'package:jamfix_mobilna/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
 class RadniNalogListScreen extends StatefulWidget {
-  const RadniNalogListScreen({Key? key}) : super(key: key);
+  RadniNalogListScreen({Key? key}) : super(key: key);
   @override
   State<RadniNalogListScreen> createState() => _RadniNalogListScreen();
 }
 
 class _RadniNalogListScreen extends State<RadniNalogListScreen> {
   late RadniNalogProvider _radniNalogProvider;
-  final TextEditingController _imePrezimeController = TextEditingController();
   SearchResult<RadniNalog>? result;
 
+  final TextEditingController _ftsController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -62,15 +61,15 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
             children: [
               Expanded(
                 child: TextField(
-                    decoration:
-                        const InputDecoration(labelText: "Ime ili prezime"),
-                    controller: _imePrezimeController),
+                  decoration:
+                      const InputDecoration(labelText: "Ime ili prezime"),
+                  controller: _ftsController,
+                ),
               ),
               ElevatedButton(
                 onPressed: () async {
-                  var data = await _radniNalogProvider.get(filter: {
-                    'fts': _imePrezimeController.text,
-                  });
+                  var data = await _radniNalogProvider
+                      .get(search: {'fts': _ftsController.text});
                   setState(() {
                     result = data;
                   });
@@ -84,7 +83,7 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                 onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => RadniNalogScreen(),
+                      builder: (context) => RadniNalogScreen(radniNalog: null),
                     ),
                   );
                 },
@@ -103,45 +102,16 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
         child: DataTable(
           columns: const [
             DataColumn(
-              label: Text(
-                'Nosilac posla',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              label: Expanded(
+                child: Text('Nosilac posla',
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
             DataColumn(
-              label: Text(
-                'Adresa',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Ime i prezime',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Telefon',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Datum',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Akcija',
-                style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.blue),
+              label: Expanded(
+                child: Text('Akcija',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
           ],
@@ -161,10 +131,6 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                       },
                       cells: [
                         DataCell(Text(e.nosilacPosla ?? "")),
-                        DataCell(Text(e.adresa ?? "")),
-                        DataCell(Text(e.imePrezime ?? "")),
-                        DataCell(Text(e.telefon.toString() ?? "")),
-                        DataCell(Text(e.datum.toString() ?? "")),
                         DataCell(
                           Row(
                             children: [
@@ -176,7 +142,7 @@ class _RadniNalogListScreen extends State<RadniNalogListScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const RadniNalogListScreen(),
+                                          RadniNalogListScreen(),
                                     ),
                                   );
                                 },

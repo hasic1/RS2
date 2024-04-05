@@ -8,6 +8,7 @@ import 'package:jamfix_mobilna/screens/oNama_screen.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/postavke_screen.dart';
 import 'package:jamfix_mobilna/screens/product_list_screen.dart';
+import 'package:jamfix_mobilna/screens/radni_nalog_list_screen.dart';
 import 'package:jamfix_mobilna/screens/radni_nalog_screen.dart';
 import 'package:jamfix_mobilna/screens/zahtijev_screen.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
@@ -137,7 +138,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => RadniNalogScreen(),
+                      builder: (context) => RadniNalogListScreen(),
                     ),
                   );
                 },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_mobilna/models/zahtjev.dart';
 import 'package:jamfix_mobilna/providers/zahtjev_provider.dart';
@@ -57,7 +58,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
     RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
     final isPhoneValid = phoneRegex.hasMatch(phoneNumber ?? '');
     if (!isPhoneValid) {
-      return 'Molimo unesite validan broj telefona u formatu 06X-XXX-XXX';
+      return 'Molimo unesite validan broj telefona\nu formatu 06X-XXX-XXX';
     }
     return null;
   }
@@ -100,7 +101,12 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                     controller: brojTelefonaController,
                     decoration:
                         const InputDecoration(labelText: 'Broj Telefona'),
+                    keyboardType: TextInputType.number,
                     validator: validatePhoneNumber,
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.allow(RegExp(r'^[0-9-]*$')),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
@@ -161,7 +167,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                             builder: (BuildContext context) => AlertDialog(
                               title: const Text("Success"),
                               content:
-                                  const Text("Uspješno ste izvrsili promjene"),
+                                  const Text("Uspješno ste poslali zahtjev"),
                               actions: [
                                 TextButton(
                                   onPressed: () {

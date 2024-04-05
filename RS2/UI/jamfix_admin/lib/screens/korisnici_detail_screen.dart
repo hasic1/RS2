@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
@@ -161,6 +162,10 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                     decoration:
                         const InputDecoration(labelText: 'Broj Telefona'),
                     validator: validatePhoneNumber,
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.allow(RegExp(r'^[0-9-]*$')),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   Row(
@@ -207,71 +212,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 15.0),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: aktivan,
-                        onChanged: (value) {
-                          setState(() {
-                            aktivan = value!;
-                          });
-                        },
-                      ),
-                      const Text('Aktivan korisnik'),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          String drzavaId = selectedDrzavaId ?? "1";
-
-                          Korisnici request = Korisnici(
-                              ime: imeController.text,
-                              prezime: prezimeController.text,
-                              telefon: telefonController.text,
-                              email: emailController.text,
-                              drzavaId: int.parse(drzavaId),
-                              aktivnost: aktivan,
-                              pozicijaId: int.parse(
-                                  widget.korisnici!.pozicijaId.toString()),
-                              noviPassword: Authorization.psw,
-                              passwordPotvrda: Authorization.psw,
-                              datumVrijeme: selectedDate ?? DateTime.now(),
-                              transakcijskiRacun: Authorization.brojRacuna);
-                          _korisniciProvider.update(
-                              widget.korisnici!.korisnikId!, request);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Success"),
-                              content:
-                                  const Text("Uspješno ste izvršili promjene"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const KorisniciListScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text("OK"),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('Potvrdi Unos'),
-                    ),
-                  ), //------------------------------------------------------------
+                  const SizedBox(height: 5.0),
                   const Text("Promjeni poziciju"),
                   Row(
                     children: [
@@ -318,60 +259,6 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 5.0),
-
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (widget.korisnici != null) {
-                          String pozicijaId = selectedPozicijaId ?? "1";
-                          Korisnici request = Korisnici(
-                              ime: imeController.text,
-                              prezime: prezimeController.text,
-                              telefon: telefonController.text,
-                              email: emailController.text,
-                              drzavaId: int.parse(
-                                  widget.korisnici!.drzavaId.toString()),
-                              aktivnost: aktivan,
-                              pozicijaId: int.parse(pozicijaId),
-                              noviPassword: Authorization.psw,
-                              passwordPotvrda: Authorization.psw,
-                              datumVrijeme: selectedDate ?? DateTime.now(),
-                              transakcijskiRacun: Authorization.brojRacuna);
-                          _korisniciProvider.update(
-                              widget.korisnici!.korisnikId!, request);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Success"),
-                              content:
-                                  const Text("Uspješno ste izvršili promjene"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const KorisniciListScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text("OK"),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('Potvrdi Unos'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  //----------------------------------------------------------------------
                   const Text("Promjeni ulogu"),
                   Row(
                     children: [
@@ -414,11 +301,43 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 5.0),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: aktivan,
+                        onChanged: (value) {
+                          setState(() {
+                            aktivan = value!;
+                          });
+                        },
+                      ),
+                      const Text('Aktivan korisnik'),
+                    ],
+                  ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () async {
                         if (widget.korisnici != null) {
+                          String? pozicijaID = selectedPozicijaId;
+                          String drzavaId = selectedDrzavaId ?? "1";
+
+                          Korisnici request = Korisnici(
+                              ime: imeController.text,
+                              prezime: prezimeController.text,
+                              telefon: telefonController.text,
+                              email: emailController.text,
+                              drzavaId: int.parse(drzavaId),
+                              aktivnost: aktivan,
+                              pozicijaId: int.parse(pozicijaID ??
+                                  widget.korisnici!.pozicijaId.toString()),
+                              noviPassword: Authorization.psw,
+                              passwordPotvrda: Authorization.psw,
+                              datumVrijeme: selectedDate ?? DateTime.now(),
+                              transakcijskiRacun: Authorization.brojRacuna);
+                          _korisniciProvider.update(
+                              widget.korisnici!.korisnikId!, request);
+
                           String ulogaId = selectedUloga ?? "1";
                           KorisniciUloge uloge = KorisniciUloge(
                             korisnikId: widget.korisnici!.korisnikId,

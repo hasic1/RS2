@@ -108,10 +108,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           columns: const [
             DataColumn(
                 label: Expanded(
-              child: Text('ID', style: TextStyle(fontStyle: FontStyle.italic)),
-            )),
-            DataColumn(
-                label: Expanded(
               child: Text('Naziv proizvoda',
                   style: TextStyle(fontStyle: FontStyle.italic)),
             )),
@@ -133,7 +129,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
-            
             DataColumn(
               label: Expanded(
                 child: Text('Slika',
@@ -156,7 +151,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   }
                               },
                           cells: [
-                            DataCell(Text(e.proizvodId?.toString() ?? "")),
                             DataCell(
                               Align(
                                   alignment: Alignment.center,
@@ -173,7 +167,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 child: Text(
                                   e.snizen == true ? "DA" : "NE",
                                 ))),
-                            
                             DataCell(e.slika != ""
                                 ? SizedBox(
                                     width: 100,

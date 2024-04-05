@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
@@ -132,13 +133,25 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                 decoration:
                                     const InputDecoration(labelText: 'Telefon'),
                                 validator: validatePhoneNumber,
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(11),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^[0-9-]*$')),
+                                ],
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
-                                  controller: _transakcijskiRacunController,
-                                  decoration: const InputDecoration(
-                                      labelText: 'Transakcijski racun'),
-                                  validator: validateCreditCardNumber),
+                                controller: _transakcijskiRacunController,
+                                decoration: const InputDecoration(
+                                    labelText: 'Transakcijski racun'),
+                                validator: validateCreditCardNumber,
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(19),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^[0-9 ]*$')),
+                                ],
+                              ),
                               const SizedBox(height: 8.0),
                               Row(
                                 children: [

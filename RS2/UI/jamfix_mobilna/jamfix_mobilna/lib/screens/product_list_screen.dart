@@ -64,12 +64,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           const SizedBox(
             width: 8,
           ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(labelText: "Cijena"),
-              controller: _cijenaController,
-            ),
-          ),
           ElevatedButton(
               onPressed: () async {
                 var data = await _productProvider.get(search: {
@@ -106,25 +100,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
       child: DataTable(
           columns: const [
             DataColumn(
-                label: Expanded(
-              child: Text('Naziv proizvoda',
-                  style: TextStyle(fontStyle: FontStyle.italic)),
-            )),
-            DataColumn(
               label: Expanded(
-                child: Text('Opis',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontStyle: FontStyle.italic)),
-              ),
-            ),
-            DataColumn(
-                label: Expanded(
-              child:
-                  Text('Cijena', style: TextStyle(fontStyle: FontStyle.italic)),
-            )),
-            DataColumn(
-              label: Expanded(
-                child: Text('Snizen',
+                child: Text('Naziv proizvoda',
                     style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
@@ -132,6 +109,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
               label: Expanded(
                 child: Text('Slika',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontStyle: FontStyle.italic)),
+              ),
+            ),
+            DataColumn(
+              label: Expanded(
+                child: Text('Cijena',
                     style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ),
@@ -155,17 +138,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   alignment: Alignment.center,
                                   child: Text(e.nazivProizvoda ?? "")),
                             ),
-                            DataCell(Text(e.opis ?? "")),
-                            DataCell(
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Text(e.cijena.toString())),
-                            ),
-                            DataCell(Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  e.snizen == true ? "DA" : "NE",
-                                ))),
                             DataCell(e.slika != ""
                                 ? SizedBox(
                                     width: 100,
@@ -173,6 +145,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     child: imageFromBase64String(e.slika!),
                                   )
                                 : const Text("")),
+                            DataCell(
+                              Align(
+                                  alignment: Alignment.center,
+                                  child: Text(e.cijena.toString())),
+                            ),
                           ]))
                   .toList() ??
               []),

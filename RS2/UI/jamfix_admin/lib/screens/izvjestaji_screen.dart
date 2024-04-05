@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/models/izvjestaj.dart';
+import 'package:jamfix_admin/models/radni_nalog.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
+import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -19,25 +21,24 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
   final TextEditingController cijenaUtrosAlataController =
       TextEditingController();
   final TextEditingController najOpremaController = TextEditingController();
-  late IzvjestajProvider _izvjestajProvider;
-  SearchResult<Izvjestaj>? result;
-  String selectedMonth = "Januar";
+  late RadniNalogProvider _radniNalogProvider;
+  SearchResult<RadniNalog>? radniNalogresult;
+  String selectedMonth = "1";
   DateTime? selectedDate;
   bool hitnaIntervencija = false;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _izvjestajProvider = context.read<IzvjestajProvider>();
+    _radniNalogProvider = context.read<RadniNalogProvider>();
     _ucitajPodatke();
   }
 
   Future<void> _ucitajPodatke() async {
-    var podaci = await _izvjestajProvider.get(filter: {"month": selectedMonth});
-
+    var podaciRadniNalog =
+        await _radniNalogProvider.get(filter: {"fts": selectedMonth});
     setState(() {
-      result = podaci;
+      radniNalogresult = podaciRadniNalog;
     });
   }
 
@@ -58,128 +59,9 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 16.0,
-              right: 16.0,
-              child: ElevatedButton(
-                onPressed: () async {
-                  _handleAddReport();
-                },
-                child: const Text("Dodaj novi izvjestaj"),
-              ),
-            ),
           ],
         ),
       ),
-    );
-  }
-
-  void _handleAddReport() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Cijena utrosenog alata'),
-                  controller: cijenaUtrosAlataController,
-                  validator: (name) => name!.isEmpty ? 'Unesite cijenu' : null,
-                ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Najposjecenije mjesto'),
-                  controller: najPosMjestoController,
-                  validator: (name) =>
-                      name!.isEmpty ? 'Unesite najposjecenije mjesto' : null,
-                ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Broj intervnecija'),
-                  controller: brojIntervencijaController,
-                  validator: (name) =>
-                      name!.isEmpty ? 'Unesite broj intervnecija' : null,
-                ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Najkoristenija oprema'),
-                  validator: (name) =>
-                      name!.isEmpty ? 'Unesite najkoristenija oprema' : null,
-                  controller: najOpremaController,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => _selectDate(context),
-                        child: const Text('Odaberi Datum i Vrijeme'),
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                  ],
-                ),
-                Row(children: [
-                  selectedDate != null
-                      ? Text(selectedDate!.toString())
-                      : const Text('Nije odabrano'),
-                ]),
-              ]),
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  Izvjestaj request = Izvjestaj(
-                    najPosMjesto: najPosMjestoController.text,
-                    najOprema: najOpremaController.text,
-                    brojIntervencija:
-                        int.parse(brojIntervencijaController.text),
-                    cijenaUtrosAlata:
-                        int.parse(cijenaUtrosAlataController.text),
-                    datum: selectedDate ?? DateTime.now(),
-                  );
-                  _izvjestajProvider.insert(request);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Success"),
-                      content: const Text("Uspješno ste kreirali racun"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const IzvjestajiScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text("OK"),
-                        )
-                      ],
-                    ),
-                  );
-                }
-              },
-              child: const Text('Spremi'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Odustani'),
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -206,132 +88,84 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
             ),
             const SizedBox(width: 16.0),
             Expanded(
-              child: result != null && result!.result.isNotEmpty
+              child: radniNalogresult != null &&
+                      radniNalogresult!.result.isNotEmpty
                   ? DataTable(
                       columns: const [
                         DataColumn(label: Expanded(child: Text(""))),
                         DataColumn(label: Expanded(child: Text(""))),
                       ],
                       rows: [
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("ID"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(result?.result.first.izvjestajId
-                                      ?.toString() ??
-                                  ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Broj intervencija"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(result?.result.first.brojIntervencija
-                                      .toString() ??
-                                  ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Najposjećenije mjesto"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child:
-                                  Text(result?.result.first.najPosMjesto ?? ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Cijena utrošenog alata"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(result?.result.first.cijenaUtrosAlata
-                                      .toString() ??
-                                  ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Najkorištenija oprema"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(result?.result.first.najOprema ?? ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Datum"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                  result?.result.first.datum.toString() ?? ""),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          const DataCell(
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text("Obrisi izvjestaj"),
-                            ),
-                          ),
-                          DataCell(
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  _izvjestajProvider
-                                      .delete(result?.result.first.izvjestajId);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const IzvjestajiScreen(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Obrisi'),
+                        DataRow(
+                          cells: [
+                            const DataCell(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Najkorištenija oprema"),
                               ),
                             ),
-                          ),
-                        ]),
+                            DataCell(
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                    getNajkoristenijaOprema(radniNalogresult)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        DataRow(
+                          cells: [
+                            const DataCell(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Najposjećenije mjesto"),
+                              ),
+                            ),
+                            DataCell(
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                    getNajposjecenijeMjesto(radniNalogresult)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        DataRow(
+                          cells: [
+                            const DataCell(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Kolicina utrošenog alata"),
+                              ),
+                            ),
+                            DataCell(
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                    getKolicinaUtrosenogAlata(radniNalogresult)
+                                        .toString()),
+                              ),
+                            ),
+                          ],
+                        ),
+                        DataRow(
+                          cells: [
+                            const DataCell(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Broj intervencija"),
+                              ),
+                            ),
+                            DataCell(
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(radniNalogresult?.result.length
+                                        .toString() ??
+                                    '0'),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     )
                   : const Center(
@@ -368,15 +202,15 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
   Future<void> _ucitajPodatkeZaMjesec() async {
     try {
       var podaci =
-          await _izvjestajProvider.get(filter: {"datum": selectedMonth});
+          await _radniNalogProvider.get(filter: {"FTS": selectedMonth});
 
       setState(() {
-        result = podaci;
+        radniNalogresult = podaci;
       });
 
-      if (result?.result.isEmpty ?? true) {
+      if (radniNalogresult?.result.isEmpty ?? true) {
         setState(() {
-          result = null;
+          radniNalogresult = null;
         });
 
         showDialog(
@@ -476,5 +310,53 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
         });
       }
     }
+  }
+
+  String getNajkoristenijaOprema(SearchResult<RadniNalog>? radniNalozi) {
+    if (radniNalozi == null || radniNalozi.result.isEmpty) return 'N/A';
+
+    Map<String, int> opremaCount = {};
+
+    radniNalozi?.result?.forEach((nalog) {
+      final naziv = nalog?.naziv;
+      if (naziv != null) {
+        opremaCount[naziv] = (opremaCount[naziv] ?? 0) + 1;
+      }
+    });
+
+    var najkoristenijaOprema =
+        opremaCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    return najkoristenijaOprema;
+  }
+
+  String getNajposjecenijeMjesto(SearchResult<RadniNalog>? radniNalozi) {
+    if (radniNalozi == null || radniNalozi.result.isEmpty) return 'N/A';
+
+    Map<String, int> mjestoCount = {};
+
+    radniNalozi?.result?.forEach((nalog) {
+      final mjesto = nalog?.mjesto;
+      if (mjesto != null) {
+        mjestoCount[mjesto] = (mjestoCount[mjesto] ?? 0) + 1;
+      }
+    });
+
+    var najposjecenijeMjesto =
+        mjestoCount.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    return najposjecenijeMjesto;
+  }
+
+  int getKolicinaUtrosenogAlata(SearchResult<RadniNalog>? radniNalozi) {
+    if (radniNalozi == null || radniNalozi.result.isEmpty) return 0;
+
+    int ukupnaCijena = 0;
+
+    radniNalozi.result.forEach((nalog) {
+      if (nalog.kolicina != null) {
+        ukupnaCijena += nalog.kolicina!;
+      }
+    });
+
+    return ukupnaCijena;
   }
 }

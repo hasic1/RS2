@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/statusZahtjeva.dart';
@@ -111,6 +112,11 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                     decoration:
                         const InputDecoration(labelText: 'Broj Telefona'),
                     validator: validatePhoneNumber,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.allow(RegExp(r'^[0-9-]*$')),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
@@ -289,43 +295,108 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            String statusZahtjeva =
-                                selectedStatusZahtjevaId ?? "1";
-                            var request = Zahtjev(
-                              imePrezime: imePrezimeController.text,
-                              adresa: adresaController.text,
-                              brojTelefona: brojTelefonaController.text,
-                              opis: opisController.text,
-                              datumVrijeme: selectedDate ?? DateTime.now(),
-                              hitnaIntervencija: hitnaIntervencija,
-                              statusZahtjevaId: int.tryParse(statusZahtjeva),
-                            );
-                            await _zahtjevProvider.update(
-                                widget.zahtjev!.zahtjevId, request);
-                            // ignore: use_build_context_synchronously
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Success"),
-                                content: const Text(
-                                    "Uspješno ste izvršili promjene"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); // Zatvori dijalog
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ZahtjevScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text("OK"),
-                                  )
-                                ],
-                              ),
-                            );
+                            if (widget.zahtjev != null) {
+                              var currentStatus =
+                                  widget.zahtjev!.statusZahtjevaId;
+                              if (currentStatus == 1 &&
+                                  selectedStatusZahtjevaId == "2") {
+                                String statusZahtjeva =
+                                    selectedStatusZahtjevaId ?? "1";
+                                var request = Zahtjev(
+                                  imePrezime: imePrezimeController.text,
+                                  adresa: adresaController.text,
+                                  brojTelefona: brojTelefonaController.text,
+                                  opis: opisController.text,
+                                  datumVrijeme: selectedDate ?? DateTime.now(),
+                                  hitnaIntervencija: hitnaIntervencija,
+                                  statusZahtjevaId:
+                                      int.tryParse(statusZahtjeva),
+                                );
+                                await _zahtjevProvider.update(
+                                    widget.zahtjev!.zahtjevId, request);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Success"),
+                                    content: const Text(
+                                        "Uspješno ste izvršili promjene"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ZahtjevScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("OK"),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              } else if (currentStatus == 2 &&
+                                  selectedStatusZahtjevaId == "3") {
+                                String statusZahtjeva =
+                                    selectedStatusZahtjevaId ?? "1";
+                                var request = Zahtjev(
+                                  imePrezime: imePrezimeController.text,
+                                  adresa: adresaController.text,
+                                  brojTelefona: brojTelefonaController.text,
+                                  opis: opisController.text,
+                                  datumVrijeme: selectedDate ?? DateTime.now(),
+                                  hitnaIntervencija: hitnaIntervencija,
+                                  statusZahtjevaId:
+                                      int.tryParse(statusZahtjeva),
+                                );
+                                await _zahtjevProvider.update(
+                                    widget.zahtjev!.zahtjevId, request);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Success"),
+                                    content: const Text(
+                                        "Uspješno ste izvršili promjene"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ZahtjevScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("OK"),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Greška"),
+                                    content: const Text(
+                                        "Nije dozvoljena promjena statusa."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text("OK"),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                         child: const Text('Promijeniti status'),
