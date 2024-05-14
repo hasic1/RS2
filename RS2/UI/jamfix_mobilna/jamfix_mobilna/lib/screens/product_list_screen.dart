@@ -144,7 +144,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     height: 100,
                                     child: imageFromBase64String(e.slika!),
                                   )
-                                : const Text("")),
+                                :Image.asset(
+                "assets/images/slika.jpg",
+                height: 100,
+                width: 100,
+              ),),
                             DataCell(
                               Align(
                                   alignment: Alignment.center,

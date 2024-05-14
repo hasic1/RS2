@@ -569,7 +569,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Future getImage() async {
     var result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null) {
       _image = File(result.files.single.path!);
       _base65Image = base64Encode(_image!.readAsBytesSync());
     } else {

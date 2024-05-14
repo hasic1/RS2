@@ -56,7 +56,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
   }
 
   Future<void> _ucitajPodatke() async {
-    var drzava = await _drzavaProvider.get();
+    var drzava = await _drzavaProvider.getDrzave();
     setState(() {
       drzavaResult = drzava;
     });
@@ -200,7 +200,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                             children: [
                               Expanded(
                                 child: FutureBuilder(
-                                  future: _drzavaProvider.get(),
+                                  future: _drzavaProvider.getDrzave(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
