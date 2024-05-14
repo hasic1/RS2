@@ -1,6 +1,6 @@
 # JamFix
 
-JamFix aplikacija omogucava korisnicima da iznesu svoj problem bez ikakavog cekanja, te do najsitnijeg detalja opisati isti problem,koji ce se rijesiti u nakracem roku.
+The JamFix application allows users to state their problem without any waiting, and to describe the same problem in the smallest detail, which will be solved in the shortest possible time.
 
 ## Backend (.NET 6)
 
