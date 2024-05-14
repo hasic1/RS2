@@ -24,6 +24,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
   TextEditingController _adresaController = TextEditingController();
   TextEditingController _mjestoController = TextEditingController();
   TextEditingController _nazivController = TextEditingController();
+  TextEditingController _startDateController = TextEditingController();
   TextEditingController _kolicinaController = TextEditingController();
   SearchResult<RadniNalog>? korisniciResult;
   RadniNalogProvider _radniNalogProvider = RadniNalogProvider();
@@ -128,20 +129,47 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                 ),
                 Row(
                   children: [
-                    const Text('Datum i Vrijeme:'),
-                    const SizedBox(width: 8.0),
-                    ElevatedButton(
-                      onPressed: () => _selectDate(context),
-                      child: const Text('Odaberi Datum i Vrijeme'),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _startDateController,
+                        decoration: const InputDecoration(
+                          labelText: 'Datum',
+                          hintText: 'Odaberite datum',
+                          labelStyle: TextStyle(color: Colors.black),
+                          hintStyle: TextStyle(color: Colors.black),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2101),
+                          );
+
+                          if (pickedDate != null &&
+                              pickedDate != selectedDate) {
+                            setState(() {
+                              selectedDate = pickedDate;
+                              _startDateController.text =
+                                  "${pickedDate.day}.${pickedDate.month}.${pickedDate.year}.";
+                            });
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Obavezan unos datuma!';
+                          }
+                          return null;
+                        },
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                    const SizedBox(width: 8.0),
-                  ],
-                ),
-                Row(
-                  children: [
-                    selectedDate != null
-                        ? Text(selectedDate!.toString())
-                        : const Text('Nije odabrano'),
                   ],
                 ),
                 const Text(
@@ -278,8 +306,8 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text("Success"),
-                            content:
-                                const Text("Uspješno ste napraviili radni nalog"),
+                            content: const Text(
+                                "Uspješno ste napraviili radni nalog"),
                             actions: [
                               TextButton(
                                 onPressed: () {

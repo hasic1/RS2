@@ -65,12 +65,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           const SizedBox(
             width: 8,
           ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(labelText: "Cijena"),
-              controller: _cijenaController,
-            ),
-          ),
           ElevatedButton(
               onPressed: () async {
                 var data = await _productProvider.get(filter: {

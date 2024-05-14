@@ -251,8 +251,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         );
                       } else {
+                        ByteData imageData =
+                            await rootBundle.load("assets/images/slika.jpg");
+                        List<int> bytes = imageData.buffer.asUint8List();
+
+                        Product zahtjev = Product(
+                          nazivProizvoda: nazivProizvodaController.text,
+                          cijena: cijenaInt,
+                          opis: opisController.text,
+                          slika: _base65Image ?? widget.product!.slika,
+                          snizen: snizen,
+                          brzinaInterneta: brzinaInternetaController.text,
+                          brojMinuta: brojMinutaPotvrdaController.text,
+                          brojKanala: brojKanalaController.text,
+                          vrstaId: int.tryParse(odabranaVrsta),
+                        );
                         await _productProvider.update(
-                            widget.product?.proizvodId, request);
+                            widget.product?.proizvodId, zahtjev);
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -566,7 +581,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final ByteData data = await rootBundle.load('assets/images/slika.jpg');
     final List<int> bytes = data.buffer.asUint8List();
     setState(() {
-      _base65Image = base64Encode(bytes);
+      _base65Image = widget.product?.slika ?? base64Encode(bytes);
     });
   }
 }

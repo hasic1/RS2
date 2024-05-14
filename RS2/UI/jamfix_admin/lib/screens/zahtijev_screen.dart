@@ -24,6 +24,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
   final TextEditingController adresaController = TextEditingController();
   final TextEditingController brojTelefonaController = TextEditingController();
   final TextEditingController opisController = TextEditingController();
+  TextEditingController _startDateController = TextEditingController();
 
   StatusZahtjevaProvider _statusZahtjevaProvider = StatusZahtjevaProvider();
   final ZahtjevProvider _zahtjevProvider = ZahtjevProvider();
@@ -129,22 +130,49 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                   const SizedBox(height: 35.0),
                   Row(
                     children: [
-                      const Text('Datum i Vrijeme:'),
-                      const SizedBox(width: 8.0),
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => _selectDate(context),
-                          child: const Text('Odaberi Datum i Vrijeme'),
+                        child: TextFormField(
+                          controller: _startDateController,
+                          decoration: const InputDecoration(
+                            labelText: 'Datum',
+                            hintText: 'Odaberite datum',
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintStyle: TextStyle(color: Colors.black),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                          ),
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: selectedDate,
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2101),
+                            );
+
+                            if (pickedDate != null &&
+                                pickedDate != selectedDate) {
+                              setState(() {
+                                selectedDate = pickedDate;
+                                _startDateController.text =
+                                    "${pickedDate.day}.${pickedDate.month}.${pickedDate.year}.";
+                              });
+                            }
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Obavezan unos datuma!';
+                            }
+                            return null;
+                          },
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
-                      const SizedBox(width: 8.0),
                     ],
                   ),
-                  Row(children: [
-                    selectedDate != null
-                        ? Text(selectedDate!.toString())
-                        : const Text('Nije odabrano'),
-                  ]),
                   Row(
                     children: [
                       Checkbox(

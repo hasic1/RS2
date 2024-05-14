@@ -212,7 +212,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                   Novosti editedNovost = Novosti(
                     naslov: naslovController.text,
                     sadrzaj: sadrzajController.text,
-                    slika: _base65Image ?? base64Encode(defaultImageBytes),
+                    slika: _base65Image ?? novost.slika,
                   );
                   _novostiProvider.update(id, editedNovost);
                   showDialog(
