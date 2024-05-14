@@ -18,8 +18,8 @@ class ProductProvider extends BaseProvider<Product> {
     var i = 3;
     var url = "${Authorization.putanja}Proizvodi/topRatedProducts/$i";
     var uri = Uri.parse(url);
-
-    var response = await http.get(uri);
+    var headers = createHeadersLogIn();
+    var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -47,7 +47,7 @@ class ProductProvider extends BaseProvider<Product> {
 
     var uri = Uri.parse(url);
 
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     var response = await http.get(uri, headers: headers);
 
     print("Status code:${response.statusCode}");

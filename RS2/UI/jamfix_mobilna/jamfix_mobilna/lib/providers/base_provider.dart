@@ -37,7 +37,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
 
     var response = await http!.get(uri, headers: headers);
     print("done $response");
@@ -66,7 +66,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var uri = Uri.parse(url);
 
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     var response = await http!.get(uri, headers: headers);
 
     print("Status code:${response.statusCode}");
@@ -81,7 +81,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
 
     var jsonRequest = jsonEncode(request);
     var response = await http!.post(uri, headers: headers, body: jsonRequest);
@@ -97,7 +97,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> update(int? id, [dynamic request]) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
 
     var jsonRequest = jsonEncode(request);
     var response = await http!.put(uri, headers: headers, body: jsonRequest);
@@ -113,7 +113,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> delete(int? id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     final response = await http!.delete(uri, headers: headers);
 
     if (isValidResponse(response)) {
@@ -139,6 +139,21 @@ abstract class BaseProvider<T> with ChangeNotifier {
       "Content-Type": "application/json",
       "Authorization": "Bearer $jwtToken",
     };
+    return headers;
+  }
+
+  Map<String, String> createHeadersLogIn() {
+    String username = Authorization.username ?? "";
+    String password = Authorization.password ?? "";
+
+    String basicAuth =
+        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
+
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": basicAuth
+    };
+
     return headers;
   }
 

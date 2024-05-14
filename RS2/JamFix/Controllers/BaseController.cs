@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JamFix.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch : class
     {

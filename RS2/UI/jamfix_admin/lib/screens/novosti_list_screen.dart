@@ -135,7 +135,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 icon: const Icon(Icons.delete),
                 onPressed: () {
                   _novostiProvider.delete(novost.novostId);
-                  Navigator.of(context).pushReplacement(
+                  Navigator.pushReplacement(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => NovostiListScreen(),
                     ),
@@ -158,79 +159,84 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Naslov'),
-                  controller: naslovController,
-                  validator: (name) =>
-                      name?.isEmpty ?? true ? 'Polje je obavezno' : null,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Sadržaj'),
-                  validator: (name) =>
-                      name?.isEmpty ?? true ? 'Polje je obavezno' : null,
-                  controller: sadrzajController,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FormBuilderField(
-                        name: 'imageId',
-                        builder: ((field) {
-                          return InputDecorator(
-                            decoration: InputDecoration(
-                                label: const Text('Odaberite sliku'),
-                                errorText: field.errorText),
-                            child: ListTile(
-                              leading: const Icon(Icons.photo),
-                              title: const Text("Select image"),
-                              trailing: const Icon(Icons.file_upload),
-                              onTap: getImage,
-                            ),
-                          );
-                        }),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Naslov'),
+                    controller: naslovController,
+                    validator: (name) =>
+                        name?.isEmpty ?? true ? 'Polje je obavezno' : null,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Sadržaj'),
+                    validator: (name) =>
+                        name?.isEmpty ?? true ? 'Polje je obavezno' : null,
+                    controller: sadrzajController,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FormBuilderField(
+                          name: 'imageId',
+                          builder: ((field) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                  label: const Text('Odaberite sliku'),
+                                  errorText: field.errorText),
+                              child: ListTile(
+                                leading: const Icon(Icons.photo),
+                                title: const Text("Select image"),
+                                trailing: const Icon(Icons.file_upload),
+                                onTap: getImage,
+                              ),
+                            );
+                          }),
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           actions: [
             ElevatedButton(
               onPressed: () async {
-                ByteData imageData =
-                    await rootBundle.load("assets/images/slika.jpg");
-                Uint8List defaultImageBytes = imageData.buffer.asUint8List();
+                if (_formKey.currentState!.validate()) {
+                  ByteData imageData =
+                      await rootBundle.load("assets/images/slika.jpg");
+                  Uint8List defaultImageBytes = imageData.buffer.asUint8List();
 
-                Novosti editedNovost = Novosti(
-                  naslov: naslovController.text,
-                  sadrzaj: sadrzajController.text,
-                  slika: _base65Image ?? base64Encode(defaultImageBytes),
-                );
-                _novostiProvider.update(id, editedNovost);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text("Success"),
-                    content: const Text("Uspješno ste izvrsili promjene"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NovostiListScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text("OK"),
-                      )
-                    ],
-                  ),
-                );
+                  Novosti editedNovost = Novosti(
+                    naslov: naslovController.text,
+                    sadrzaj: sadrzajController.text,
+                    slika: _base65Image ?? base64Encode(defaultImageBytes),
+                  );
+                  _novostiProvider.update(id, editedNovost);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Success"),
+                      content: const Text("Uspješno ste izvrsili promjene"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NovostiListScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text("OK"),
+                        )
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text('Spremi'),
             ),

@@ -133,7 +133,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 icon: Icon(Icons.delete),
                 onPressed: () {
                   _novostiProvider.delete(novost.novostId);
-                  Navigator.of(context).pushReplacement(
+                  Navigator.pushReplacement(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => NovostiListScreen(),
                     ),

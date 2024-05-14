@@ -66,7 +66,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
     final isEmailValid = emailRegex.hasMatch(email ?? '');
     if (!isEmailValid) {
-      return 'Molimo unesite validan email';
+      return 'Molimo unesite validan email\nu formatu example@example.com';
     }
     return null;
   }

@@ -6,6 +6,7 @@ using JamFix.Services.Database;
 using JamFix.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,18 @@ namespace JamFix.Services.Service
             }
 
             return base.AddFilter(querry, search);
+        }
+
+        public virtual async Task<PagedResult<Drzave>> GetDrzave()
+        {
+            var query = _context.Set<Drzava>().AsQueryable();
+            PagedResult<Drzave> result = new PagedResult<Drzave>();
+
+            var list = await query.ToListAsync();
+
+            var tmp = _mapper.Map<List<Drzave>>(list);
+            result.Result = tmp;
+            return result;
         }
     }
 }

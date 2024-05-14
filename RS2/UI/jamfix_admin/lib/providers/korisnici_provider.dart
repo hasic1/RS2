@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/providers/base_provider.dart';
@@ -15,10 +17,24 @@ class KorisniciProvider extends BaseProvider<Korisnici> {
 Future<String> fetchUlogeZaKorisnika(int? korisnikId) async {
   var url = "${Authorization.putanja}Korisnici/uloga/$korisnikId";
   var uri = Uri.parse(url);
+  Map<String, String> createHeadersLogIn() {
+    String username = Authorization.username ?? "";
+    String password = Authorization.password ?? "";
+
+    String basicAuth =
+        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
+
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": basicAuth
+    };
+
+    return headers;
+  }
 
   try {
-    var response = await http.get(uri);
-
+    var headers = createHeadersLogIn();
+    var response = await http.get(uri, headers: headers);
     if (response.statusCode == 200) {
       return response.body;
     } else {

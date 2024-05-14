@@ -364,9 +364,18 @@ namespace JamFix.Services.Migrations
                 columns: new[] { "NalogId", "Adresa", "Datum", "ImePrezime", "Kolicina", "Mjesto", "Naziv", "NosilacPosla", "OpisPrijavljenog", "OpisUradjenog", "Telefon" },
                 values: new object[,]
                 {
-                    { 1, "Domanovici b.b", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1000), "Bakir Hasic", 1, "Mostar", "Neki naziv", "Bakir Hasic", "Modem u kvaru", "Zamjena modema", "061-330-326" },
-                    { 2, "Domanovici b.b", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1004), "Arman Hasic", 1, "Mostar", "Ruter", "Amar Hasic", "Ruter u kvaru", "Zamijena rutera", "061-336-026" },
-                    { 3, "Mostar", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1006), "Dzemal Causevic", 2, "Mostar", "Kablovi", "Ramiz Dizdar", "Problemi sa konekcijom", "Zamijena kablova", "061-202-330" }
+                    { 1, "Domanovici b.b", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1465), "Bakir Hasic", 1, "Mostar", "Neki naziv", "Bakir Hasic", "Modem u kvaru", "Zamjena modema", "061-330-326" },
+                    { 2, "Domanovici b.b", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1478), "Arman Hasic", 1, "Mostar", "Ruter", "Amar Hasic", "Ruter u kvaru", "Zamijena rutera", "061-336-026" },
+                    { 3, "Mostar", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1485), "Dzemal Causevic", 2, "Mostar", "Kablovi", "Ramiz Dizdar", "Problemi sa konekcijom", "Zamijena kablova", "061-202-330" },
+                    { 4, "Domanovici b.b", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local), "Bakir Hasic", 1, "Mostar", "Neki naziv", "Neir Hasic", "Modem u kvaru", "Zamjena modema", "061-330-326" },
+                    { 5, "Domanovici b.b", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local), "Arman Hasic", 3, "Mostar", "Ruter", "Armin Hasic", "Ruter u kvaru", "Zamijena rutera", "061-336-026" },
+                    { 6, "Mostar", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local), "Dzemal Causevic", 2, "Mostar", "Kablovi", "Zejneb Dizdar", "Problemi sa konekcijom", "Zamijena kablova", "061-202-330" },
+                    { 7, "Domanovici b.b", new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Dajana Matic", 5, "Mostar", "Neki naziv", "Dajana Matic", "Modem u kvaru", "Zamjena modema", "061-330-326" },
+                    { 8, "Domanovici b.b", new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Faris Hadziomerovic", 2, "Mostar", "Ruter", "Faris Hadziomerovic", "Ruter u kvaru", "Zamijena rutera", "061-336-026" },
+                    { 9, "Mostar", new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Selma Causevic", 4, "Mostar", "Kablovi", "Selma Causevic", "Problemi sa konekcijom", "Zamijena kablova", "061-202-330" },
+                    { 10, "Domanovici b.b", new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Dino Hasic", 2, "Mostar", "Neki naziv", "Dino Hasic", "Modem u kvaru", "Zamjena modema", "061-330-326" },
+                    { 11, "Domanovici b.b", new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Amel Hasic", 1, "Mostar", "Ruter", "Amel Hasic", "Ruter u kvaru", "Zamijena rutera", "061-336-026" },
+                    { 12, "Mostar", new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified), "Dzemal Dizdar", 3, "Mostar", "Kablovi", "Dzemal Dizdar", "Problemi sa konekcijom", "Zamijena kablova", "061-202-330" }
                 });
 
             migrationBuilder.InsertData(
@@ -395,9 +404,9 @@ namespace JamFix.Services.Migrations
                 columns: new[] { "UslugaId", "BrojRacuna", "Cijena", "Datum", "ImePrezime", "NazivPaketa", "Placeno", "ProizvodId" },
                 values: new object[,]
                 {
-                    { 1, "1234-1234-1234-1234", "123", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1058), "Bakir Hasic", "Trio paket", true, 1 },
-                    { 2, "1235-1235-1235-1235", "123", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1061), "Anel Hodzic", "Trio paket", true, 1 },
-                    { 3, "1236-1236-1236-1236", "123", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1063), "Hamza Dzeko", "Trio paket", true, 1 }
+                    { 1, "1234-1234-1234-1234", "123", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1733), "Bakir Hasic", "Trio paket", true, 1 },
+                    { 2, "1235-1235-1235-1235", "123", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1746), "Anel Hodzic", "Trio paket", true, 1 },
+                    { 3, "1236-1236-1236-1236", "123", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1752), "Hamza Dzeko", "Trio paket", true, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -438,9 +447,9 @@ namespace JamFix.Services.Migrations
                 columns: new[] { "ZahtjevId", "Adresa", "BrojTelefona", "DatumVrijeme", "HitnaIntervencija", "ImePrezime", "Opis", "StatusZahtjevaId" },
                 values: new object[,]
                 {
-                    { 1, "Domanovici", "061-336-026", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1104), true, "Bakir Hasic", "Moj ruter je u kvaru", 1 },
-                    { 2, "Mostar", "062-223-322", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1106), false, "Arman Hodzic", "Moj modem je u kvaru", 1 },
-                    { 3, "Mostar", "062-123-321", new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1108), false, "Amar Hodzic", "Moj modem je u kvaru", 1 }
+                    { 1, "Domanovici", "061-336-026", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1823), true, "Bakir Hasic", "Moj ruter je u kvaru", 1 },
+                    { 2, "Mostar", "062-223-322", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1835), false, "Arman Hodzic", "Moj modem je u kvaru", 1 },
+                    { 3, "Mostar", "062-123-321", new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1841), false, "Amar Hodzic", "Moj modem je u kvaru", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -448,10 +457,10 @@ namespace JamFix.Services.Migrations
                 columns: new[] { "KorisnikUlogaID", "DatumIzmjene", "KorisnikID", "UlogaID" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(592), 1, 1 },
-                    { 2, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(623), 2, 2 },
-                    { 3, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(626), 3, 3 },
-                    { 4, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(627), 4, 4 }
+                    { 1, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(376), 1, 1 },
+                    { 2, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(425), 2, 2 },
+                    { 3, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(430), 3, 3 },
+                    { 4, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(435), 4, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -459,14 +468,14 @@ namespace JamFix.Services.Migrations
                 columns: new[] { "OcjenaID", "Datum", "Ocjena", "ProizvodID" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(942), 3, 1 },
-                    { 2, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(945), 5, 1 },
-                    { 3, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(946), 3, 2 },
-                    { 4, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(948), 4, 2 },
-                    { 5, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(949), 5, 3 },
-                    { 6, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(951), 4, 3 },
-                    { 7, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(952), 4, 4 },
-                    { 8, new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(954), 4, 5 }
+                    { 1, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1277), 3, 1 },
+                    { 2, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1290), 5, 1 },
+                    { 3, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1295), 3, 2 },
+                    { 4, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1299), 4, 2 },
+                    { 5, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1304), 5, 3 },
+                    { 6, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1308), 4, 3 },
+                    { 7, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1313), 4, 4 },
+                    { 8, new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1317), 4, 5 }
                 });
 
             migrationBuilder.InsertData(

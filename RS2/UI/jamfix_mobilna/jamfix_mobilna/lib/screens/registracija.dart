@@ -46,7 +46,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
     final isEmailValid = emailRegex.hasMatch(email ?? '');
     if (!isEmailValid) {
-      return 'Molimo unesite validan email';
+      return 'Molimo unesite validan email\nu formatu example@example.com';
     }
     return null;
   }
@@ -179,7 +179,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                       children: [
                         Expanded(
                           child: FutureBuilder(
-                            future: _drzavaProvider.get(),
+                            future: _drzavaProvider.getDrzave(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {

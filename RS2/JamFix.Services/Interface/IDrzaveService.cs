@@ -11,5 +11,7 @@ namespace JamFix.Services.Interface
 {
     public interface IDrzaveService : ICRUDService<Drzave,DrzaveSO,DrzavaInsertRequest,DrzavaUpdateRequest>
     {
+        Task<PagedResult<Drzave>> GetDrzave();
+
     }
 }

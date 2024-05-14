@@ -110,6 +110,8 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     var username = _usernameController.text;
                     var password = _passwordController.text;
+                    Authorization.password = _passwordController.text;
+                    Authorization.username = _usernameController.text;
 
                     try {
                       await loginUser(username, password);

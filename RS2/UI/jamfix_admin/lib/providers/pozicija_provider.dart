@@ -14,13 +14,28 @@ class PozicijaProvider extends BaseProvider<Pozicija> {
   }
 }
 
+Map<String, String> createHeadersLogIn() {
+  String username = Authorization.username ?? "";
+  String password = Authorization.password ?? "";
+
+  String basicAuth =
+      "Basic ${base64Encode(utf8.encode('$username:$password'))}";
+
+  var headers = {
+    "Content-Type": "application/json",
+    "Authorization": basicAuth
+  };
+
+  return headers;
+}
+
 Future<String> fetchPozicijaZaKorisnika(int? korisnikId) async {
   var url = "${Authorization.putanja}Pozicija/$korisnikId";
   var uri = Uri.parse(url);
 
+  var headers = createHeadersLogIn();
+  var response = await http.get(uri, headers: headers);
   try {
-    var response = await http.get(uri);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       var nazivPozicije = data['naziv'];

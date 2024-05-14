@@ -379,6 +379,129 @@ namespace JamFix.Services.Database
                    Mjesto = "Mostar",
                    Naziv = "Kablovi",
                    Kolicina = 2
+               }, new()
+               {
+                   NalogId = 4,
+                   NosilacPosla = "Neir Hasic",
+                   OpisPrijavljenog = "Modem u kvaru",
+                   OpisUradjenog = "Zamjena modema",
+                   ImePrezime = "Bakir Hasic",
+                   Telefon = "061-330-326",
+                   Datum = _dateTime,
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Neki naziv",
+                   Kolicina = 1
+               },
+               new()
+               {
+                   NalogId = 5,
+                   NosilacPosla = "Armin Hasic",
+                   OpisPrijavljenog = "Ruter u kvaru",
+                   OpisUradjenog = "Zamijena rutera",
+                   ImePrezime = "Arman Hasic",
+                   Telefon = "061-336-026",
+                   Datum = _dateTime,
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Ruter",
+                   Kolicina = 3
+               },
+               new()
+               {
+                   NalogId = 6,
+                   NosilacPosla = "Zejneb Dizdar",
+                   OpisPrijavljenog = "Problemi sa konekcijom",
+                   OpisUradjenog = "Zamijena kablova",
+                   ImePrezime = "Dzemal Causevic",
+                   Telefon = "061-202-330",
+                   Datum = _dateTime,
+                   Adresa = "Mostar",
+                   Mjesto = "Mostar",
+                   Naziv = "Kablovi",
+                   Kolicina = 2
+               }, new()
+               {
+                   NalogId = 7,
+                   NosilacPosla = "Dajana Matic",
+                   OpisPrijavljenog = "Modem u kvaru",
+                   OpisUradjenog = "Zamjena modema",
+                   ImePrezime = "Dajana Matic",
+                   Telefon = "061-330-326",
+                   Datum = new DateTime(2024, 3, 24, 16, 00, 0),
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Neki naziv",
+                   Kolicina = 5
+               },
+               new()
+               {
+                   NalogId = 8,
+                   NosilacPosla = "Faris Hadziomerovic",
+                   OpisPrijavljenog = "Ruter u kvaru",
+                   OpisUradjenog = "Zamijena rutera",
+                   ImePrezime = "Faris Hadziomerovic",
+                   Telefon = "061-336-026",
+                   Datum = new DateTime(2024, 3, 24, 16, 00, 0),
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Ruter",
+                   Kolicina = 2
+               },
+               new()
+               {
+                   NalogId = 9,
+                   NosilacPosla = "Selma Causevic",
+                   OpisPrijavljenog = "Problemi sa konekcijom",
+                   OpisUradjenog = "Zamijena kablova",
+                   ImePrezime = "Selma Causevic",
+                   Telefon = "061-202-330",
+                   Datum = new DateTime(2024, 3, 24, 16, 00, 0),
+                   Adresa = "Mostar",
+                   Mjesto = "Mostar",
+                   Naziv = "Kablovi",
+                   Kolicina = 4
+               }, new()
+               {
+                   NalogId = 10,
+                   NosilacPosla = "Dino Hasic",
+                   OpisPrijavljenog = "Modem u kvaru",
+                   OpisUradjenog = "Zamjena modema",
+                   ImePrezime = "Dino Hasic",
+                   Telefon = "061-330-326",
+                   Datum = new DateTime(2024, 4, 24, 16, 00, 0),
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Neki naziv",
+                   Kolicina = 2
+               },
+               new()
+               {
+                   NalogId = 11,
+                   NosilacPosla = "Amel Hasic",
+                   OpisPrijavljenog = "Ruter u kvaru",
+                   OpisUradjenog = "Zamijena rutera",
+                   ImePrezime = "Amel Hasic",
+                   Telefon = "061-336-026",
+                   Datum = new DateTime(2024, 4, 24, 16, 00, 0),
+                   Adresa = "Domanovici b.b",
+                   Mjesto = "Mostar",
+                   Naziv = "Ruter",
+                   Kolicina = 1
+               },
+               new()
+               {
+                   NalogId = 12,
+                   NosilacPosla = "Dzemal Dizdar",
+                   OpisPrijavljenog = "Problemi sa konekcijom",
+                   OpisUradjenog = "Zamijena kablova",
+                   ImePrezime = "Dzemal Dizdar",
+                   Telefon = "061-202-330",
+                   Datum = new DateTime(2024, 4, 24, 16, 00, 0),
+                   Adresa = "Mostar",
+                   Mjesto = "Mostar",
+                   Naziv = "Kablovi",
+                   Kolicina = 3
                });
         }
         private void SeedProizvod(ModelBuilder modelBuilder)

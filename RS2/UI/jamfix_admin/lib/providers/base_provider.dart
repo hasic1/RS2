@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jamfix_admin/models/drzava.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/screens/log_in_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
@@ -17,19 +18,16 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   Future<SearchResult<T>> get({dynamic filter}) async {
     var url = "$_baseUrl$_endpoint";
-
     if (filter != null) {
       var queryString = getQueryString(filter);
       url = "$url?$queryString";
     }
     var uri = Uri.parse(url);
-
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
-
       var result = SearchResult<T>();
 
       if (data.containsKey('count') && data['count'] is int) {
@@ -37,7 +35,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
       } else {
         result.count = 0;
       }
-
       for (var item in data['result']) {
         result.result.add(fromJson(item));
       }
@@ -53,7 +50,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var uri = Uri.parse(url);
 
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
@@ -67,7 +64,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
 
     var jsonRequest = jsonEncode(request);
     var response = await http.post(uri, headers: headers, body: jsonRequest);
@@ -83,7 +80,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> update(int? id, [dynamic request]) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
 
     var jsonRequest = jsonEncode(request);
     var response = await http.put(uri, headers: headers, body: jsonRequest);
@@ -95,10 +92,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw Exception("Unknown error");
     }
   }
+
   Future<T> delete(int? id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
-    var headers = createHeaders();
+    var headers = createHeadersLogIn();
     final response = await http.delete(uri, headers: headers);
 
     if (isValidResponse(response)) {
@@ -111,6 +109,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   T fromJson(data) {
     throw Exception("Method not implemented");
+  }
+
+  Map<String, String> createHeadersLogIn() {
+    String username = Authorization.username ?? "";
+    String password = Authorization.password ?? "";
+
+
+    String basicAuth =
+        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
+
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": basicAuth
+    };
+
+    return headers;
   }
 
   Map<String, String> createHeaders() {
@@ -158,4 +172,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     });
     return query;
   }
+
+  
 }

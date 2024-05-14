@@ -157,7 +157,7 @@ class _UslugeScreen extends State<UslugeScreen> {
                                 icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   _uslugeProvider.delete(e.uslugaId);
-                                  Navigator.of(context).pushReplacement(
+                                  Navigator.pushReplacement(context,
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           const UslugeScreen(),

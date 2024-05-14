@@ -164,28 +164,28 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             KorisnikUlogaId = 1,
-                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(592),
+                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(376),
                             KorisnikId = 1,
                             UlogaId = 1
                         },
                         new
                         {
                             KorisnikUlogaId = 2,
-                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(623),
+                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(425),
                             KorisnikId = 2,
                             UlogaId = 2
                         },
                         new
                         {
                             KorisnikUlogaId = 3,
-                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(626),
+                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(430),
                             KorisnikId = 3,
                             UlogaId = 3
                         },
                         new
                         {
                             KorisnikUlogaId = 4,
-                            DatumIzmjene = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(627),
+                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(435),
                             KorisnikId = 4,
                             UlogaId = 4
                         });
@@ -436,56 +436,56 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             OcjenaId = 1,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(942),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1277),
                             Ocjena = 3,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 2,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(945),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1290),
                             Ocjena = 5,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 3,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(946),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1295),
                             Ocjena = 3,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 4,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(948),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1299),
                             Ocjena = 4,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 5,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(949),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1304),
                             Ocjena = 5,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 6,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(951),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1308),
                             Ocjena = 4,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 7,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(952),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1313),
                             Ocjena = 4,
                             ProizvodId = 4
                         },
                         new
                         {
                             OcjenaId = 8,
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(954),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1317),
                             Ocjena = 4,
                             ProizvodId = 5
                         });
@@ -735,7 +735,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 1,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1000),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1465),
                             ImePrezime = "Bakir Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -749,7 +749,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 2,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1004),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1478),
                             ImePrezime = "Arman Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -763,12 +763,138 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 3,
                             Adresa = "Mostar",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1006),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1485),
                             ImePrezime = "Dzemal Causevic",
                             Kolicina = 2,
                             Mjesto = "Mostar",
                             Naziv = "Kablovi",
                             NosilacPosla = "Ramiz Dizdar",
+                            OpisPrijavljenog = "Problemi sa konekcijom",
+                            OpisUradjenog = "Zamijena kablova",
+                            Telefon = "061-202-330"
+                        },
+                        new
+                        {
+                            NalogId = 4,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            ImePrezime = "Bakir Hasic",
+                            Kolicina = 1,
+                            Mjesto = "Mostar",
+                            Naziv = "Neki naziv",
+                            NosilacPosla = "Neir Hasic",
+                            OpisPrijavljenog = "Modem u kvaru",
+                            OpisUradjenog = "Zamjena modema",
+                            Telefon = "061-330-326"
+                        },
+                        new
+                        {
+                            NalogId = 5,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            ImePrezime = "Arman Hasic",
+                            Kolicina = 3,
+                            Mjesto = "Mostar",
+                            Naziv = "Ruter",
+                            NosilacPosla = "Armin Hasic",
+                            OpisPrijavljenog = "Ruter u kvaru",
+                            OpisUradjenog = "Zamijena rutera",
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            NalogId = 6,
+                            Adresa = "Mostar",
+                            Datum = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            ImePrezime = "Dzemal Causevic",
+                            Kolicina = 2,
+                            Mjesto = "Mostar",
+                            Naziv = "Kablovi",
+                            NosilacPosla = "Zejneb Dizdar",
+                            OpisPrijavljenog = "Problemi sa konekcijom",
+                            OpisUradjenog = "Zamijena kablova",
+                            Telefon = "061-202-330"
+                        },
+                        new
+                        {
+                            NalogId = 7,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Dajana Matic",
+                            Kolicina = 5,
+                            Mjesto = "Mostar",
+                            Naziv = "Neki naziv",
+                            NosilacPosla = "Dajana Matic",
+                            OpisPrijavljenog = "Modem u kvaru",
+                            OpisUradjenog = "Zamjena modema",
+                            Telefon = "061-330-326"
+                        },
+                        new
+                        {
+                            NalogId = 8,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Faris Hadziomerovic",
+                            Kolicina = 2,
+                            Mjesto = "Mostar",
+                            Naziv = "Ruter",
+                            NosilacPosla = "Faris Hadziomerovic",
+                            OpisPrijavljenog = "Ruter u kvaru",
+                            OpisUradjenog = "Zamijena rutera",
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            NalogId = 9,
+                            Adresa = "Mostar",
+                            Datum = new DateTime(2024, 3, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Selma Causevic",
+                            Kolicina = 4,
+                            Mjesto = "Mostar",
+                            Naziv = "Kablovi",
+                            NosilacPosla = "Selma Causevic",
+                            OpisPrijavljenog = "Problemi sa konekcijom",
+                            OpisUradjenog = "Zamijena kablova",
+                            Telefon = "061-202-330"
+                        },
+                        new
+                        {
+                            NalogId = 10,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Dino Hasic",
+                            Kolicina = 2,
+                            Mjesto = "Mostar",
+                            Naziv = "Neki naziv",
+                            NosilacPosla = "Dino Hasic",
+                            OpisPrijavljenog = "Modem u kvaru",
+                            OpisUradjenog = "Zamjena modema",
+                            Telefon = "061-330-326"
+                        },
+                        new
+                        {
+                            NalogId = 11,
+                            Adresa = "Domanovici b.b",
+                            Datum = new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Amel Hasic",
+                            Kolicina = 1,
+                            Mjesto = "Mostar",
+                            Naziv = "Ruter",
+                            NosilacPosla = "Amel Hasic",
+                            OpisPrijavljenog = "Ruter u kvaru",
+                            OpisUradjenog = "Zamijena rutera",
+                            Telefon = "061-336-026"
+                        },
+                        new
+                        {
+                            NalogId = 12,
+                            Adresa = "Mostar",
+                            Datum = new DateTime(2024, 4, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImePrezime = "Dzemal Dizdar",
+                            Kolicina = 3,
+                            Mjesto = "Mostar",
+                            Naziv = "Kablovi",
+                            NosilacPosla = "Dzemal Dizdar",
                             OpisPrijavljenog = "Problemi sa konekcijom",
                             OpisUradjenog = "Zamijena kablova",
                             Telefon = "061-202-330"
@@ -969,7 +1095,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 1,
                             BrojRacuna = "1234-1234-1234-1234",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1058),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1733),
                             ImePrezime = "Bakir Hasic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -980,7 +1106,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 2,
                             BrojRacuna = "1235-1235-1235-1235",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1061),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1746),
                             ImePrezime = "Anel Hodzic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -991,7 +1117,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 3,
                             BrojRacuna = "1236-1236-1236-1236",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1063),
+                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1752),
                             ImePrezime = "Hamza Dzeko",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -1076,7 +1202,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 1,
                             Adresa = "Domanovici",
                             BrojTelefona = "061-336-026",
-                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1104),
+                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1823),
                             HitnaIntervencija = true,
                             ImePrezime = "Bakir Hasic",
                             Opis = "Moj ruter je u kvaru",
@@ -1087,7 +1213,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 2,
                             Adresa = "Mostar",
                             BrojTelefona = "062-223-322",
-                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1106),
+                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1835),
                             HitnaIntervencija = false,
                             ImePrezime = "Arman Hodzic",
                             Opis = "Moj modem je u kvaru",
@@ -1098,7 +1224,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 3,
                             Adresa = "Mostar",
                             BrojTelefona = "062-123-321",
-                            DatumVrijeme = new DateTime(2024, 3, 11, 15, 34, 58, 107, DateTimeKind.Local).AddTicks(1108),
+                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1841),
                             HitnaIntervencija = false,
                             ImePrezime = "Amar Hodzic",
                             Opis = "Moj modem je u kvaru",

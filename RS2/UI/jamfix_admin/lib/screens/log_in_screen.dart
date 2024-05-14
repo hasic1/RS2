@@ -17,74 +17,80 @@ class LoginPage extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  "assets/images/Jamfix.jpg",
-                  height: 100,
-                  width: 100,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Username", prefixIcon: Icon(Icons.email)),
-                  controller: _usernameController,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Password", prefixIcon: Icon(Icons.password)),
-                  controller: _passwordController,
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    var username = _usernameController.text;
-                    var password = _passwordController.text;
-                    Authorization.psw=_passwordController.text;
-                    try {
-                      await loginUser(username, password);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const PocetnaScreen(),
-                        ),
-                      );
-                    } on Exception catch (e) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text("Error"),
-                          content: Text(e.toString()),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"),
-                            )
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text("Login"),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                ElevatedButton(
+        child: SingleChildScrollView(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/images/Jamfix.jpg",
+                    height: 100,
+                    width: 100,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Username", prefixIcon: Icon(Icons.email)),
+                    controller: _usernameController,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Password",
+                        prefixIcon: Icon(Icons.password)),
+                    controller: _passwordController,
+                    obscureText: true,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ElevatedButton(
                     onPressed: () async {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const RegistracijaScreen()));
+                      var username = _usernameController.text;
+                      var password = _passwordController.text;
+                      Authorization.psw = _passwordController.text;
+                      Authorization.password = _passwordController.text;
+                      Authorization.username= _usernameController.text;
+                      
+                      try {
+                        await loginUser(username, password);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const PocetnaScreen(),
+                          ),
+                        );
+                      } on Exception catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Error"),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("OK"),
+                              )
+                            ],
+                          ),
+                        );
+                      }
                     },
-                    child: const Text("Registruj se"))
-              ],
+                    child: const Text("Login"),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const RegistracijaScreen()));
+                      },
+                      child: const Text("Registruj se"))
+                ],
+              ),
             ),
           ),
         ),
