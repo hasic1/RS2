@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:jamfix_mobilna/main.dart';
 import 'package:jamfix_mobilna/models/drzava.dart';
 import 'package:jamfix_mobilna/models/korisnici.dart';
 import 'package:jamfix_mobilna/models/search_result.dart';
@@ -277,7 +278,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PostavkeScreen(),
+                                                    LoginPage(),
                                               ),
                                             );
                                           },

@@ -5,6 +5,7 @@ import 'package:jamfix_admin/models/korisnici.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
+import 'package:jamfix_admin/screens/log_in_screen.dart';
 import 'package:jamfix_admin/screens/pocetna_screen.dart';
 import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
@@ -275,7 +276,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const PocetnaScreen(),
+                                                        LoginPage(),
                                                   ),
                                                 );
                                               },
