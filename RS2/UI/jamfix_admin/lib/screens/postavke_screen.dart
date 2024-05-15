@@ -196,7 +196,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                 children: [
                                   Expanded(
                                     child: FutureBuilder(
-                                      future: _drzavaProvider.get(),
+                                      future: _drzavaProvider.getDrzave(),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
