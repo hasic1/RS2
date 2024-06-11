@@ -7,7 +7,7 @@ using System.Text;
 
 namespace JamFixTestAPI2.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DrzavaController: ControllerBase
