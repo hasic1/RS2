@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:jamfix_mobilna/main.dart';
 import 'package:jamfix_mobilna/models/drzava.dart';
 import 'package:jamfix_mobilna/models/korisnici.dart';
@@ -26,10 +27,12 @@ class _PostavkeScreen extends State<PostavkeScreen> {
       TextEditingController();
   final TextEditingController _transakcijskiRacunController =
       TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
   KorisniciProvider _korisniciProvider = KorisniciProvider();
   DrzavaProvider _drzavaProvider = DrzavaProvider();
   SearchResult<Drzava>? drzavaResult;
   final _formKey = GlobalKey<FormState>();
+  DateTime? _currentDate;
   Map<String, dynamic> _initialValue = {};
   DateTime? selectedDate;
   String? selectedDrzavaId = '1';
@@ -43,7 +46,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
         'prezime': Authorization.prezime,
         'telefon': Authorization.telefon,
         'email': Authorization.email,
-        'transakcijskiRacun': Authorization.brojRacuna
+        'transakcijskiRacun': Authorization.brojRacuna,
       };
       _imeController.text = _initialValue['ime'] ?? '';
       _prezimeController.text = _initialValue['prezime'] ?? '';
@@ -51,6 +54,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
       _emailController.text = _initialValue['email'] ?? '';
       _transakcijskiRacunController.text =
           _initialValue['transakcijskiRacun'] ?? '';
+      _currentDate = Authorization.datumRodjenja;
     });
     _drzavaProvider = context.read<DrzavaProvider>();
     _ucitajPodatke();
@@ -163,7 +167,7 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                           const SizedBox(height: 8.0),
                           Row(
                             children: [
-                              const Text('Datum i Vrijeme:'),
+                              const Text('Datum rodjenja:'),
                               const SizedBox(width: 4.0),
                               ElevatedButton(
                                 onPressed: () => _selectDate(context),
@@ -173,8 +177,12 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                             ],
                           ),
                           Row(children: [
-                            selectedDate != null
-                                ? Text(selectedDate!.toString())
+                            _currentDate != null
+                                ? Text(_currentDate!.toString() != null
+                                    ? DateFormat('dd-MM-yyyy')
+                                        .format(_currentDate!)
+                                    : DateFormat('dd-MM-yyyy')
+                                        .format(selectedDate!))
                                 : const Text('Nije odabrano'),
                           ]),
                           const SizedBox(height: 8.0),
@@ -256,8 +264,8 @@ class _PostavkeScreen extends State<PostavkeScreen> {
                                       passwordPotvrda:
                                           _passwordPotvrdaController.text,
                                       pozicijaId: Authorization.pozicijaID ?? 1,
-                                      datumVrijeme:
-                                          selectedDate ?? DateTime.now(),
+                                      datumRodjenja: selectedDate ??
+                                          Authorization.datumRodjenja,
                                       transakcijskiRacun:
                                           _transakcijskiRacunController.text ??
                                               Authorization.brojRacuna);
@@ -308,17 +316,17 @@ class _PostavkeScreen extends State<PostavkeScreen> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
+      initialDate: selectedDate,
+      firstDate: DateTime(1950),
       lastDate: DateTime(2025),
     );
 
-    if (pickedDate != null) {
+    if (pickedDate != null && pickedDate != _currentDate) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
       );
-
+      _currentDate = pickedDate;
       if (pickedTime != null) {
         setState(() {
           selectedDate = DateTime(

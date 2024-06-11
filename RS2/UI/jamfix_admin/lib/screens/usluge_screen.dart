@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/usluge.dart';
 import 'package:jamfix_admin/providers/usluge_provider.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -89,8 +90,8 @@ class _UslugeScreen extends State<UslugeScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
-          columns: const [
-            DataColumn(
+          columns: [
+            const DataColumn(
               label: Expanded(
                 child: Text(
                   'Ime i prezime',
@@ -99,7 +100,7 @@ class _UslugeScreen extends State<UslugeScreen> {
                 ),
               ),
             ),
-            DataColumn(
+            const DataColumn(
               label: Expanded(
                 child: Text(
                   'Datum i vrijeme uplate',
@@ -108,7 +109,7 @@ class _UslugeScreen extends State<UslugeScreen> {
                 ),
               ),
             ),
-            DataColumn(
+            const DataColumn(
               label: Expanded(
                 child: Text(
                   'Naziv paketa',
@@ -119,7 +120,7 @@ class _UslugeScreen extends State<UslugeScreen> {
                 ),
               ),
             ),
-            DataColumn(
+            const DataColumn(
               label: Expanded(
                 child: Text(
                   'Uplaceno',
@@ -132,11 +133,14 @@ class _UslugeScreen extends State<UslugeScreen> {
             ),
             DataColumn(
               label: Expanded(
-                child: Text(
-                  'Akcija',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.blue,
+                child: Visibility(
+                  visible: Authorization.isAdmin,
+                  child: const Text(
+                    'Akcija',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
               ),
@@ -153,17 +157,21 @@ class _UslugeScreen extends State<UslugeScreen> {
                         DataCell(
                           Row(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  _uslugeProvider.delete(e.uslugaId);
-                                  Navigator.pushReplacement(context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const UslugeScreen(),
-                                    ),
-                                  );
-                                },
+                              Visibility(
+                                visible: Authorization.isAdmin,
+                                child: IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    _uslugeProvider.delete(e.uslugaId);
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UslugeScreen(),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),

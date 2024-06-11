@@ -2,15 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:jamfix_mobilna/main.dart';
+import 'package:jamfix_mobilna/screens/konkursi_screen.dart';
 import 'package:jamfix_mobilna/screens/korisnici_product_list_screen.dart';
 import 'package:jamfix_mobilna/screens/novosti_list_screen.dart';
 import 'package:jamfix_mobilna/screens/oNama_screen.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/postavke_screen.dart';
+import 'package:jamfix_mobilna/screens/prijave_screen.dart';
 import 'package:jamfix_mobilna/screens/product_list_screen.dart';
 import 'package:jamfix_mobilna/screens/radni_nalog_list_screen.dart';
 import 'package:jamfix_mobilna/screens/radni_nalog_screen.dart';
+import 'package:jamfix_mobilna/screens/usluge_screen.dart';
 import 'package:jamfix_mobilna/screens/zahtijev_screen.dart';
+import 'package:jamfix_mobilna/screens/zahtjevi_list_screen.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
 
 class MasterScreenWidget extends StatefulWidget {
@@ -40,7 +44,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik || Authorization.isAdmin,
+              visible: Authorization.isKorisnik,
               child: ListTile(
                 title: Text(
                   'Dodaj zahtjev',
@@ -50,6 +54,38 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ZahtjevListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text(
+                  'Zahtjevi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ZahtjevScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              child: ListTile(
+                title: Text(
+                  'Placene usluge',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UslugeScreen(),
                     ),
                   );
                 },
@@ -95,10 +131,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             Visibility(
-              visible: Authorization.isAdmin||Authorization.isZaposlenik,
+              visible: Authorization.isAdmin,
               child: ListTile(
                 title: Text(
-                  'Proizvodi admin',
+                  'Proizvodi',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {
@@ -111,9 +147,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isKorisnik ||
-                  Authorization.isZaposlenik ||
-                  Authorization.isAdmin,
+              visible: Authorization.isKorisnik || Authorization.isZaposlenik,
               child: ListTile(
                 title: Text(
                   'Proizvodi',
@@ -129,7 +163,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isAdmin || Authorization.isOperater,
+              visible: Authorization.isOperater,
               child: ListTile(
                 title: Text(
                   'Radni nalog',
@@ -139,6 +173,38 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => RadniNalogListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin || Authorization.isKorisnik,
+              child: ListTile(
+                title: Text(
+                  'Konkursi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KonkursiScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text(
+                  'Prijave',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PrijavaScreen(),
                     ),
                   );
                 },

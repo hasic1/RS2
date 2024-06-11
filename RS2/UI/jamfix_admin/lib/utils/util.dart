@@ -25,6 +25,7 @@ class Authorization {
   static int? drzavaID;
   static String? brojRacuna;
   static String? psw;
+  static DateTime? datumRodjenja;
   static const String putanja = "http://localhost:7097/";
   static const String putanjaTestni = "http://localhost:7108/";
 
@@ -47,9 +48,22 @@ class Authorization {
     pozicijaID = int.tryParse(decodedToken['upn']?.toString() ?? "");
     drzavaID = int.tryParse(decodedToken['certserialnumber']?.toString() ?? "");
     brojRacuna = decodedToken['gender'] as String?;
+    String? birthdateString = decodedToken['birthdate'] as String?;
+    if (birthdateString != null) {
+      try {
+        final dateFormat = DateFormat('dd. MM. yyyy. HH:mm:ss');
+        datumRodjenja = dateFormat.parse(birthdateString);
+      } catch (e) {
+        datumRodjenja = null;
+        print('Greška prilikom parsiranja datuma: $e');
+      }
+    } else {
+      datumRodjenja = null;
+    }
 
     if (isAdmin) {
       rola = "Administrator";
+      print(datumRodjenja);
     }
     if (isZaposlenik) {
       rola = "Zaposlenik";

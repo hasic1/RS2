@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:jamfix_admin/models/radni_nalog.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
+import 'package:jamfix_admin/utils/util.dart';
 import 'package:provider/provider.dart';
 
 class RadniNalogScreen extends StatefulWidget {
@@ -60,6 +62,10 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
         _nazivController.text = _initialValue['naziv'] ?? '';
         _kolicinaController.text = _initialValue['kolicina'].toString() ?? '';
         selectedDate = _initialValue['datum'] ?? '';
+        if (selectedDate != null) {
+          _startDateController.text =
+              DateFormat('dd.MM.yyyy.').format(selectedDate!);
+        }
       });
     }
     _radniNalogProvider = context.read<RadniNalogProvider>();
@@ -101,19 +107,6 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _nosilacPoslaController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nosilac posla',
-                        ),
-                        validator: (name) =>
-                            name!.isEmpty ? 'Polje je obavezno' : null,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormField(
                         controller: _mjestoController,
                         decoration: const InputDecoration(
                           labelText: 'Mijesto',
@@ -148,10 +141,9 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: selectedDate,
-                            firstDate: DateTime(1950),
+                            firstDate: DateTime.now(),
                             lastDate: DateTime(2101),
                           );
-
                           if (pickedDate != null &&
                               pickedDate != selectedDate) {
                             setState(() {
@@ -167,7 +159,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                           }
                           return null;
                         },
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ),
                   ],
@@ -289,7 +281,8 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                     if (_formKey.currentState!.validate()) {
                       var kolicinaInt = int.tryParse(_kolicinaController.text);
                       var request = RadniNalog(
-                        nosilacPosla: _nosilacPoslaController.text,
+                        nosilacPosla:
+                            '${Authorization.ime} ${Authorization.prezime}',
                         opisPrijavljenog: _opisPrijavljenogController.text,
                         opisUradjenog: _opisUradjenogController.text,
                         imePrezime: _imePrezimeController.text,

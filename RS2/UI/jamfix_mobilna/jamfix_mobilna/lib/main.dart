@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:jamfix_mobilna/providers/base_provider.dart';
 import 'package:jamfix_mobilna/providers/drzava_provider.dart';
+import 'package:jamfix_mobilna/providers/konkurs_provider.dart';
 import 'package:jamfix_mobilna/providers/korisnici_provider.dart';
 import 'package:jamfix_mobilna/providers/novosti_provider.dart';
 import 'package:jamfix_mobilna/providers/ocjene_provider.dart';
+import 'package:jamfix_mobilna/providers/prijava_provider.dart';
 import 'package:jamfix_mobilna/providers/product_provider.dart';
 import 'package:jamfix_mobilna/providers/radni_nalog_provider.dart';
+import 'package:jamfix_mobilna/providers/status_zahtjeva_provider.dart';
 import 'package:jamfix_mobilna/providers/usluge_provider.dart';
 import 'package:jamfix_mobilna/providers/vrste_proizvoda_provider.dart';
+import 'package:jamfix_mobilna/providers/zahtjev_provider.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/registracija.dart';
 import 'package:jamfix_mobilna/utils/utils.dart';
@@ -36,10 +40,14 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
+        ChangeNotifierProvider(create: (_) => StatusZahtjevaProvider()),
         ChangeNotifierProvider(create: (_) => RadniNalogProvider()),
         ChangeNotifierProvider(create: (_) => KorisniciProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => NovostiProvider()),
+        ChangeNotifierProvider(create: (_) => PrijavaProvider()),
+        ChangeNotifierProvider(create: (_) => KonkursProvider()),
+        ChangeNotifierProvider(create: (_) => ZahtjevProvider()),
         ChangeNotifierProvider(create: (_) => DrzavaProvider()),
         ChangeNotifierProvider(create: (_) => OcjeneProvider()),
         ChangeNotifierProvider(create: (_) => UslugeProvider()),

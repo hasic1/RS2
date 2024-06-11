@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JamFix.Services.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240513171134_initial")]
-    partial class initial
+    [Migration("20240611115814_migracija")]
+    partial class migracija
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,55 @@ namespace JamFix.Services.Migrations
                         });
                 });
 
+            modelBuilder.Entity("JamFix.Services.Database.Konkurs", b =>
+                {
+                    b.Property<int>("KonkursId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("KonkursId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KonkursId"));
+
+                    b.Property<int>("BrojIzvrsitelja")
+                        .HasColumnType("int")
+                        .HasColumnName("BrojIzvrsitelja");
+
+                    b.Property<DateTime>("DatumZavrsetka")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("TrazenaPozicija")
+                        .IsRequired()
+                        .HasMaxLength(55)
+                        .HasColumnType("nvarchar(55)");
+
+                    b.HasKey("KonkursId");
+
+                    b.ToTable("Konkurs", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            KonkursId = 1,
+                            BrojIzvrsitelja = 1,
+                            DatumZavrsetka = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrazenaPozicija = "Supervizor"
+                        },
+                        new
+                        {
+                            KonkursId = 2,
+                            BrojIzvrsitelja = 1,
+                            DatumZavrsetka = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrazenaPozicija = "Zaposlenik"
+                        },
+                        new
+                        {
+                            KonkursId = 3,
+                            BrojIzvrsitelja = 1,
+                            DatumZavrsetka = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrazenaPozicija = "Operater"
+                        });
+                });
+
             modelBuilder.Entity("JamFix.Services.Database.KorisniciUloge", b =>
                 {
                     b.Property<int>("KorisnikUlogaId")
@@ -167,28 +216,28 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             KorisnikUlogaId = 1,
-                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(376),
+                            DatumIzmjene = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(3679),
                             KorisnikId = 1,
                             UlogaId = 1
                         },
                         new
                         {
                             KorisnikUlogaId = 2,
-                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(425),
+                            DatumIzmjene = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(3738),
                             KorisnikId = 2,
                             UlogaId = 2
                         },
                         new
                         {
                             KorisnikUlogaId = 3,
-                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(430),
+                            DatumIzmjene = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(3743),
                             KorisnikId = 3,
                             UlogaId = 3
                         },
                         new
                         {
                             KorisnikUlogaId = 4,
-                            DatumIzmjene = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(435),
+                            DatumIzmjene = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(3748),
                             KorisnikId = 4,
                             UlogaId = 4
                         });
@@ -282,7 +331,7 @@ namespace JamFix.Services.Migrations
                         {
                             KorisnikId = 1,
                             Aktivnost = true,
-                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumRodjenja = new DateTime(2000, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DrzavaId = 1,
                             Email = "admin@gmail.com",
@@ -300,7 +349,7 @@ namespace JamFix.Services.Migrations
                         {
                             KorisnikId = 2,
                             Aktivnost = true,
-                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumRodjenja = new DateTime(2000, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DrzavaId = 1,
                             Email = "korisnik@gmail.com",
@@ -318,7 +367,7 @@ namespace JamFix.Services.Migrations
                         {
                             KorisnikId = 3,
                             Aktivnost = true,
-                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumRodjenja = new DateTime(2000, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DrzavaId = 1,
                             Email = "zaposlenik@gmail.com",
@@ -336,7 +385,7 @@ namespace JamFix.Services.Migrations
                         {
                             KorisnikId = 4,
                             Aktivnost = true,
-                            DatumRodjenja = new DateTime(2024, 12, 24, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumRodjenja = new DateTime(2000, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DatumZaposlenja = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DrzavaId = 1,
                             Email = "operater@gmail.com",
@@ -439,56 +488,56 @@ namespace JamFix.Services.Migrations
                         new
                         {
                             OcjenaId = 1,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1277),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4647),
                             Ocjena = 3,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 2,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1290),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4663),
                             Ocjena = 5,
                             ProizvodId = 1
                         },
                         new
                         {
                             OcjenaId = 3,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1295),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4668),
                             Ocjena = 3,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 4,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1299),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4673),
                             Ocjena = 4,
                             ProizvodId = 2
                         },
                         new
                         {
                             OcjenaId = 5,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1304),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4677),
                             Ocjena = 5,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 6,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1308),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4682),
                             Ocjena = 4,
                             ProizvodId = 3
                         },
                         new
                         {
                             OcjenaId = 7,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1313),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4687),
                             Ocjena = 4,
                             ProizvodId = 4
                         },
                         new
                         {
                             OcjenaId = 8,
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1317),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4692),
                             Ocjena = 4,
                             ProizvodId = 5
                         });
@@ -540,6 +589,81 @@ namespace JamFix.Services.Migrations
                         {
                             PozicijaId = 6,
                             Naziv = "User"
+                        });
+                });
+
+            modelBuilder.Entity("JamFix.Services.Database.Prijava", b =>
+                {
+                    b.Property<int>("PrijavaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("PrijavaId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrijavaId"));
+
+                    b.Property<string>("BrojTelefona")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("DatumPrijave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Ime")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("KonkursId")
+                        .HasColumnType("int")
+                        .HasColumnName("KonkursId");
+
+                    b.Property<string>("Prezime")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("PrijavaId");
+
+                    b.HasIndex("KonkursId");
+
+                    b.ToTable("Prijava", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PrijavaId = 1,
+                            BrojTelefona = "061-336-026",
+                            DatumPrijave = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5421),
+                            Email = "adin@gmail.com",
+                            Ime = "Adin",
+                            KonkursId = 1,
+                            Prezime = "Zuhric"
+                        },
+                        new
+                        {
+                            PrijavaId = 2,
+                            BrojTelefona = "061-234-123",
+                            DatumPrijave = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5431),
+                            Email = "almin@gmail.com",
+                            Ime = "Almin",
+                            KonkursId = 2,
+                            Prezime = "Orucevic"
+                        },
+                        new
+                        {
+                            PrijavaId = 3,
+                            BrojTelefona = "061-523-122",
+                            DatumPrijave = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5438),
+                            Email = "belmin@gmail.com",
+                            Ime = "Belmin",
+                            KonkursId = 3,
+                            Prezime = "Nozic"
                         });
                 });
 
@@ -738,7 +862,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 1,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1465),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4835),
                             ImePrezime = "Bakir Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -752,7 +876,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 2,
                             Adresa = "Domanovici b.b",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1478),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4851),
                             ImePrezime = "Arman Hasic",
                             Kolicina = 1,
                             Mjesto = "Mostar",
@@ -766,7 +890,7 @@ namespace JamFix.Services.Migrations
                         {
                             NalogId = 3,
                             Adresa = "Mostar",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1485),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(4858),
                             ImePrezime = "Dzemal Causevic",
                             Kolicina = 2,
                             Mjesto = "Mostar",
@@ -1098,7 +1222,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 1,
                             BrojRacuna = "1234-1234-1234-1234",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1733),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5222),
                             ImePrezime = "Bakir Hasic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -1109,7 +1233,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 2,
                             BrojRacuna = "1235-1235-1235-1235",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1746),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5237),
                             ImePrezime = "Anel Hodzic",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -1120,7 +1244,7 @@ namespace JamFix.Services.Migrations
                             UslugaId = 3,
                             BrojRacuna = "1236-1236-1236-1236",
                             Cijena = "123",
-                            Datum = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1752),
+                            Datum = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5244),
                             ImePrezime = "Hamza Dzeko",
                             NazivPaketa = "Trio paket",
                             Placeno = true,
@@ -1205,7 +1329,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 1,
                             Adresa = "Domanovici",
                             BrojTelefona = "061-336-026",
-                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1823),
+                            DatumVrijeme = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5316),
                             HitnaIntervencija = true,
                             ImePrezime = "Bakir Hasic",
                             Opis = "Moj ruter je u kvaru",
@@ -1216,7 +1340,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 2,
                             Adresa = "Mostar",
                             BrojTelefona = "062-223-322",
-                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1835),
+                            DatumVrijeme = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5331),
                             HitnaIntervencija = false,
                             ImePrezime = "Arman Hodzic",
                             Opis = "Moj modem je u kvaru",
@@ -1227,7 +1351,7 @@ namespace JamFix.Services.Migrations
                             ZahtjevId = 3,
                             Adresa = "Mostar",
                             BrojTelefona = "062-123-321",
-                            DatumVrijeme = new DateTime(2024, 5, 13, 19, 11, 33, 939, DateTimeKind.Local).AddTicks(1841),
+                            DatumVrijeme = new DateTime(2024, 6, 11, 13, 58, 13, 989, DateTimeKind.Local).AddTicks(5337),
                             HitnaIntervencija = false,
                             ImePrezime = "Amar Hodzic",
                             Opis = "Moj modem je u kvaru",
@@ -1285,6 +1409,17 @@ namespace JamFix.Services.Migrations
                     b.Navigation("Proizvod");
                 });
 
+            modelBuilder.Entity("JamFix.Services.Database.Prijava", b =>
+                {
+                    b.HasOne("JamFix.Services.Database.Konkurs", "Konkurs")
+                        .WithMany("Prijava")
+                        .HasForeignKey("KonkursId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Prijave_Konkursi");
+
+                    b.Navigation("Konkurs");
+                });
+
             modelBuilder.Entity("JamFix.Services.Database.Proizvod", b =>
                 {
                     b.HasOne("JamFix.Services.Database.VrsteProizvoda", "Vrsta")
@@ -1329,6 +1464,11 @@ namespace JamFix.Services.Migrations
             modelBuilder.Entity("JamFix.Services.Database.Drzava", b =>
                 {
                     b.Navigation("Korisnik");
+                });
+
+            modelBuilder.Entity("JamFix.Services.Database.Konkurs", b =>
+                {
+                    b.Navigation("Prijava");
                 });
 
             modelBuilder.Entity("JamFix.Services.Database.Korisnik", b =>

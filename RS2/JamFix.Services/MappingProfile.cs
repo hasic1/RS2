@@ -72,6 +72,14 @@ namespace JamFix.Services
             CreateMap<UslugeStavkeUpdateRequest, UslugaStavke>();
             CreateMap<UslugeStavkeInsertRequest, UslugaStavke>();
             //-------------------------------------------------------
+            CreateMap<Database.Prijava, Model.Modeli.Prijava>();
+            CreateMap<PrijavaInsertRequest, Database.Prijava>();
+            CreateMap<PrijavaUpdateRequest, Database.Prijava>();
+            //-------------------------------------------------------
+            CreateMap<Konkurs, Konkursi>();
+            CreateMap<KonkursInsertRequest, Konkurs>();
+            CreateMap<KonkursUpdateRequest, Konkurs>();
+            //-------------------------------------------------------
         }
     }
 }

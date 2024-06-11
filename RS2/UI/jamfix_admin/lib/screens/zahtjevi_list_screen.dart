@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/statusZahtjeva.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
@@ -135,7 +136,7 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                   DataColumn(
                     label: Expanded(
                       child: Text(
-                        'Datum i vrijeme',
+                        'Datum',
                         style: TextStyle(
                             fontStyle: FontStyle.italic, color: Colors.blue),
                       ),
@@ -186,7 +187,12 @@ class _ZahtjevScreen extends State<ZahtjevScreen> {
                             cells: [
                               DataCell(Text(e.imePrezime ?? "")),
                               DataCell(Text(e.opis ?? "")),
-                              DataCell(Text(e.datumVrijeme.toString() ?? "")),
+                              DataCell(
+                                Text(e.datumVrijeme != null
+                                    ? DateFormat('dd-MM-yyyy')
+                                        .format(e.datumVrijeme!)
+                                    : ""),
+                              ),
                               DataCell(Align(
                                 alignment: Alignment.center,
                                 child: Text(

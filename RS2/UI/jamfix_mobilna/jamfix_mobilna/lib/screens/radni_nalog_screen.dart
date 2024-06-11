@@ -5,6 +5,7 @@ import 'package:jamfix_mobilna/models/search_result.dart';
 import 'package:jamfix_mobilna/providers/radni_nalog_provider.dart';
 import 'package:jamfix_mobilna/screens/pocetna_screen.dart';
 import 'package:jamfix_mobilna/screens/radni_nalog_list_screen.dart';
+import 'package:jamfix_mobilna/utils/utils.dart';
 import 'package:jamfix_mobilna/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -100,19 +101,6 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _nosilacPoslaController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nosilac posla',
-                        ),
-                        validator: (name) =>
-                            name!.isEmpty ? 'Polje je obavezno' : null,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormField(
                         controller: _mjestoController,
                         decoration: const InputDecoration(
                           labelText: 'Mjesto',
@@ -144,7 +132,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: selectedDate,
-                            firstDate: DateTime(1950),
+                            firstDate: DateTime.now(),
                             lastDate: DateTime(2101),
                           );
 
@@ -272,7 +260,8 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
                     if (_formKey.currentState!.validate()) {
                       var kolicinaInt = int.tryParse(_kolicinaController.text);
                       var request = RadniNalog(
-                        nosilacPosla: _nosilacPoslaController.text,
+                        nosilacPosla:
+                            '${Authorization.ime} ${Authorization.prezime}',
                         opisPrijavljenog: _opisPrijavljenogController.text,
                         opisUradjenog: _opisUradjenogController.text,
                         imePrezime: _imePrezimeController.text,
@@ -351,7 +340,7 @@ class _RadniNalogScreenState extends State<RadniNalogScreen> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime(2024, 1, 1),
-      firstDate: DateTime(2024),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2025),
     );
 

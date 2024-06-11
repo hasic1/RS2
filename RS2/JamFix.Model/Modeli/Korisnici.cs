@@ -18,6 +18,7 @@ namespace JamFix.Model.Modeli
         public int DrzavaId { get; set; }
         public bool? Aktivnost { get; set; }
         public int? PozicijaId { get; set; }
+        public DateTime DatumRodjenja { get; set; }
         public string? TransakcijskiRacun { get; set; }
 
         //public string RoleNames => string.Join(", ", KorisnikUloge?.Select(x => x.Uloga?.Naziv)?.ToList());

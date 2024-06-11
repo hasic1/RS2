@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamfix_admin/main.dart';
 import 'package:jamfix_admin/screens/izvjestaji_screen.dart';
+import 'package:jamfix_admin/screens/konkursi_screen.dart';
 import 'package:jamfix_admin/screens/korisnici_list_screen.dart';
 import 'package:jamfix_admin/screens/korisnik_product_list_screen.dart';
 import 'package:jamfix_admin/screens/log_in_screen.dart';
@@ -10,6 +11,7 @@ import 'package:jamfix_admin/screens/novosti_list_screen.dart';
 import 'package:jamfix_admin/screens/oNama_screen.dart';
 import 'package:jamfix_admin/screens/pocetna_screen.dart';
 import 'package:jamfix_admin/screens/postavke_screen.dart';
+import 'package:jamfix_admin/screens/prijave_screen.dart';
 import 'package:jamfix_admin/screens/radni_nalog_list_screen.dart';
 import 'package:jamfix_admin/screens/usluge_screen.dart';
 import 'package:jamfix_admin/screens/zahtijev_screen.dart';
@@ -45,7 +47,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         child: ListView(
           children: [
             Visibility(
-              visible: Authorization.isKorisnik || Authorization.isAdmin,
+              visible: Authorization.isKorisnik,
               child: ListTile(
                 title: Text(
                   'Dodaj zahtjev',
@@ -116,7 +118,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isZaposlenik || Authorization.isAdmin||Authorization.isOperater,
+              visible: Authorization.isOperater,
               child: ListTile(
                 title: Text(
                   'Radni nalog',
@@ -135,7 +137,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               visible: Authorization.isAdmin,
               child: ListTile(
                 title: Text(
-                  'Proizvodi admin',
+                  'Proizvodi',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {
@@ -148,9 +150,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isKorisnik ||
-                  Authorization.isZaposlenik ||
-                  Authorization.isAdmin,
+              visible: Authorization.isKorisnik || Authorization.isZaposlenik,
               child: ListTile(
                 title: Text(
                   'Proizvodi',
@@ -182,7 +182,39 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              visible: Authorization.isAdmin || Authorization.isKorisnik,
+              child: ListTile(
+                title: Text(
+                  'Konkursi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KonkursiScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isAdmin,
+              child: ListTile(
+                title: Text(
+                  'Prijave',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PrijavaScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: Authorization.isZaposlenik,
               child: ListTile(
                 title: Text(
                   'Zahtjevi',
@@ -198,7 +230,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               ),
             ),
             Visibility(
-              visible: Authorization.isAdmin || Authorization.isZaposlenik,
+              visible: Authorization.isZaposlenik,
               child: ListTile(
                 title: Text(
                   'Izvjestaj',

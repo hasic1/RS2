@@ -23,6 +23,7 @@ class Authorization {
   static int? id;
   static int? drzavaID;
   static int? pozicijaID;
+  static DateTime? datumRodjenja;
   static String? brojRacuna;
   static const String putanja = "http://10.0.2.2:7097/";
 
@@ -45,7 +46,19 @@ class Authorization {
     pozicijaID = int.tryParse(decodedToken['upn']?.toString() ?? "");
     drzavaID = int.tryParse(decodedToken['certserialnumber']?.toString() ?? "");
     brojRacuna = decodedToken['gender'] as String?;
-
+    String? birthdateString = decodedToken['birthdate'] as String?;
+    if (birthdateString != null) {
+      try {
+        final dateFormat =
+            DateFormat('dd. MM. yyyy. HH:mm:ss'); // Prilagodite format datuma
+        datumRodjenja = dateFormat.parse(birthdateString);
+      } catch (e) {
+        datumRodjenja = null;
+        print('Greška prilikom parsiranja datuma: $e');
+      }
+    } else {
+      datumRodjenja = null;
+    }
     if (isAdmin) {
       rola = "Administrator";
     }

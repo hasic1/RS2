@@ -11,19 +11,21 @@ namespace JamFix.Services.Database
             : base(options) { }
         public virtual DbSet<Drzava> Drzava { get; set; }
         public virtual DbSet<Izvjestaj> Izvjestaj { get; set; } 
+        public virtual DbSet<Konkurs> Konkurs { get; set; }
         public virtual DbSet<KorisniciUloge> KorisniciUloge { get; set; }
         public virtual DbSet<Korisnik> Korisnik { get; set; }
         public virtual DbSet<Novosti> Novosti{ get; set; } 
         public virtual DbSet<Ocjene> Ocjene { get; set; }
         public virtual DbSet<Pozicija> Pozicija{ get; set; }
+        public virtual DbSet<Prijava> Prijava { get; set; }
         public virtual DbSet<Proizvod> Proizvod { get; set; } 
         public virtual DbSet<RadniNalog> RadniNalog { get; set; } 
         public virtual DbSet<StatusZahtjeva> StatusZahtjeva { get; set; } 
         public virtual DbSet<Uloga> Uloga { get; set; } 
+        public virtual DbSet<UslugaStavke> UslugaStavke { get; set; }
         public virtual DbSet<Usluge> Usluge { get; set; }
         public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; }
         public virtual DbSet<Zahtjev> Zahtjev { get; set; }
-        public virtual DbSet<UslugaStavke> UslugaStavke { get; set; }
 
         private readonly DateTime _dateTime = new(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Local);
 
@@ -45,9 +47,44 @@ namespace JamFix.Services.Database
             SeedUslugaStavke(modelBuilder);
             SeedUsluge(modelBuilder);
             SeedVrsteProizvoda(modelBuilder);
-            SeedZahtjev(modelBuilder);
-        }
+            SeedZahtjev(modelBuilder); 
+            SeedKonkursi(modelBuilder);
+            SeedPrijave(modelBuilder);
 
+        }
+        private void SeedPrijave(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Prijava>().HasData(
+               new()
+               {
+                   PrijavaId = 1,
+                   KonkursId = 1,
+                   Ime = "Adin",
+                   Prezime = "Zuhric",
+                   Email = "adin@gmail.com",
+                   BrojTelefona = "061-336-026",
+                   DatumPrijave = DateTime.Now,
+               },
+               new()
+               {
+                   PrijavaId = 2,
+                   KonkursId = 2,
+                   Ime = "Almin",
+                   Prezime = "Orucevic",
+                   Email = "almin@gmail.com",
+                   BrojTelefona = "061-234-123",
+                   DatumPrijave = DateTime.Now,
+               }, new()
+               {
+                   PrijavaId = 3,
+                   KonkursId = 3,
+                   Ime = "Belmin",
+                   Prezime = "Nozic",
+                   Email = "belmin@gmail.com",
+                   BrojTelefona = "061-523-122",
+                   DatumPrijave = DateTime.Now,
+               });
+        }
         private void SeedCountries(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Drzava>().HasData(
@@ -80,6 +117,31 @@ namespace JamFix.Services.Database
                {
                    DrzavaId = 6,
                    Naziv = "Austria",
+               });
+        }
+        private void SeedKonkursi(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Konkurs>().HasData(
+               new()
+               {
+                   KonkursId = 1,
+                   DatumZavrsetka = new DateTime(2024, 6, 30),
+                   TrazenaPozicija = "Supervizor",
+                   BrojIzvrsitelja = 1,
+               },
+               new()
+               {
+                   KonkursId = 2,
+                   DatumZavrsetka = new DateTime(2024, 6, 30),
+                   TrazenaPozicija = "Zaposlenik",
+                   BrojIzvrsitelja = 1,
+               },
+               new()
+               {
+                   KonkursId = 3,
+                   DatumZavrsetka = new DateTime(2024, 6, 30),
+                   TrazenaPozicija = "Operater",
+                   BrojIzvrsitelja = 1,
                });
         }
         private void SeedVrsteProizvoda(ModelBuilder modelBuilder)
@@ -654,7 +716,7 @@ namespace JamFix.Services.Database
                    KorisnickoIme = "admin",
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
-                   DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
+                   DatumRodjenja = new DateTime(2000, 12,24),
                    Aktivnost = true,
                    TransakcijskiRacun= "4000 0000 0000 0002"
                },
@@ -671,7 +733,7 @@ namespace JamFix.Services.Database
                    KorisnickoIme = "korisnik",
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
-                   DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
+                   DatumRodjenja = new DateTime(2000, 12,24),
                    Aktivnost = true,
                    TransakcijskiRacun = "5555 5555 5555 4444"
 
@@ -689,7 +751,7 @@ namespace JamFix.Services.Database
                    KorisnickoIme = "zaposlenik",
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
-                   DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
+                   DatumRodjenja = new DateTime(2000,12,24),
                    Aktivnost = true,
                    TransakcijskiRacun= "4242 4242 4242 4242"
 
@@ -707,7 +769,7 @@ namespace JamFix.Services.Database
                    KorisnickoIme = "operater",
                    LozinkaHash = Service.KorisniciService.GenerateHash("1wQEjdSFeZttx6dlvEDjOg==", "test"),
                    LozinkaSalt = "1wQEjdSFeZttx6dlvEDjOg==",
-                   DatumRodjenja = new DateTime(2024, 12, 24, 16, 00, 0),
+                   DatumRodjenja = new DateTime(2000,12,24),
                    Aktivnost = true,
                    TransakcijskiRacun= "6011 0000 0000 0004"
                }); 
@@ -874,6 +936,33 @@ namespace JamFix.Services.Database
                     .HasForeignKey(d => d.ProizvodId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ocjene_Proizvodi");
+            });
+            modelBuilder.Entity<Prijava>(entity =>
+            {
+                entity.HasKey(e => e.PrijavaId);
+                entity.ToTable("Prijava");
+                entity.Property(e => e.PrijavaId).HasColumnName("PrijavaId");
+                entity.Property(e => e.Ime).HasMaxLength(50);
+                entity.Property(e => e.Prezime).HasMaxLength(50);
+                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.BrojTelefona).HasMaxLength(50);
+                entity.Property(e => e.KonkursId).HasColumnName("KonkursId");
+
+
+                entity.HasOne(d => d.Konkurs)
+                    .WithMany(p => p.Prijava)
+                    .HasForeignKey(d => d.KonkursId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Prijave_Konkursi");
+            });
+            modelBuilder.Entity<Konkurs>(entity =>
+            {
+                entity.HasKey(e => e.KonkursId);
+                entity.ToTable("Konkurs");
+                entity.Property(e => e.KonkursId).HasColumnName("KonkursId");
+                entity.Property(e => e.BrojIzvrsitelja).HasColumnName("BrojIzvrsitelja");
+                entity.Property(e => e.DatumZavrsetka).HasColumnType("datetime");
+                entity.Property(e => e.TrazenaPozicija).HasMaxLength(55);
             });
             modelBuilder.Entity<Proizvod>(entity =>
             {

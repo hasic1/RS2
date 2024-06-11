@@ -111,7 +111,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                     TextFormField(
                       controller: telefonController,
                       decoration:
-                          const InputDecoration(labelText: '06X-XXX-XXX'),
+                          const InputDecoration(labelText: 'Broj telefona'),
                       validator: validatePhoneNumber,
                       keyboardType: TextInputType.phone,
                       inputFormatters: <TextInputFormatter>[
@@ -132,7 +132,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                     TextFormField(
                       controller: transakcijskiRacunController,
                       decoration: const InputDecoration(
-                          labelText: 'XXXX XXXX XXXX XXXX'),
+                          labelText: 'Transakcijski racun'),
                       validator: validateCreditCardNumber,
                       inputFormatters: <TextInputFormatter>[
                         LengthLimitingTextInputFormatter(19),
@@ -146,7 +146,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                           child: TextFormField(
                             controller: _startDateController,
                             decoration: const InputDecoration(
-                              labelText: 'Datum',
+                              labelText: 'Datum rodjenja',
                               hintText: 'Odaberite datum',
                               labelStyle: TextStyle(color: Colors.black),
                               hintStyle: TextStyle(color: Colors.black),
@@ -259,7 +259,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                                 passwordPotvrda: passwordPotvrdaController.text,
                                 drzavaId: int.parse(drzavaId),
                                 pozicijaId: Authorization.pozicijaID,
-                                datumVrijeme: selectedDate ?? DateTime.now(),
+                                datumRodjenja: selectedDate ?? DateTime.now(),
                                 transakcijskiRacun:
                                     transakcijskiRacunController.text);
                             _korisniciProvider.insert(request);

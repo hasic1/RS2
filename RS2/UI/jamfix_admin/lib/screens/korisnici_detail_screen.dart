@@ -333,7 +333,7 @@ class _KorisnciDetailScreen extends State<KorisnciDetailScreen> {
                                   widget.korisnici!.pozicijaId.toString()),
                               noviPassword: Authorization.psw,
                               passwordPotvrda: Authorization.psw,
-                              datumVrijeme: selectedDate ?? DateTime.now(),
+                              datumRodjenja: selectedDate ?? DateTime.now(),
                               transakcijskiRacun: Authorization.brojRacuna);
                           _korisniciProvider.update(
                               widget.korisnici!.korisnikId!, request);

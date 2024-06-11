@@ -1,4 +1,5 @@
 using JamFixTestAPI2.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -6,6 +7,7 @@ using System.Text;
 
 namespace JamFixTestAPI2.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DrzavaController: ControllerBase

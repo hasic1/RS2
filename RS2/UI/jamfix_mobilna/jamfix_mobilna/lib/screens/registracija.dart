@@ -145,7 +145,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                           child: TextFormField(
                             controller: _startDateController,
                             decoration: const InputDecoration(
-                              labelText: 'Datum',
+                              labelText: 'Datum rodjenja',
                               hintText: 'Odaberite datum',
                               labelStyle: TextStyle(color: Colors.black),
                               hintStyle: TextStyle(color: Colors.black),
@@ -260,7 +260,7 @@ class _RegistracijaScreen extends State<RegistracijaScreen> {
                                   drzavaId: int.parse(drzavaId),
                                   aktivnost: true,
                                   pozicijaId: 1,
-                                  datumVrijeme: selectedDate ?? DateTime.now(),
+                                  datumRodjenja: selectedDate ?? DateTime.now(),
                                   transakcijskiRacun:
                                       transakcijskiRacunController.text);
                               _korisniciProvider.insert(request);

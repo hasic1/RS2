@@ -35,6 +35,8 @@ builder.Services.AddTransient<IKorisniciService, KorisniciService>();
 builder.Services.AddTransient<IPozicijaService, PozicijaService>();
 builder.Services.AddTransient<IZahtjeviService, ZahtjeviService>();
 builder.Services.AddTransient<INovostiService, NovostiService>();
+builder.Services.AddTransient<IKonkursService, KonkursService>();
+builder.Services.AddTransient<IPrijavaService, PrijavaService>();
 builder.Services.AddTransient<IDrzaveService, DrzaveService>();
 builder.Services.AddTransient<IUslugeService, UslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();

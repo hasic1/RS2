@@ -5,7 +5,10 @@ import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/widgets/master_screen.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class IzvjestajiScreen extends StatefulWidget {
   const IzvjestajiScreen({Key? key}) : super(key: key);
@@ -46,7 +49,16 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: const Text("Izvještaji"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.download),
+              onPressed: _generatePdfAndDownload,
+            ),
+            const Text("Download PDF"),
+          ],
+        ),
         body: Stack(
           children: [
             Container(
@@ -358,5 +370,36 @@ class _IzvjestajiScreen extends State<IzvjestajiScreen> {
     });
 
     return ukupnaCijena;
+  }
+
+  Future<void> _generatePdfAndDownload() async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text(
+                  "Izvještaj za mjesec: ${_getMonthName(int.parse(selectedMonth))}",
+                  style: pw.TextStyle(fontSize: 24)),
+              pw.SizedBox(height: 16),
+              pw.Text(
+                  "Najkorištenija oprema: ${getNajkoristenijaOprema(radniNalogresult)}"),
+              pw.Text(
+                  "Najposjećenije mjesto: ${getNajposjecenijeMjesto(radniNalogresult)}"),
+              pw.Text(
+                  "Količina utrošenog alata: ${getKolicinaUtrosenogAlata(radniNalogresult)}"),
+              pw.Text(
+                  "Broj intervencija: ${radniNalogresult?.result.length ?? 0}"),
+            ],
+          );
+        },
+      ),
+    );
+
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdf.save());
   }
 }

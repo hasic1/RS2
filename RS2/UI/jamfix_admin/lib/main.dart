@@ -1,10 +1,12 @@
 import 'package:jamfix_admin/providers/drzava_provider.dart';
 import 'package:jamfix_admin/providers/izvjestaj_provider.dart';
+import 'package:jamfix_admin/providers/konkurs_provider.dart';
 import 'package:jamfix_admin/providers/korisniciUloge_provider.dart';
 import 'package:jamfix_admin/providers/korisnici_provider.dart';
 import 'package:jamfix_admin/providers/novosti_provider.dart';
 import 'package:jamfix_admin/providers/ocjene_provider.dart';
 import 'package:jamfix_admin/providers/pozicija_provider.dart';
+import 'package:jamfix_admin/providers/prijava_provider.dart';
 import 'package:jamfix_admin/providers/product_provider.dart';
 import 'package:jamfix_admin/providers/radni_nalog_provider.dart';
 import 'package:jamfix_admin/providers/statusZahtjevaProvider.dart';
@@ -33,6 +35,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ProductProvider()),
       ChangeNotifierProvider(create: (_) => ZahtjevProvider()),
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
+      ChangeNotifierProvider(create: (_) => KonkursProvider()),
+      ChangeNotifierProvider(create: (_) => PrijavaProvider()),
       ChangeNotifierProvider(create: (_) => DrzavaProvider()),
       ChangeNotifierProvider(create: (_) => UslugeProvider()),
       ChangeNotifierProvider(create: (_) => OcjeneProvider()),

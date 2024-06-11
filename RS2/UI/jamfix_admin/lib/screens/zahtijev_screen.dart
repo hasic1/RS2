@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:jamfix_admin/models/search_result.dart';
 import 'package:jamfix_admin/models/statusZahtjeva.dart';
 import 'package:jamfix_admin/models/zahtjev.dart';
@@ -57,6 +58,8 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
         brojTelefonaController.text = _initialValue['brojTelefona'] ?? '';
         opisController.text = _initialValue['opis'] ?? '';
         hitnaIntervencija = _initialValue['hitnaIntervencija'] ?? '';
+        _startDateController.text = DateFormat('dd.MM.yyyy. hh.mm.ss')
+            .format(_initialValue['datumVrijeme'] ?? '');
       }
     }
     _statusZahtjevaProvider = context.read<StatusZahtjevaProvider>();
@@ -199,9 +202,10 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                             opis: opisController.text,
                             datumVrijeme: selectedDate ?? DateTime.now(),
                             hitnaIntervencija: hitnaIntervencija,
-                            statusZahtjevaId:
+                            statusZahtjevaId:widget
+                                    .zahtjev?.statusZahtjevaId ??
                                 int.tryParse(selectedStatusZahtjevaId ?? "1") ??
-                                    0,
+                                1,
                           );
                           if (widget.zahtjev == null) {
                             await _zahtjevProvider.insert(request);
@@ -262,7 +266,7 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: Authorization.isAdmin,
+                    visible: Authorization.isZaposlenik,
                     child: Row(
                       children: [
                         Expanded(
@@ -366,8 +370,10 @@ class _ZahtjevListScreen extends State<ZahtjevListScreen> {
                                     ],
                                   ),
                                 );
-                              } else if (currentStatus == 2 &&
-                                  selectedStatusZahtjevaId == "3") {
+                              } else if ((currentStatus == 2 &&
+                                      selectedStatusZahtjevaId == "3") ||
+                                  (currentStatus == 1 &&
+                                      selectedStatusZahtjevaId == '3')) {
                                 String statusZahtjeva =
                                     selectedStatusZahtjevaId ?? "1";
                                 var request = Zahtjev(
