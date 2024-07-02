@@ -120,55 +120,55 @@ using (var scope = app.Services.CreateScope())
 
 
 
-//string hostname = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "";
-//string username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
-//string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
-//string virtualHost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
+string hostname = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "";
+string username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
+string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
+string virtualHost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
 
-//var factory = new ConnectionFactory
-//{
-//    HostName = hostname,
-//    UserName = username,
-//    Password = password,
-//    VirtualHost = virtualHost,
-//};
+var factory = new ConnectionFactory
+{
+    HostName = hostname,
+    UserName = username,
+    Password = password,
+    VirtualHost = virtualHost,
+};
 
-//using var connection = factory.CreateConnection();
-//using var channel = connection.CreateModel();
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
 
-//channel.QueueDeclare(queue: "drzava",
-//                     durable: false,
-//                     exclusive: false,
-//                     autoDelete: true,
-//                     arguments: null);
-//Console.WriteLine(" [*] Waiting for messages.");
-//var consumer = new EventingBasicConsumer(channel);
+channel.QueueDeclare(queue: "drzava",
+                     durable: false,
+                     exclusive: false,
+                     autoDelete: true,
+                     arguments: null);
+Console.WriteLine(" [*] Waiting for messages.");
+var consumer = new EventingBasicConsumer(channel);
 
-//consumer.Received += async (model, ea) =>
-//{
-//    var body = ea.Body.ToArray();
-//    var message = Encoding.UTF8.GetString(body);
-//    Console.WriteLine(message.ToString());
-//    var notification = JsonSerializer.Deserialize<DrzavaInsertRequest>(message);
+consumer.Received += async (model, ea) =>
+{
+    var body = ea.Body.ToArray();
+    var message = Encoding.UTF8.GetString(body);
+    Console.WriteLine(message.ToString());
+    var notification = JsonSerializer.Deserialize<DrzavaInsertRequest>(message);
 
-//    using (var scope = app.Services.CreateScope())
-//    {
-//        var notificationsService = scope.ServiceProvider.GetRequiredService<IDrzaveService>();
-//        if (notification != null)
-//        {
-//            try
-//            {
-//                await notificationsService.Insert(notification);
-//            }
-//            catch (Exception e)
-//            {
-//            }
-//        }
-//    }
-//    Console.WriteLine(Environment.GetEnvironmentVariable("Some"));
-//};
-//channel.BasicConsume(queue: "drzava",
-//                     autoAck: true,
-//                     consumer: consumer);
+    using (var scope = app.Services.CreateScope())
+    {
+        var notificationsService = scope.ServiceProvider.GetRequiredService<IDrzaveService>();
+        if (notification != null)
+        {
+            try
+            {
+                await notificationsService.Insert(notification);
+            }
+            catch (Exception e)
+            {
+            }
+        }
+    }
+    Console.WriteLine(Environment.GetEnvironmentVariable("Some"));
+};
+channel.BasicConsume(queue: "drzava",
+                     autoAck: true,
+                     consumer: consumer);
 
 app.Run();
