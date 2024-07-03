@@ -26,8 +26,8 @@ class Authorization {
   static String? brojRacuna;
   static String? psw;
   static DateTime? datumRodjenja;
-  static const String putanja = "http://localhost:7097/";
-  static const String putanjaTestni = "http://localhost:7108/";
+  static const String putanja = "https://localhost:7097/";
+  static const String putanjaTestni = "https://localhost:7108/";
 
   static void setJwtToken(String token) {
     jwtToken = token;

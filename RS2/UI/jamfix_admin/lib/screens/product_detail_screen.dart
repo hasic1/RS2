@@ -171,7 +171,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     );
                   },
-                  child: Text('Ocijeni'),
+                  child: const Text('Ocijeni'),
                 ),
                 newMethod(context),
               ],
@@ -248,7 +248,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ByteData imageData =
                             await rootBundle.load("assets/images/slika.jpg");
                         List<int> bytes = imageData.buffer.asUint8List();
-
                         Product zahtjev = Product(
                           nazivProizvoda: nazivProizvodaController.text,
                           cijena: cijenaInt,
